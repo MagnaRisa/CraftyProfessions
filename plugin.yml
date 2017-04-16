@@ -1,0 +1,11 @@
+main: BetterJobs
+name: Better Jobs
+version: 1.11.2-alpha_0.0.1
+author: Logan Cookman
+description: This is a Jobs plugin which will be completely customizable.
+commands:
+  testcommand:
+    description: A testing command
+    usage: /testcommand
+    permission: betterjobs.testcommand
+    permission-message: You dont have the correct permissions.
