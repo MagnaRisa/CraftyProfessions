@@ -1,11 +1,19 @@
-main: BetterJobs
-name: Better Jobs
-version: 1.11.2-alpha_0.0.1
-author: Logan Cookman
+# This is the plugin.yml for the CommonWealth plugin. As you can see below
+# this plugin does depend on Vault in order to distribute the money
+# earned to a separate economy plugin.
+name: CommonWealth
+version: 0.0.2
 description: This is a Jobs plugin which will be completely customizable.
+main: magnarisa.commonwealth.CommonWealth
+author: Logan Cookman
+
+depend: [Vault]
+soft depend: [CoreProtect]
+
+# I may add in some sort of Database here we shall see
+database: false
+
 commands:
-  testcommand:
-    description: A testing command
-    usage: /testcommand
-    permission: betterjobs.testcommand
-    permission-message: You dont have the correct permissions.
+  shower:
+    description: The Shower Command
+    usage: /shower
