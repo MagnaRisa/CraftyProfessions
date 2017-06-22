@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 /**
  * This command allows the user to join a profession if given the

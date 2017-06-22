@@ -2,6 +2,7 @@ package magnarisa.craftyprofessions;
 
 import magnarisa.craftyprofessions.commands.CommandController;
 import magnarisa.craftyprofessions.config.ConfigController;
+import magnarisa.craftyprofessions.container.PlayerManager;
 import magnarisa.craftyprofessions.database.Database;
 import magnarisa.craftyprofessions.database.SQLiteDatabase;
 import magnarisa.craftyprofessions.listeners.CoreListener;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
  */
 public class CraftyProfessions extends JavaPlugin
 {
-    private final Logger Log = this.getLogger ();
+    private final Logger mLog = this.getLogger ();
     private static Economy mEconomy = null;
     private static Permission mPermissions = null;
     private static Chat mChat = null;
@@ -72,6 +73,8 @@ public class CraftyProfessions extends JavaPlugin
 
         CommandController.initializeCommands (this);
 
+        // This will initialize the PlayerManager Singleton
+        PlayerManager.Instance ().initializePlayerManager (this, mCPDatabase);
 
         // This will notify the end of initialization
         this.getLogger().log(Level.INFO, "Initializaion of CraftyProfessions Completed!");
@@ -97,7 +100,7 @@ public class CraftyProfessions extends JavaPlugin
     {
         if (null == getServer().getPluginManager ().getPlugin ("Vault"))
         {
-            Log.severe ("Vault is not Installed! Disabling Plugin");
+            mLog.severe ("Vault is not Installed! Disabling Plugin");
             return false;
         }
 
@@ -105,7 +108,7 @@ public class CraftyProfessions extends JavaPlugin
 
         if (null == rsp)
         {
-            Log.severe ("No Economy Plugin Found! Disabling Plugin");
+            mLog.severe ("No Economy Plugin Found! Disabling Plugin");
             return false;
         }
 
@@ -176,4 +179,5 @@ public class CraftyProfessions extends JavaPlugin
     {
         return mCPDatabase;
     }
+
 }
