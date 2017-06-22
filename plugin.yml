@@ -1,19 +1,22 @@
-# This is the plugin.yml for the CommonWealth plugin. As you can see below
+# This is the plugin.yml for the CraftyProfessions plugin. As you can see below
 # this plugin does depend on Vault in order to distribute the money
 # earned to a separate economy plugin.
-name: CommonWealth
-version: 0.0.2
-description: This is a Jobs plugin which will be completely customizable.
-main: magnarisa.commonwealth.CommonWealth
-author: Logan Cookman
+name: CraftyProfessions
+version: 0.0.3
+description: This is a Professions plugin which will be completely customizable.
+main: magnarisa.craftyprofessions.CraftyProfessions
+author: CreedTheFreak
 
 depend: [Vault]
-soft depend: [CoreProtect]
+# soft depend: [CoreProtect]
 
 # I may add in some sort of Database here we shall see
-database: false
+database: true
 
 commands:
   shower:
-    description: The Shower Command
-    usage: /shower
+    description: The Shower Squad
+
+  prof:
+    description: Allows you to join a Profession to start earning Money
+    aliases: [cp, craftyprofessions, cprofessions, craftyp]

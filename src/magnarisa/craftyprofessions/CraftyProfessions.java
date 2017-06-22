@@ -1,27 +1,42 @@
-package magnarisa.commonwealth;
+package magnarisa.craftyprofessions;
 
-import magnarisa.commonwealth.commands.CommandShower;
-import magnarisa.commonwealth.listeners.CoreListener;
+import magnarisa.craftyprofessions.commands.CommandController;
+import magnarisa.craftyprofessions.config.ConfigController;
+import magnarisa.craftyprofessions.database.Database;
+import magnarisa.craftyprofessions.database.SQLiteDatabase;
+import magnarisa.craftyprofessions.listeners.CoreListener;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Authors: Logan Cookman
+ * Authors: CreedTheFreak
  * Date:   4/8/2017
  *
- * This is the entry point class for the CommonWealth plugin.
+ * This is the entry point class for the CraftyProfessions plugin.
  */
-public class CommonWealth extends JavaPlugin
+public class CraftyProfessions extends JavaPlugin
 {
     private final Logger Log = this.getLogger ();
     private static Economy mEconomy = null;
     private static Permission mPermissions = null;
     private static Chat mChat = null;
+
+    // Config Details
+    private static Configuration mConfig = null;
+    private ConfigController mConfigController = null;
+
+    // Command Controller
+    private CommandController mCmdControl;
+
+    // Database Information
+    private Database mCPDatabase;
 
     /**
      * This method will do all of the plugins initialization of
@@ -30,8 +45,18 @@ public class CommonWealth extends JavaPlugin
     @Override
     public void onEnable ()
     {
+        // Setup the Main Configuration class and likewise
+        // any other needed config files.
+        mConfigController = new ConfigController (this);
+        mConfigController.createConfig ("config.yml");
+
+        // MAKE SURE TO REMOVE THIS, TEMPORARY UNTIL WE GET THE PLAYER MANAGER/CONTROLLER
+        // Setup the database and initialize the table unless it's already created.
+        mCPDatabase = new SQLiteDatabase (this);
+        mCPDatabase.load ();
+
         // Register the Core Listener of the Plugin
-        getServer().getPluginManager().registerEvents (new CoreListener (), this);
+        getServer().getPluginManager().registerEvents (new CoreListener (mCPDatabase), this);
 
         if (!setupEconomy ())
         {
@@ -41,10 +66,15 @@ public class CommonWealth extends JavaPlugin
         setupPermissions ();
         setupChat();
 
-        // Redo commands? This way seems a bit weird.
-        // Registers the commands
-        this.getCommand ("shower").setExecutor (new CommandShower());
 
+        // Setup any command needs here through the controller
+        // mCmdControl = new CommandController ();
+
+        CommandController.initializeCommands (this);
+
+
+        // This will notify the end of initialization
+        this.getLogger().log(Level.INFO, "Initializaion of CraftyProfessions Completed!");
     }
 
     /**
@@ -139,4 +169,11 @@ public class CommonWealth extends JavaPlugin
         return mChat;
     }
 
+    /**
+     * Returns the Database we are using
+     */
+    public Database getCPDatabase ()
+    {
+        return mCPDatabase;
+    }
 }

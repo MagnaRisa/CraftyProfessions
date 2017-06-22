@@ -1,4 +1,4 @@
-package magnarisa.commonwealth.commands;
+package magnarisa.craftyprofessions.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * The Shower command is the first command I have created for the CommonWealth
+ * The Shower command is the first command I have created for the CraftyProfessions
  * Plugin and in essence is the Most Important command within the Plugin...
  *
  * Just sayin...
