@@ -61,4 +61,26 @@ public class CraftyPlayer
     {
         return mPlayerPool;
     }
+
+    /**
+     * This method will display the message to the Player wrapped within
+     * the CraftyPlayer of this object, not "getting" a Player from the CraftyPlayer is
+     * technically safer.
+     *
+     * @param message The message to send to the wrapped player.
+     */
+    public void sendMessage (String message)
+    {
+        mPlayer.sendMessage (message);
+    }
+
+    /**
+     * This method checks the CraftyPlayers Permissions
+     *
+     * @param perm The permission to check against the player
+     */
+    public boolean checkPerms (final String perm)
+    {
+        return mPlayer.hasPermission (perm);
+    }
 }

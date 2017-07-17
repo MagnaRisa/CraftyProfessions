@@ -1,14 +1,15 @@
 package magnarisa.craftyprofessions.listeners;
 
+import magnarisa.craftyprofessions.CraftyProfessions;
 import magnarisa.craftyprofessions.database.Database;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import javax.xml.crypto.Data;
 
 import static magnarisa.craftyprofessions.CraftyProfessions.getEconomy;
 
@@ -20,18 +21,20 @@ import static magnarisa.craftyprofessions.CraftyProfessions.getEconomy;
  */
 public class CoreListener implements Listener
 {
+    private CraftyProfessions mProfessions;
     private Database mdb;
+    private Economy mEconomy;
 
-    public CoreListener (Database db)
+    public CoreListener (CraftyProfessions professions)
     {
-        mdb = db;
+        mProfessions = professions;
     }
 
 
     @EventHandler
     public void onPlayerJoin (PlayerJoinEvent event)
     {
-        Player eventPlayer = event.getPlayer ();
+       /* Player eventPlayer = event.getPlayer ();
 
         if (eventPlayer != null)
         {
@@ -47,7 +50,7 @@ public class CoreListener implements Listener
             }
         }
 
-        /*
+        *//*
          * What needs to happen here is once the player joins, we will see if their name
          * is in the database, If it is, then we will retrieve that information and store it
          * in a new CraftyPlayer object. If the player is not in the database, then we will
@@ -60,13 +63,41 @@ public class CoreListener implements Listener
     @EventHandler
     public void onBlockBreak (BlockBreakEvent event)
     {
-        OfflinePlayer player = event.getPlayer ();
+        Player player = event.getPlayer ();
 
-        event.getPlayer ().sendMessage (event.getPlayer ().getDisplayName () + " Broke " + event.getBlock ().toString ());
+        player.sendMessage (event.getPlayer ().getDisplayName () + " Broke " + event.getBlock ().toString ());
 
-        if (getEconomy () != null)
+        if (mEconomy != null)
         {
-            event.getPlayer ().sendMessage (Double.toString (getEconomy ().getBalance (player)));
+           player.sendMessage (Double.toString (mEconomy.getBalance (player)));
         }
+    }
+
+    @EventHandler
+    public void onBlockPlaced (BlockPlaceEvent event)
+    {
+        Player player = event.getPlayer ();
+
+        player.sendMessage (player.getDisplayName() + " Placed " + event.getBlockPlaced ().toString ());
+
+        if (mEconomy != null)
+        {
+            mEconomy.depositPlayer (player, 100D);
+            mEconomy.getBalance (player);
+        }
+    }
+
+    /**
+     * WILL PROBABLY HAVE TO REMOVE THIS AT SOME POINT
+     * I DONT LIKE SETTERS.
+     *
+     * This method will place the economy into the lister so that
+     * we can obtain the correct economy after the construction of this
+     * object.
+     * @param econ
+     */
+    public void setEconomyHook (Economy econ)
+    {
+        mEconomy = econ;
     }
 }

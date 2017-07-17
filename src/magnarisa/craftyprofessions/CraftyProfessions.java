@@ -10,6 +10,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,7 +19,6 @@ import java.util.logging.Logger;
 
 /**
  * Authors: CreedTheFreak
- * Date:   4/8/2017
  *
  * This is the entry point class for the CraftyProfessions plugin.
  */
@@ -28,13 +28,14 @@ public class CraftyProfessions extends JavaPlugin
     private static Economy mEconomy = null;
     private static Permission mPermissions = null;
     private static Chat mChat = null;
+    private CoreListener mCoreListener;
 
     // Config Details
     private static Configuration mConfig = null;
     private ConfigController mConfigController = null;
 
     // Command Controller
-    private CommandController mCmdControl;
+    private CommandController mCommandController;
 
     // Database Information
     private Database mCPDatabase;
@@ -56,8 +57,8 @@ public class CraftyProfessions extends JavaPlugin
         mCPDatabase = new SQLiteDatabase (this);
         mCPDatabase.load ();
 
-        // Register the Core Listener of the Plugin
-        getServer().getPluginManager().registerEvents (new CoreListener (mCPDatabase), this);
+        // We need to register the listeners for the Plugin
+        this.registerListeners ();
 
         if (!setupEconomy ())
         {
@@ -67,11 +68,7 @@ public class CraftyProfessions extends JavaPlugin
         setupPermissions ();
         setupChat();
 
-
-        // Setup any command needs here through the controller
-        // mCmdControl = new CommandController ();
-
-        CommandController.initializeCommands (this);
+        mCoreListener.setEconomyHook (mEconomy);
 
         // This will initialize the PlayerManager Singleton
         PlayerManager.Instance ().initializePlayerManager (this, mCPDatabase);
@@ -178,6 +175,22 @@ public class CraftyProfessions extends JavaPlugin
     public Database getCPDatabase ()
     {
         return mCPDatabase;
+    }
+
+    /**
+     * This method registers all of the needed listeners for the Plugin
+     */
+    private void registerListeners ()
+    {
+        PluginManager pluginManager = this.getServer ().getPluginManager ();
+        mCommandController = new CommandController (this);
+        mCoreListener = new CoreListener (this);
+
+        // Register the CraftyProfession Command Entry Point
+        getCommand ("prof").setExecutor (mCommandController);
+
+        // Register the Core Listener of CraftyProfessions
+        pluginManager.registerEvents (mCoreListener, this);
     }
 
 }
