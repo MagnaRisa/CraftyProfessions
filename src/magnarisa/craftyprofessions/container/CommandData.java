@@ -14,7 +14,7 @@ import java.util.HashMap;
  */
 public class CommandData
 {
-    private HashMap<String, String> mData;
+    private HashMap<String, String> mData = new HashMap<> ();
 
     /**
      * This method is the default constructor for the CommandData class for
@@ -37,9 +37,9 @@ public class CommandData
      * @return True  - If the CommandSender has access to this permission
      *         False - If the CommandSender does not have access to this permission
      */
-    public boolean hasPerms (CommandSender sender)
+    public boolean hasPerms (CraftyPlayer sender)
     {
-        return sender.hasPermission (mData.get("permission"));
+        return sender.checkPerms (mData.get("permission"));
     }
 
     /**

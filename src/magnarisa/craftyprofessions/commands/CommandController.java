@@ -1,15 +1,19 @@
 package magnarisa.craftyprofessions.commands;
 
 import magnarisa.craftyprofessions.CraftyProfessions;
-import magnarisa.craftyprofessions.commands.Cmd_Professions.CommandInfo;
-import magnarisa.craftyprofessions.commands.Cmd_Professions.CommandJoin;
+import magnarisa.craftyprofessions.container.PlayerManager;
+import magnarisa.craftyprofessions.exceptions.*;
+import magnarisa.craftyprofessions.commands.ProfessionCommands.CommandInfo;
+import magnarisa.craftyprofessions.commands.ProfessionCommands.CommandJoin;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
-
+import java.util.UUID;
 
 /**
  * The Command Controller is the central hub for all of the command
@@ -29,6 +33,8 @@ public class CommandController implements CommandExecutor
     {
         mPlugin = craftyProf;
         mCommandMap = new HashMap<> ();
+
+        initializeCommands ();
     }
 
     /**
@@ -43,30 +49,104 @@ public class CommandController implements CommandExecutor
     @Override
     public boolean onCommand (CommandSender sender, Command cmd, String label, String... args)
     {
-        if (sender instanceof Player)
+        Player player = obtainBukkitPlayer (sender);
+        ICommand command = null;
+
+        if (player == null)
         {
-            sender.sendMessage ("Profession command issued!");
+            return false;
+        }
+
+        try
+        {
+            if (checkArgsLength (args))
+            {
+                command = loadCommand (args[0]);
+
+                // TODO: I need to add in the appropriate checking and arg trimming devices before I can use the commands.
+                command.execute (PlayerManager.Instance ().retrievePlayer (player.getUniqueId ()), args);
+                return true;
+            }
+        }
+        catch (TooFewArgumentException | CommandNotFoundException ex)
+        {
+            player.sendMessage (ex.getMessage ());
             return true;
         }
-        else
-        {
-            sender.sendMessage ("Not a player, Issuing Profession Command");
-            return true;
-        }
+
+        return false;
     }
 
     /**
      * This method will setup all of the commands for the plugin and
-     * register them with spigot.
+     * put them into the command map.
      */
-    public void initializeCommands ()
+    private void initializeCommands ()
     {
         registerCommand (new CommandJoin ());
         registerCommand (new CommandInfo ());
     }
 
+    /**
+     * Add the command to the Command Map
+     *
+     * @param cmd The command to add to the map
+     */
     private void registerCommand (ICommand cmd)
     {
         mCommandMap.put (cmd.cmdName (), cmd);
+    }
+
+    /**
+     * This method checks to see if the arguments passed into it are
+     * valid for a CraftyProfession Command.
+     *
+     * @param args The Array of arguments to check the length of
+     *
+     * @return True If the argument length is > 0
+     *
+     * @throws TooFewArgumentException This Argument is thrown when someone
+     * issues a command that has zero arguments.
+     */
+    private boolean checkArgsLength (String... args) throws TooFewArgumentException
+    {
+        if (!(args.length > 0))
+        {
+            throw new TooFewArgumentException (ChatColor.DARK_AQUA + "Too Few Arguments in command");
+        }
+
+        return true;
+    }
+
+    /*Obtained from MobArena Code as the unwrapping of a CommandSender*/
+    private Player obtainBukkitPlayer (CommandSender sender)
+    {
+        Player player = (Player) sender;
+        UUID playerUUID = player.getUniqueId ();
+        return Bukkit.getPlayer (playerUUID);
+    }
+
+    /**
+     * This method pulls the reference to the command who's string identifier is
+     * the parameter arg.
+     *
+     * @param arg The string to hash to the command map and retrieve the command
+     *
+     * @return The ICommand with the specified command name.
+     *
+     * @throws CommandNotFoundException If mCommandMap.get returns null then we
+     *         know that the command is not in the map and that we need to throw
+     *         the exception.
+     */
+    private ICommand loadCommand (String arg) throws CommandNotFoundException
+    {
+        ICommand command = mCommandMap.get (arg);
+
+        if (command == null)
+        {
+            throw new CommandNotFoundException ();
+        }
+
+        return command;
     }
 }

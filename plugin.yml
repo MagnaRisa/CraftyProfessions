@@ -36,7 +36,7 @@ commands:
   prof:
     description: The entry point into the commands for CraftyProfessions
     usage: |
-        Error!
+        Error False was returned from command!
 
 #  ### These Commands are Profession Related ###
 #  join:
@@ -82,11 +82,11 @@ commands:
 #    usage: /prof <command> [PlayerName]
 #    aliases: [l, find, search]
 #
-#  ### Random Commands for fun ###
-#  shower:
-#    description: The Shower Squad, That is all...
-#    usage: /<command>
-#    aliases: [shower, showersquad, showersqad, showersquad]
+### Random Commands for fun ###
+  shower:
+    description: The Shower Squad, That is all...
+    usage: /<command>
+    aliases: [shower, showersquad, showersqad, showersquad]
 
 
 ################ Permissions ################
@@ -96,6 +96,14 @@ commands:
 #
 #
 permissions:
-  craftyprofessions.*:
+  craftyprofessions.admin.*:
     default: op
-    description: Give player all of the permissions
+    description: Give player all of the administration permissions
+
+  craftyprofessions.use.*:
+    default: op
+    description: Give a player all of the use permissions
+
+  craftyprofessions.db.*:
+    default: op
+    description: Give the player all of the Database permissions

@@ -9,7 +9,6 @@ import magnarisa.craftyprofessions.listeners.CoreListener;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Server;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -20,7 +19,6 @@ import java.util.logging.Logger;
 
 /**
  * Authors: CreedTheFreak
- * Date:   4/8/2017
  *
  * This is the entry point class for the CraftyProfessions plugin.
  */
@@ -61,10 +59,6 @@ public class CraftyProfessions extends JavaPlugin
 
         // We need to register the listeners for the Plugin
         this.registerListeners ();
-
-        /*
-        TODO: Register commands to the Controller Command Map Here.
-         */
 
         if (!setupEconomy ())
         {
