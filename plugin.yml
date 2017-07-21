@@ -11,77 +11,13 @@ depend: [Vault]
 database: true
 
 ###################### Commands ####################
-# The commands are broken down into a couple groups
-#
-# Profession Related Commands
-#   These commands deal with adding and removing the
-#   the professions of a player as well as any sort
-#   of information command that deals with a players
-#   profession profile.
-#
-# Database Related Commands
-#   These commands all revolve around the database
-#   and do a plethora of things like purging the
-#   database, archiving players from the main database
-#   and other commands that admins may need such as
-#   a player profile lookup.
-#
-# Random Related Commands
-#   These command are literally just for fun and
-#   have no impact on any in game content....
-#   or do they?
-#
-####################################################
 commands:
   prof:
     description: The entry point into the commands for CraftyProfessions
     usage: |
         Error False was returned from command!
 
-#  ### These Commands are Profession Related ###
-#  join:
-#    description: Allows a player to join a Profession to start Earning Money.
-#    usage: /prof <command> [profession name]
-#    aliases: [apply, take, add]
-#
-#  list:
-#    description: Lists the Professions you are able to join.
-#    usage: /prof <command>
-#
-#  stats:
-#    description: Displays a book GUI which has your CraftyPlayer information in it.
-#    usage: /prof <command>
-#
-#  info:
-#    description: Displays Information about a given Profession.
-#    usage: /prof <command> [Profession Name]
-#
-#  ### Database Commands, Admin Permissions Only ###
-#  purge:
-#    description: Purges a Player based on their IGN from the Database and the Archive.
-#    usage: /prof <command> [PlayerName] [DatabaseName]
-#    aliases: [cppurge, purgeplayer, ppurge]
-#
-#  purgeall:
-#    description: Purges all of the Old users from the database from the Main Database and the Archive.
-#    usage: /prof <command> [TimeFrame] [DatabaseName]
-#    stopaliases: [allpurge, dbpurge, purgedb]
-#
-#  archive:
-#    description: Sends a player to the Archive Database.
-#    usage: /prof <command> [PlayerName]
-#    aliases: [aplayer, cparchive, arcplayer, arcp]
-#
-#  archiveall:
-#    description: Sends all of the players in the database to be archived in the Archive Database.
-#    usage: /prof <command>
-#    aliases: [cparchall, arcall]
-#
-#  lookup:
-#    description: This command looks up a given player based on the name passed into the arguments
-#    usage: /prof <command> [PlayerName]
-#    aliases: [l, find, search]
-#
+
 ### Random Commands for fun ###
   shower:
     description: The Shower Squad, That is all...
