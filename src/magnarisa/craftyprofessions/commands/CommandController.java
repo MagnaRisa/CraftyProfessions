@@ -1,10 +1,11 @@
 package magnarisa.craftyprofessions.commands;
 
 import magnarisa.craftyprofessions.CraftyProfessions;
+import magnarisa.craftyprofessions.commands.DatabaseCommands.*;
+import magnarisa.craftyprofessions.commands.ProfessionCommands.*;
 import magnarisa.craftyprofessions.container.PlayerManager;
+import magnarisa.craftyprofessions.database.Database;
 import magnarisa.craftyprofessions.exceptions.*;
-import magnarisa.craftyprofessions.commands.ProfessionCommands.CommandInfo;
-import magnarisa.craftyprofessions.commands.ProfessionCommands.CommandJoin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -38,13 +39,18 @@ public class CommandController implements CommandExecutor
     }
 
     /**
-     * Processes
+     * Processes the commands for players issuing CraftyProfessions Commands
      *
-     * @param sender
-     * @param cmd
-     * @param label
-     * @param args
-     * @return
+     * @param sender The sender of the command
+     *
+     * @param cmd The command that is being issued
+     *
+     * @param label The label of the command
+     *
+     * @param args The arguments of the command, this can range from few arguments to a few.
+     *
+     * @return True  - If the command succeeds
+     *         False - If the command fails
      */
     @Override
     public boolean onCommand (CommandSender sender, Command cmd, String label, String... args)
@@ -83,8 +89,24 @@ public class CommandController implements CommandExecutor
      */
     private void initializeCommands ()
     {
+        Database db = mPlugin.getCPDatabase ();
+
+        /*Profession Command Registration*/
         registerCommand (new CommandJoin ());
         registerCommand (new CommandInfo ());
+        registerCommand (new CommandList ());
+        registerCommand (new CommandProfile ());
+        registerCommand (new CommandStats ());
+
+        /*Database Command Registration*/
+        registerCommand (new CommandArchive (db));
+        registerCommand (new CommandArchiveAll (db));
+        registerCommand (new CommandLookup (db));
+        registerCommand (new CommandResetProfile (db));
+
+
+        /*Random Command Registration*/
+        mPlugin.getCommand ("shower").setExecutor (new CommandShower ());
     }
 
     /**
