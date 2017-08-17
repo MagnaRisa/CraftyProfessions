@@ -2,10 +2,13 @@ package magnarisa.craftyprofessions;
 
 import magnarisa.craftyprofessions.commands.CommandController;
 import magnarisa.craftyprofessions.config.ConfigController;
+import magnarisa.craftyprofessions.container.IWageTable;
+import magnarisa.craftyprofessions.container.MinerWage;
 import magnarisa.craftyprofessions.container.PlayerManager;
 import magnarisa.craftyprofessions.database.Database;
 import magnarisa.craftyprofessions.database.SQLiteDatabase;
 import magnarisa.craftyprofessions.listeners.CoreListener;
+import magnarisa.craftyprofessions.utility.WageTableParser;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -14,6 +17,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +45,10 @@ public class CraftyProfessions extends JavaPlugin
     // Database Information
     private Database mCPDatabase;
 
+    // WageTableParser and WageTables //
+    private WageTableParser mWageParser;
+    private HashMap<String, IWageTable> mWageTables;
+
     /**
      * This method will do all of the plugins initialization of
      * various objects like commands, events, etc...
@@ -48,9 +57,9 @@ public class CraftyProfessions extends JavaPlugin
     public void onEnable ()
     {
         // Setup the Main Configuration class and likewise
-        // any other needed config files.
+        // any other needed config files, notably the WageTables.
         mConfigController = new ConfigController (this);
-        mConfigController.createConfig ("config.yml");
+        mConfigController.initilizeConfigFiles ();
 
         // MAKE SURE TO REMOVE THIS, TEMPORARY UNTIL WE GET THE PLAYER MANAGER/CONTROLLER
         // Setup the database and initialize the table unless it's already created.
@@ -69,6 +78,13 @@ public class CraftyProfessions extends JavaPlugin
         setupChat();
 
         mCoreListener.setEconomyHook (mEconomy);
+
+        /*Not sure where I should initialize the wage tables, Ill put there here temporarily though*/
+        mWageParser = new WageTableParser ();
+        //mWageTables = new HashMap<> ();
+
+        //registerWageTables ();
+
 
         // This will initialize the PlayerManager Singleton
         PlayerManager.Instance ().initializePlayerManager (this, mCPDatabase);
@@ -193,4 +209,8 @@ public class CraftyProfessions extends JavaPlugin
         pluginManager.registerEvents (mCoreListener, this);
     }
 
+    private void registerWageTables ()
+    {
+        mWageTables.put ("miner_wage", new MinerWage (mWageParser));
+    }
 }
