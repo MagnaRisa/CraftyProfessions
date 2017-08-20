@@ -1,0 +1,43 @@
+# This is the Alchemy Wage table config file, in which any config option pertaining
+# To the alchemy profession is within this file. The Table type can be determined
+# based on which wage archetype you choose either currency payout on the Type of
+# potion or currency payout on the type of ingredient used. More info can be found
+# below.
+Enable_Alchemy_Job: true
+
+# The Payout Type is used to determine whether or not to use Potions as the Payout type
+# For example if you make a Speed Potion you get x amount of currency. Or when you use
+# a piece of Gunpowder you get x amount of currency
+#
+# Payout_Type Examples
+#
+# When the potion is brewed
+# POTION: Potion of Speed : 20.00
+#
+# When the Ingredient is used
+# INGREDIENT: Gunpowder : 2.00
+Payout_Type: POTION
+
+# Payout for potion being made
+POTION:
+    PotionName: 0.00
+
+# Payout for ingredient being used
+INGREDIENT:
+# Base Ingredients
+    NETHER_STALK: 0.20
+    GLOWSTONE_DUST: 0.20
+    REDSTONE: 0.20
+    FERMENTED_SPIDER_EYE: 0.20
+    # Secondary Ingredients
+    SUGAR: 0.20
+    SULPHER: 0.20
+    RABBIT_FOOT: 0.20
+    SPECKLED_MELON: 0.20
+    SPIDER_EYE: 0.20
+    RAW_FISH(3): 0.20
+    MAGMA_CREAM: 0.20
+    GOLDEN_CARROT: 0.20
+    BLAZE_POWDER: 0.20
+    GHAST_TEAR: 0.20
+    DRAGONS_BREATH: 0.20
