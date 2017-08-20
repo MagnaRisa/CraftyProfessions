@@ -3,12 +3,10 @@ package magnarisa.craftyprofessions;
 import magnarisa.craftyprofessions.commands.CommandController;
 import magnarisa.craftyprofessions.config.ConfigController;
 import magnarisa.craftyprofessions.container.IWageTable;
-import magnarisa.craftyprofessions.container.MinerWage;
 import magnarisa.craftyprofessions.container.PlayerManager;
 import magnarisa.craftyprofessions.database.Database;
 import magnarisa.craftyprofessions.database.SQLiteDatabase;
 import magnarisa.craftyprofessions.listeners.CoreListener;
-import magnarisa.craftyprofessions.utility.WageTableParser;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -17,7 +15,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,7 +43,6 @@ public class CraftyProfessions extends JavaPlugin
     private Database mCPDatabase;
 
     // WageTableParser and WageTables //
-    private WageTableParser mWageParser;
     private HashMap<String, IWageTable> mWageTables;
 
     /**
@@ -80,7 +76,6 @@ public class CraftyProfessions extends JavaPlugin
         mCoreListener.setEconomyHook (mEconomy);
 
         /*Not sure where I should initialize the wage tables, Ill put there here temporarily though*/
-        mWageParser = new WageTableParser ();
         //mWageTables = new HashMap<> ();
 
         //registerWageTables ();
@@ -211,6 +206,6 @@ public class CraftyProfessions extends JavaPlugin
 
     private void registerWageTables ()
     {
-        mWageTables.put ("miner_wage", new MinerWage (mWageParser));
+
     }
 }

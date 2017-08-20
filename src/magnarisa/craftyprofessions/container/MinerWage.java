@@ -1,10 +1,8 @@
 package magnarisa.craftyprofessions.container;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import magnarisa.craftyprofessions.utility.WageTableParser;
 import org.bukkit.block.Block;
 
 import java.math.BigDecimal;
@@ -17,10 +15,8 @@ import java.util.HashMap;
  */
 public class MinerWage extends BlockTable
 {
-    public MinerWage (WageTableParser parser)
+    public MinerWage ()
     {
-        super (parser);
-
         initializeTable ();
     }
 
@@ -44,13 +40,7 @@ public class MinerWage extends BlockTable
 
     private void initializeTable ()
     {
-        JsonObject json = parseJsonObject ("miner_wage");
-        if (json == null)
-        {
-            return;
-        }
-        // This line of code will fill in the mBlockmap with the given Type of the Miner_Wage table from miner_wage.json
-        mBlockMap = new Gson ().fromJson (json.getAsString (), new TypeToken<HashMap<String, HashMap<String, BigDecimal>>>(){}.getType ());
+
     }
 
     /**

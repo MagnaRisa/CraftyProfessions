@@ -1,8 +1,6 @@
 package magnarisa.craftyprofessions.container;
 
 import com.google.gson.JsonObject;
-import magnarisa.craftyprofessions.config.ConfigController;
-import magnarisa.craftyprofessions.utility.WageTableParser;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -13,8 +11,6 @@ import java.util.HashMap;
  */
 public abstract class BlockTable implements IWageTable
 {
-    private WageTableParser mParser;
-
     /**
      * TODO: This Should be the table design that is used throughout all the wage tables.
      * So my intended purpose here is that whenever someone breaks or places
@@ -29,14 +25,8 @@ public abstract class BlockTable implements IWageTable
     // protected HashMap<String, HashMap<String, BigDecimal>> mBlockMap;
     protected HashMap<String, HashMap<String, BigDecimal>> mBlockMap;
 
-    protected BlockTable (WageTableParser parser)
+    protected BlockTable ()
     {
-        mParser = parser;
         mBlockMap = new HashMap<>();
-    }
-
-    protected JsonObject parseJsonObject (String table)
-    {
-        return mParser.parseTable (table);
     }
 }
