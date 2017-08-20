@@ -3,15 +3,15 @@ package magnarisa.craftyprofessions.listeners;
 import magnarisa.craftyprofessions.CraftyProfessions;
 import magnarisa.craftyprofessions.database.Database;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import static magnarisa.craftyprofessions.CraftyProfessions.getEconomy;
 
 /**
  * Author:  CreedTheFreak
@@ -65,7 +65,8 @@ public class CoreListener implements Listener
     {
         Player player = event.getPlayer ();
 
-        player.sendMessage (event.getPlayer ().getDisplayName () + " Broke " + event.getBlock ().toString ());
+        player.sendMessage (event.getPlayer ().getDisplayName () + ChatColor.RED + " Broke " + event.getBlock ().getType () + ":" + event.getBlock ().getData ());
+        player.sendMessage (event.getPlayer ().getDisplayName () + ChatColor.GOLD + " Broke " + event.getBlock ().getType ().toString ());
 
         if (mEconomy != null)
         {
@@ -86,6 +87,25 @@ public class CoreListener implements Listener
             mEconomy.getBalance (player);
         }
     }
+
+    /**
+     * THIS METHOD IS FOR TESTING ONLY AND WILL NOT BE USED IN THE FINAL PRODUCTION
+     */
+    @EventHandler
+    public void onEntityPickup (EntityPickupItemEvent event)
+    {
+        Entity player = event.getEntity ();
+
+        if (player instanceof Player)
+        {
+
+            player.sendMessage (event.getItem ().getName ());
+            // TODO: Use the below way to retrieve the Material Type from an Item.
+            player.sendMessage (event.getItem ().getItemStack ().getType ().toString ());
+        }
+    }
+
+
 
     /**
      * WILL PROBABLY HAVE TO REMOVE THIS AT SOME POINT

@@ -21,7 +21,7 @@ import java.util.logging.Level;
  */
 public class ConfigController
 {
-    private final String[] WAGE_NAMES = {"miner_wage.yml"};
+    private final String[] WAGE_NAMES = {"miner_wage.yml", "alchemy_wage.yml", "angler_wage.yml"};
 
     private JavaPlugin mPlugin = null;
 
@@ -79,7 +79,6 @@ public class ConfigController
             {
                 mPlugin.getLogger ().info ("config.yml Found, Loading File!");
             }
-            mPlugin.getConfig ();
         }
         catch (Exception e)
         {
@@ -143,10 +142,10 @@ public class ConfigController
             FileConfiguration pushConfig;
 
             pushFile = checkFile (fileName);
-            pushConfig = checkConfiguration (pushFile);
+            //pushConfig = checkConfiguration (pushFile);
 
             mWageFiles.put (fileName, pushFile);
-            mWageConfigs.put (fileName, pushConfig);
+            //mWageConfigs.put (fileName, pushConfig);
         }
     }
 
