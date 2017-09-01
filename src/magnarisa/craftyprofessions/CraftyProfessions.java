@@ -96,8 +96,12 @@ public class CraftyProfessions extends JavaPlugin
     @Override
     public void onDisable ()
     {
-        this.saveConfig ();
-        mConfigController.saveConfigs ();
+        /*Saving The configs will happen once the commenting yaml parser is implemented,
+        right now we will only be reading from the configs although we will eventually
+        be writing to the config files at a later date.*/
+
+        // this.saveConfig ();
+        // mConfigController.saveConfigs ();
     }
 
     /**
