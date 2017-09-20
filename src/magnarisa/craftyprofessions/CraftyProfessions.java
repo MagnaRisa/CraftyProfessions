@@ -3,6 +3,7 @@ package magnarisa.craftyprofessions;
 import magnarisa.craftyprofessions.commands.CommandController;
 import magnarisa.craftyprofessions.config.ConfigController;
 import magnarisa.craftyprofessions.container.IWageTable;
+import magnarisa.craftyprofessions.container.MinerWage;
 import magnarisa.craftyprofessions.container.PlayerManager;
 import magnarisa.craftyprofessions.database.Database;
 import magnarisa.craftyprofessions.database.SQLiteDatabase;
@@ -10,12 +11,17 @@ import magnarisa.craftyprofessions.listeners.CoreListener;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,7 +48,7 @@ public class CraftyProfessions extends JavaPlugin
     // Database Information
     private Database mCPDatabase;
 
-    // WageTableParser and WageTables //
+    // WageTables
     private HashMap<String, IWageTable> mWageTables;
 
     /**
@@ -76,10 +82,9 @@ public class CraftyProfessions extends JavaPlugin
 
         mCoreListener.setEconomyHook (mEconomy);
 
-        /*Not sure where I should initialize the wage tables, Ill put there here temporarily though*/
-        //mWageTables = new HashMap<> ();
-
-        //registerWageTables ();
+        /*The registering of the wage tables are below*/
+        mWageTables = new HashMap<> ();
+        registerWageTables ();
 
 
         // This will initialize the PlayerManager Singleton
@@ -212,6 +217,64 @@ public class CraftyProfessions extends JavaPlugin
 
     private void registerWageTables ()
     {
+        mWageTables.put ("Miner_Wage", new MinerWage());
 
+
+
+        for (Map.Entry<String, IWageTable> table : mWageTables.entrySet ())
+        {
+            table.getValue ().readTable (mConfigController);
+        }
+
+    }
+
+    public IWageTable getWageTable (String tableName)
+    {
+        return mWageTables.get (tableName);
+    }
+
+    /** NEED TO DELETE THIS LATER DEBUGGING ONLY
+     * This method is Purely for the Use of obtaining a list of Materials to access later
+     */
+    private void writeMaterials ()
+    {
+        final String FILE_NAME = "C:\\Users\\Logan Cookman\\Desktop\\materials.txt";
+
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+
+        try
+        {
+            fw = new FileWriter (FILE_NAME);
+            bw = new BufferedWriter (fw);
+
+            for (Material material : Material.values ())
+            {
+                bw.write (material.toString () + "\n");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace ();
+        }
+        finally
+        {
+            mLog.log (Level.INFO, "Writing Materials is DONE!");
+            try
+            {
+                if (bw != null)
+                {
+                    bw.close ();
+                }
+                if (fw != null)
+                {
+                    fw.close ();
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace ();
+            }
+        }
     }
 }

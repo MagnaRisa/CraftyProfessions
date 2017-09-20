@@ -1,6 +1,7 @@
 package magnarisa.craftyprofessions.config;
 
 import com.google.common.base.Charsets;
+import magnarisa.craftyprofessions.container.TableName;
 import magnarisa.craftyprofessions.exceptions.ConfigNotFoundException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,8 +22,6 @@ import java.util.logging.Level;
  */
 public class ConfigController
 {
-    private final String[] WAGE_NAMES = {"miner_wage.yml", "alchemy_wage.yml", "angler_wage.yml"};
-
     private JavaPlugin mPlugin = null;
 
     private File mConfigFile;
@@ -55,9 +54,9 @@ public class ConfigController
      */
     public void registerConfigFiles ()
     {
-        for (String resource : WAGE_NAMES)
+        for (TableName resource : TableName.values ())
         {
-            loadFile (resource);
+            loadFile (resource.getFileName ());
         }
     }
 
@@ -112,6 +111,36 @@ public class ConfigController
     }
 
     /**
+     * This method will save the config parameter to the specified
+     * resource file.
+     *
+     * @param config The configuration to save to the resource file
+     * @param resource The file name to save the configuration to.
+     */
+    public void saveConfig (YamlConfiguration config, String resource)
+    {
+        File file = mWageFiles.get (resource);
+
+        try
+        {
+            if (file == null)
+            {
+                throw new ConfigNotFoundException ("Could not find config labeled " + resource);
+            }
+
+            config.save (file);
+        }
+        catch (ConfigNotFoundException e)
+        {
+            mPlugin.getLogger ().log (Level.WARNING, "Config not found, Cannot Save the Config File to " + resource);
+        }
+        catch (IOException e)
+        {
+            mPlugin.getLogger ().log (Level.WARNING, e.getMessage ());
+        }
+    }
+
+    /**
      * This method will save all of the config files.
      */
     public void saveConfigs ()
@@ -120,9 +149,9 @@ public class ConfigController
         {
             mPlugin.saveConfig ();
 
-            for (String fileName : WAGE_NAMES)
+            for (TableName resource : TableName.values ())
             {
-                saveConfig (fileName);
+                saveConfig (resource.getFileName ());
             }
         }
         catch (ConfigNotFoundException e)

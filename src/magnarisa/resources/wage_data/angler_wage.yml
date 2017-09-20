@@ -1,7 +1,35 @@
-# default config.yml
-message: Hello World and Welcome! :)
-rules:
-  - Play Nice
-  - Respect others
-  - Have Fun
-  - Dont swear
+# The Main file for controlling the Angler wage table
+# for Vanilla Mechanics. To enable the wage table
+# set Enable to true.
+Enable: true
+
+# This is the payout for the items obtained by fishing
+Angler_Payout:
+    # Raw Fish
+    RAW_FISH(0): 4.00
+    # Salmon
+    RAW_FISH(1): 5.00
+    # Clown fish
+    RAW_FISH(2): 20.00
+    # Puffer fish
+    RAW_FISH(3): 16.00
+
+    # Below is the "Treasure" That is dropped from fishing
+    ENCANTED_BOOK: 20.00
+    NAME_TAG: 10.00
+    SADDLE: 5.00
+    LILY_PAD: 2.50
+    BOW: 1.50
+    FISHING_ROD: 2.00
+
+    # Below is the "Junk" That is dropped from fishing
+    BOWL: 0.05
+    LEATHER: 0.25
+    LEATHER_BOOTS: 0.25
+    ROTTEN_FLESH: 0.05
+    STICK: 0.05
+    STRING: 0.05
+    WATER_BOTTLE: 0.05
+    BONE: 0.15
+    INK_SACK: 0.20
+    TRIPWIRE_HOOK: 0.25

@@ -1,12 +1,13 @@
 package magnarisa.craftyprofessions.container;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import org.bukkit.block.Block;
+import magnarisa.craftyprofessions.config.ConfigController;
+import magnarisa.craftyprofessions.utility.CurrencyUtil;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This Class is the implementation for the MinerWage Table
@@ -15,50 +16,83 @@ import java.util.HashMap;
  */
 public class MinerWage extends BlockTable
 {
+    private final String MINER_PAYOUT = "Miner_Payout";
+    private final String STONE_AFFINITY = "Stone_Affinity";
+    private final String ORE_AFFINITY = "Ore_Affinity";
+
     public MinerWage ()
     {
-        initializeTable ();
-    }
-
-    @Override
-    public <T> BigDecimal mapItem (T item, String... subStrings)
-    {
-        HashMap<String, BigDecimal> mapType = mBlockMap.get (subStrings[1]);
-        Block generic;
-
-        if (item instanceof Block && mapType != null)
-        {
-            generic = (Block) item;
-        }
-        else
-        {
-            return null;
-        }
-
-        return mapType.get (generic.getType().toString ());
-    }
-
-    private void initializeTable ()
-    {
-
+        super (TableName.Miner);
     }
 
     /**
-     * This method is the implementation of the IWageTable's interface
-     * in which the table is able to be read into the MinerWage table
-     * given the name of the table.
+     * This method will read in the specified table name labeled
+     * resource in the parameters. The specified resource is then
+     * grabbed from the ConfigController and the config file is
+     * read into the MinerWage Table to be stored in memory
+     * for quick access to the data.
      *
-     * @param tableName The name of the file to read from the file.
-     *
-     * @return A Miner Wage table read from the file with the given tableName
+     * @param controller The configuration controller in order to gain
+     *                   access to a specified resource file.
      */
-    public IWageTable readTable (String tableName)
+    public void readTable (ConfigController controller)
     {
-        return null;
+        YamlConfiguration wageTable = controller.getSpecialConfig (mTableName.getFileName ());
+
+        mBlockMap.put (MINER_PAYOUT, new ConcurrentHashMap<> ());
+        mBlockMap.put (STONE_AFFINITY, new ConcurrentHashMap<> ());
+        mBlockMap.put (ORE_AFFINITY, new ConcurrentHashMap<> ());
+
+        ConfigurationSection minerPayout = wageTable.getConfigurationSection (MINER_PAYOUT);
+        Map<String, Object> table = minerPayout.getValues (true);
+
+        for (Map.Entry<String, Object> entry : table.entrySet ())
+        {
+            mBlockMap.get (MINER_PAYOUT).put (entry.getKey(), CurrencyUtil.formatDouble ((Double) entry.getValue()));
+        }
+
+        minerPayout = wageTable.getConfigurationSection (STONE_AFFINITY);
+        table = minerPayout.getValues (true);
+
+        for (Map.Entry<String, Object> entry : table.entrySet ())
+        {
+            mBlockMap.get (STONE_AFFINITY).put (entry.getKey(), CurrencyUtil.formatDouble ((Double) entry.getValue()));
+        }
+
+        minerPayout = wageTable.getConfigurationSection (ORE_AFFINITY);
+        table = minerPayout.getValues (true);
+
+        for (Map.Entry<String, Object> entry : table.entrySet ())
+        {
+            mBlockMap.get (ORE_AFFINITY).put (entry.getKey(), CurrencyUtil.formatDouble ((Double) entry.getValue()));
+        }
     }
 
-    public void writeTable ()
+    /**
+     * The goal of this method is to be able to modify a value within the
+     * Wage Table from a command or by other means.
+     *
+     * @param value The new value to modify the WageTable with
+     * @param path The path to the key whose value you want to change
+     *
+     * @return True  - If the value change was successful
+     *         False - If the value change was unsuccessful
+     */
+    public boolean modifyValue (BigDecimal value, String... path)
     {
+        Map<String, BigDecimal> map = mBlockMap.get (path[0]);
+        if (map == null)
+        {
+            return false;
+        }
 
+        BigDecimal oldValue = map.get (path[1]);
+        if (oldValue == null)
+        {
+            return false;
+        }
+
+        mBlockMap.get(path[0]).put (path[1], value);
+        return true;
     }
 }

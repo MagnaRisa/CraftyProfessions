@@ -1,9 +1,11 @@
 package magnarisa.craftyprofessions.listeners;
 
 import magnarisa.craftyprofessions.CraftyProfessions;
+import magnarisa.craftyprofessions.container.IWageTable;
 import magnarisa.craftyprofessions.database.Database;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,6 +14,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.math.BigDecimal;
 
 /**
  * Author:  CreedTheFreak
@@ -65,6 +69,7 @@ public class CoreListener implements Listener
     {
         Player player = event.getPlayer ();
 
+        /*
         player.sendMessage (event.getPlayer ().getDisplayName () + ChatColor.RED + " Broke " + event.getBlock ().getType () + ":" + event.getBlock ().getData ());
         player.sendMessage (event.getPlayer ().getDisplayName () + ChatColor.GOLD + " Broke " + event.getBlock ().getType ().toString ());
 
@@ -72,6 +77,23 @@ public class CoreListener implements Listener
         {
            player.sendMessage (Double.toString (mEconomy.getBalance (player)));
         }
+        */
+
+        IWageTable wageTable = mProfessions.getWageTable ("Miner_Wage");
+        if (wageTable == null)
+        {
+            player.sendMessage ("Wage Table is NULL");
+            return;
+        }
+
+        BigDecimal value = wageTable.mapItem (event.getBlock (), "Miner_Payout");
+        if (value == null)
+        {
+            player.sendMessage ("Block does not map to Miner_Wage Table value returned null");
+            return;
+        }
+
+        player.sendMessage (event.getBlock().getType () + " is Worth " + value.toString ());
     }
 
     @EventHandler
@@ -98,10 +120,11 @@ public class CoreListener implements Listener
 
         if (player instanceof Player)
         {
-
             player.sendMessage (event.getItem ().getName ());
             // TODO: Use the below way to retrieve the Material Type from an Item.
             player.sendMessage (event.getItem ().getItemStack ().getType ().toString ());
+            player.sendMessage (event.getItem ().getItemStack ().getData ().toString ());
+            player.sendMessage (event.getItem ().getItemStack ().getItemMeta ().toString ());
         }
     }
 
