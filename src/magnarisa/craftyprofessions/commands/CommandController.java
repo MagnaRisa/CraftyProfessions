@@ -162,13 +162,11 @@ public class CommandController implements CommandExecutor
      */
     private ICommand loadCommand (String arg) throws CommandNotFoundException
     {
-        ICommand command = mCommandMap.get (arg);
-
-        if (command == null)
+        if (mCommandMap.get (arg) == null)
         {
             throw new CommandNotFoundException ();
         }
 
-        return command;
+        return mCommandMap.get (arg);
     }
 }

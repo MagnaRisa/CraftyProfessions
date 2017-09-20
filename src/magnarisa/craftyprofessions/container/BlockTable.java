@@ -1,9 +1,12 @@
 package magnarisa.craftyprofessions.container;
 
-import com.google.gson.JsonObject;
+import magnarisa.craftyprofessions.config.ConfigController;
+import org.bukkit.block.Block;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This implementation of a Wage Table is based around the Blocks
@@ -22,11 +25,76 @@ public abstract class BlockTable implements IWageTable
      * you only really want to either place a block for a job or break it. But when handling
      * actions like breaking and planting crops this type of table should work nicely.
      */
-    // protected HashMap<String, HashMap<String, BigDecimal>> mBlockMap;
-    protected HashMap<String, HashMap<String, BigDecimal>> mBlockMap;
+    protected ConcurrentHashMap<String, ConcurrentHashMap<String, BigDecimal>> mBlockMap;
+    protected TableName mTableName;
+    private boolean mbHasChanged;
 
-    protected BlockTable ()
+    protected BlockTable (TableName tableName)
     {
-        mBlockMap = new HashMap<>();
+        mTableName = tableName;
+        mBlockMap = new ConcurrentHashMap<> ();
+        mbHasChanged = false;
+    }
+
+    /**
+     * This method will map the given item into the mBlockMap
+     * this will return a BigDecimal Value if the item is found
+     * or null if the item is not found within the Map.
+     *
+     * @param item The item to look for the in the BlockMap
+     *
+     * @return The BigDecimal Value that the Item maps to within mBlockMap
+     */
+    @Override
+    public <T> BigDecimal mapItem (T item, String... stringArgs)
+    {
+        // Loop through the string args trying the differnt table types or specializations
+        // A crafty player might have. When we find a match we stop the search.
+        ConcurrentHashMap<String, BigDecimal> mapType = mBlockMap.get (stringArgs[0]);
+        Block generic;
+
+        if (item instanceof Block && mapType != null)
+        {
+            generic = (Block) item;
+        }
+        else
+        {
+            return null;
+        }
+
+        return mapType.get (generic.getType().toString ());
+    }
+
+    /** CURRENTLY UNTESTED! NEED TO REPLICATE THIS IN THE READING OF THE FILE AS WELL
+     * This method will write the table specified by the internal parents
+     * protected mTableName field.
+     *
+     * @param controller The configuration controller in order to gain
+     *                   access to a specified resource file.
+     */
+    @Override
+    public void writeTable (ConfigController controller)
+    {
+        YamlConfiguration wageTable = controller.getSpecialConfig (mTableName.getFileName ());
+
+        for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
+        {
+            ConcurrentHashMap<String, BigDecimal> tableMap = tableEntry.getValue ();
+            ConcurrentHashMap<String, BigDecimal> blockMapSection = mBlockMap.get (tableEntry.getKey ());
+
+            for (Map.Entry<String, BigDecimal> entry : tableMap.entrySet ())
+            {
+                wageTable.set (tableEntry.getKey () + "." + entry.getKey (), blockMapSection.get (entry.getKey ()));
+            }
+        }
+
+        controller.saveConfig (wageTable, mTableName.getFileName ());
+    }
+
+
+    @Override
+    public boolean hasChanged ()
+    {
+        return mbHasChanged;
     }
 }
