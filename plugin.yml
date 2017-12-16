@@ -10,7 +10,32 @@ author: CreedTheFreak
 depend: [Vault]
 database: true
 
-###################### Commands ####################
+######################### Databases ########################
+# There are Three different types of databases that are
+# currently supported. SQLite which is a local database.
+# MySQL through the connector/J of MariaDB, and then
+# MariaDB itself. Simply put the database you would
+# like to use within the Type Parameter.
+#
+# Types: SQLite [Default], MySQL, MariaDB
+#
+# The Host, Database, User, and Password should be
+# used for MySQL or MariaDB but not SQLite.
+#
+DBMS:
+  Type: SQLite
+    # The URL to your database
+    # Example: localhost:3306 or 127.0.0.1:3306
+    host: null
+    # The name of the Database to use
+    db_name: null
+    # The username of your database
+    user: null
+    # The password for the database user
+    password: null
+
+
+########################## Commands ########################
 commands:
   prof:
     description: The entry point into the commands for CraftyProfessions
@@ -25,7 +50,7 @@ commands:
     aliases: [shower, showersquad, showersqad, showersquad]
 
 
-################ Permissions ################
+#################### Permissions ####################
 #
 # Input some sort of sassy description here
 #
