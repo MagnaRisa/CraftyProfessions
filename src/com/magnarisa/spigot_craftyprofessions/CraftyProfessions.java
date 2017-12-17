@@ -1,13 +1,12 @@
 package com.magnarisa.spigot_craftyprofessions;
 
+import com.magnarisa.AbsCmdController;
+import com.magnarisa.AbsConfigController;
 import com.magnarisa.ICraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.commands.CommandController;
 import com.magnarisa.spigot_craftyprofessions.config.ConfigController;
 import com.magnarisa.spigot_craftyprofessions.container.IWageTable;
 import com.magnarisa.spigot_craftyprofessions.container.MinerWage;
-import com.magnarisa.spigot_craftyprofessions.container.PlayerManager;
-import com.magnarisa.spigot_craftyprofessions.database.Database;
-import com.magnarisa.spigot_craftyprofessions.database.SQLiteDatabase;
 import com.magnarisa.spigot_craftyprofessions.listeners.CoreListener;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -46,7 +45,6 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     private CommandController mCommandController;
 
     // Database Information
-    private Database mCPDatabase;
 
     // WageTables
     private HashMap<String, IWageTable> mWageTables;
@@ -63,11 +61,6 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
         mConfigController = new ConfigController (this);
         mConfigController.createDefaultConfig ();
         mConfigController.registerConfigFiles ();
-
-        // MAKE SURE TO REMOVE THIS, TEMPORARY UNTIL WE GET THE PLAYER MANAGER/CONTROLLER
-        // Setup the database and initialize the table unless it's already created.
-        mCPDatabase = new SQLiteDatabase (this);
-        mCPDatabase.load ();
 
         // We need to register the listeners for the Plugin
         this.registerListeners ();
@@ -88,7 +81,7 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
 
 
         // This will initialize the PlayerManager Singleton
-        PlayerManager.Instance ().initializePlayerManager (this, mCPDatabase);
+//        PlayerManager.Instance ().initializePlayerManager (this, mCPDatabase);
 
         // This will notify the end of initialization
         this.getLogger().log(Level.INFO, "Initializaion of CraftyProfessions Completed!");
@@ -278,6 +271,9 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
         }
     }
 
+    /**
+     * Returns the Logger of the Spigot CP
+     */
     public Logger cpGetLogger ()
     {
         return this.getLogger ();
@@ -286,19 +282,26 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     /**
      * This method outlines the economy hook setup
      */
-    public void cpSetupEconomy ()
+    public boolean cpSetupEconomy ()
     {
-
+        return false;
     }
 
     /**
-     * Get the Configuration of the Plugin
+     * Get the Configuration Object of the Plugin
      */
-    public void cpGetPluginConfiguration ()
+    public AbsConfigController cpGetConfigController ()
     {
-
+        return null;
     }
 
+    /**
+     * Get the Command Controller of the Plugin
+     */
+    public AbsCmdController cpGetCmdController ()
+    {
+        return null;
+    }
     /**
      * Register the plugins listeners.
      */

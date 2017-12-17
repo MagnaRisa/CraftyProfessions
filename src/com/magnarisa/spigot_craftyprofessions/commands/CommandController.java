@@ -1,10 +1,10 @@
 package com.magnarisa.spigot_craftyprofessions.commands;
 
+import com.magnarisa.AbsCmdController;
 import com.magnarisa.spigot_craftyprofessions.CraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.commands.DatabaseCommands.*;
 import com.magnarisa.spigot_craftyprofessions.commands.ProfessionCommands.*;
 import com.magnarisa.spigot_craftyprofessions.container.PlayerManager;
-import com.magnarisa.spigot_craftyprofessions.database.Database;
 import com.magnarisa.spigot_craftyprofessions.exceptions.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,7 +22,7 @@ import java.util.UUID;
  * will be unable to be disabled but in terms of feature commands there will
  * be disabling of those commands.
  */
-public class CommandController implements CommandExecutor
+public class CommandController extends AbsCmdController implements CommandExecutor
 {
     private CraftyProfessions mPlugin;
     private HashMap<String, ICommand> mCommandMap;
@@ -89,7 +89,7 @@ public class CommandController implements CommandExecutor
      */
     private void initializeCommands ()
     {
-        Database db = mPlugin.getCPDatabase ();
+      //   Database db = mPlugin.getCPDatabase ();
 
         /*Profession Command Registration*/
         registerCommand (new CommandJoin ());
@@ -99,10 +99,10 @@ public class CommandController implements CommandExecutor
         registerCommand (new CommandStats ());
 
         /*Database Command Registration*/
-        registerCommand (new CommandArchive (db));
-        registerCommand (new CommandArchiveAll (db));
-        registerCommand (new CommandLookup (db));
-        registerCommand (new CommandResetProfile (db));
+//        registerCommand (new CommandArchive (db));
+//        registerCommand (new CommandArchiveAll (db));
+//        registerCommand (new CommandLookup (db));
+//        registerCommand (new CommandResetProfile (db));
 
 
         /*Random Command Registration*/

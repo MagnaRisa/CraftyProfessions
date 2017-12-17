@@ -1,6 +1,7 @@
 package com.magnarisa.spigot_craftyprofessions.config;
 
 import com.google.common.base.Charsets;
+import com.magnarisa.AbsConfigController;
 import com.magnarisa.spigot_craftyprofessions.container.TableName;
 import com.magnarisa.spigot_craftyprofessions.exceptions.ConfigNotFoundException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,7 +21,7 @@ import java.util.logging.Level;
  * Most if not all config setup and parsing for the main
  * config file will happen through this class.
  */
-public class ConfigController
+public class ConfigController extends AbsConfigController
 {
     private JavaPlugin mPlugin = null;
 

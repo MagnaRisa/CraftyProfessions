@@ -30,12 +30,14 @@ public interface ICraftyProfessions
     /**
      * This method outlines the economy hook setup
      */
-    void cpSetupEconomy ();
+    boolean cpSetupEconomy ();
 
     /**
      * Get the Configuration of the Plugin
      */
-    void cpGetPluginConfiguration ();
+    AbsConfigController cpGetConfigController ();
+
+    AbsCmdController cpGetCmdController ();
 
     /**
      * Register the plugins listeners.
