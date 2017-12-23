@@ -1,5 +1,7 @@
 package com.magnarisa;
 
+import com.magnarisa.spigot_craftyprofessions.database.Database;
+
 import java.util.logging.Logger;
 
 /**
@@ -43,4 +45,13 @@ public interface ICraftyProfessions
      * Register the plugins listeners.
      */
     void cpSetupListeners ();
+
+    /**
+     * Grab the database
+     *
+     * @return
+     */
+    Database cpGetDatabase ();
+
+    void cpSetupDatabase ();
 }

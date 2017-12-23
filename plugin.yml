@@ -17,23 +17,22 @@ database: true
 # MariaDB itself. Simply put the database you would
 # like to use within the Type Parameter.
 #
-# Types: SQLite [Default], MySQL, MariaDB
+# Types: SQLite [Default], MySQL
 #
 # The Host, Database, User, and Password should be
 # used for MySQL or MariaDB but not SQLite.
 #
 DBMS:
-  Type: SQLite
-    # The URL to your database
-    # Example: localhost:3306 or 127.0.0.1:3306
-    host: null
-    # The name of the Database to use
-    db_name: null
-    # The username of your database
-    user: null
-    # The password for the database user
-    password: null
-
+  type: MySQL
+  # The URL to your database
+  # Example: localhost:3306 or 127.0.0.1:3306
+  host: localhost:3306
+  # The name of the Database to use
+  db_name: creed_test
+  # The username of your database
+  user: creed
+  # The password for the database user
+  password: test
 
 ########################## Commands ########################
 commands:

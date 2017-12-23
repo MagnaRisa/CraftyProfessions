@@ -214,4 +214,9 @@ public class ConfigController extends AbsConfigController
 
         return config;
     }
+
+    public String getDefaultString (String path)
+    {
+        return mPlugin.getConfig().getString (path);
+    }
 }

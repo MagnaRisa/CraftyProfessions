@@ -7,6 +7,9 @@ import com.magnarisa.spigot_craftyprofessions.commands.CommandController;
 import com.magnarisa.spigot_craftyprofessions.config.ConfigController;
 import com.magnarisa.spigot_craftyprofessions.container.IWageTable;
 import com.magnarisa.spigot_craftyprofessions.container.MinerWage;
+import com.magnarisa.spigot_craftyprofessions.container.PlayerManager;
+import com.magnarisa.spigot_craftyprofessions.database.Database;
+import com.magnarisa.spigot_craftyprofessions.database.MySQL_Conn;
 import com.magnarisa.spigot_craftyprofessions.listeners.CoreListener;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -45,6 +48,7 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     private CommandController mCommandController;
 
     // Database Information
+    Database mDatabase;
 
     // WageTables
     private HashMap<String, IWageTable> mWageTables;
@@ -61,6 +65,9 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
         mConfigController = new ConfigController (this);
         mConfigController.createDefaultConfig ();
         mConfigController.registerConfigFiles ();
+
+        // Temp Database access : Use the Database Factory here based on the Config file
+        mDatabase = new MySQL_Conn (this,"localhost:3306", "creed_test", "creed", "test");
 
         // We need to register the listeners for the Plugin
         this.registerListeners ();
@@ -81,7 +88,7 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
 
 
         // This will initialize the PlayerManager Singleton
-//        PlayerManager.Instance ().initializePlayerManager (this, mCPDatabase);
+        PlayerManager.Instance ().initializePlayerManager (this, mDatabase);
 
         // This will notify the end of initialization
         this.getLogger().log(Level.INFO, "Initializaion of CraftyProfessions Completed!");
@@ -187,10 +194,10 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     /**
      * Returns the Database we are using
      */
-//    public Database getCPDatabase ()
-//    {
-//        return mCPDatabase;
-//    }
+    public Database cpGetDatabase ()
+    {
+        return mDatabase;
+    }
 
     /**
      * This method registers all of the needed listeners for the Plugin
@@ -308,5 +315,20 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     public void cpSetupListeners ()
     {
 
+    }
+
+    /**
+     * Sets up the Database using the Spigot Config File
+     */
+    public void cpSetupDatabase ()
+    {
+        // Grab the Database Type from the config file
+        String dbType = mConfigController.getDefaultString ("DatabaseType");
+
+        // Construct the Connection Object from Factory
+
+        // Give the Constructed connection type to mDatabase
+
+        // If the type is MySQL send in the information into the factory.
     }
 }

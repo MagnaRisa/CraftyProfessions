@@ -1,7 +1,10 @@
 package com.magnarisa.spigot_craftyprofessions.listeners;
 
+import com.magnarisa.ICraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.CraftyProfessions;
+import com.magnarisa.spigot_craftyprofessions.container.CraftyPlayer;
 import com.magnarisa.spigot_craftyprofessions.container.IWageTable;
+import com.magnarisa.spigot_craftyprofessions.container.PlayerManager;
 import com.magnarisa.spigot_craftyprofessions.database.Database;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Entity;
@@ -12,6 +15,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.math.BigDecimal;
 
@@ -27,15 +31,21 @@ public class CoreListener implements Listener
     private Database mdb;
     private Economy mEconomy;
 
-    public CoreListener (CraftyProfessions professions)
+    public CoreListener (ICraftyProfessions professions)
     {
-        mProfessions = professions;
+        mProfessions = (CraftyProfessions) professions;
     }
 
 
     @EventHandler
     public void onPlayerJoin (PlayerJoinEvent event)
     {
+        Player eventPlayer = event.getPlayer ();
+
+
+        eventPlayer.sendMessage ("Player Logged in, Attempting to save to PlayerManager");
+
+        PlayerManager.Instance ().savePlayer (new CraftyPlayer (eventPlayer, null));
        /* Player eventPlayer = event.getPlayer ();
 
         if (eventPlayer != null)
@@ -60,6 +70,14 @@ public class CoreListener implements Listener
          * add that player to the cp database to avoid making the database cluttered with
          * players that have no interest in sticking around.
          */
+    }
+
+    @EventHandler
+    public void onPlayerLogout (PlayerQuitEvent event)
+    {
+        Player eventPlayer = event.getPlayer ();
+
+        PlayerManager.Instance ().removePlayer (eventPlayer.getUniqueId ());
     }
 
     @EventHandler

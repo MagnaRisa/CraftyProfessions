@@ -1,6 +1,6 @@
 package com.magnarisa.spigot_craftyprofessions.container;
 
-import com.magnarisa.spigot_craftyprofessions.CraftyProfessions;
+import com.magnarisa.ICraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.database.Database;
 
 import java.util.UUID;
@@ -15,14 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class PlayerManager
 {
-    private CraftyProfessions mInstance;
-    private Database mPlayerDatabse;
+    private ICraftyProfessions mPlugin;
+    private Database mDatabase;
 
     private static PlayerManager mPlayerManager;
 
+    // Change the UUID to the internal database ID
     private ConcurrentHashMap<UUID, CraftyPlayer> mPlayerList;
-
-    private Integer mSize;
 
     private PlayerManager () {}
 
@@ -46,17 +45,19 @@ public final class PlayerManager
      * to access the Player Information and the Instance to the plugin so we cant have access
      * to things like the Logger of the plugin and other useful resources.
      *
-     * @param instance - The plugin in which the PlayerManager is apart of.
+     * @param plugin - The plugin in which the PlayerManager is apart of.
      * @param playerStorage - A database which the PlayerManager needs to interface with in order
      *                      to get the data from players so we can track their profession
      *                      information.
      */
-    public void initializePlayerManager (CraftyProfessions instance, Database playerStorage)
+    public void initializePlayerManager (ICraftyProfessions plugin, Database playerStorage)
     {
-        mInstance = instance;
-        mPlayerDatabse = playerStorage;
+        mPlugin = plugin;
+        mDatabase = playerStorage;
 
-        mInstance.getLogger ().info ("Initialization of the PlayerManager is completed!");
+        mPlayerList = new ConcurrentHashMap<> ();
+
+        mPlugin.cpGetLogger ().info ("Initialization of the PlayerManager is completed!");
     }
     /**
      * This method will save all of the players to the database
@@ -80,19 +81,19 @@ public final class PlayerManager
     }
 
     /**
-     * This method will save the player with the specified UUID to the database
-     * and then remove them from the PlayerManager
+     * This method will remove the player with the specified UUID from the
+     * PlayerManager.
      *
-     * @param playerUUID - The Player to stash into the database
+     * @param playerUUID - The Player to remove from the Manager.
      */
-    public void savePlayer (UUID playerUUID)
+    public void removePlayer (UUID playerUUID)
     {
-
-
-
-
         mPlayerList.remove (playerUUID);
-        mSize--;
+    }
+
+    public void savePlayer (CraftyPlayer player)
+    {
+        mPlayerList.put (player.getUUID (), player);
     }
 
     /**
@@ -114,8 +115,7 @@ public final class PlayerManager
      */
     public void loadPlayer (UUID playerUUID)
     {
-        mPlayerList.put (playerUUID, mPlayerDatabse.getPlayerInfo (playerUUID));
-        mSize++;
+//        mPlayerList.put (playerUUID, mDatabase.getPlayerInfo (playerUUID));
     }
 
     /**
@@ -129,7 +129,7 @@ public final class PlayerManager
      *
      * @return The player specified by their UUID
      */
-    public synchronized CraftyPlayer retrievePlayer (UUID playerUUID)
+    public CraftyPlayer retrievePlayer (UUID playerUUID)
     {
         return mPlayerList.get (playerUUID);
     }
