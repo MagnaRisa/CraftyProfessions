@@ -25,7 +25,7 @@ public class CommandTest extends DatabaseCommand
     public boolean execute (CraftyPlayer sender, String... args)
     {
         MySQL_Conn conn = (MySQL_Conn) mDatabase;
-        mDatabase.db_connect ();
+        mDatabase.dbConnect ();
         List<Pair<Integer, String>> array = conn.testDBconnection ();
 
         for (Pair<Integer, String> pair : array)

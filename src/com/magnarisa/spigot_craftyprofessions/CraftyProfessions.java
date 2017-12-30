@@ -9,19 +9,19 @@ import com.magnarisa.spigot_craftyprofessions.container.IWageTable;
 import com.magnarisa.spigot_craftyprofessions.container.MinerWage;
 import com.magnarisa.spigot_craftyprofessions.container.PlayerManager;
 import com.magnarisa.spigot_craftyprofessions.database.Database;
-import com.magnarisa.spigot_craftyprofessions.database.MySQL_Conn;
+import com.magnarisa.spigot_craftyprofessions.database.DatabaseFactory;
 import com.magnarisa.spigot_craftyprofessions.listeners.CoreListener;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -34,21 +34,20 @@ import java.util.logging.Logger;
  */
 public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
 {
-    private final Logger mLog = this.getLogger ();
+    private static Logger mLogger;
     private static Economy mEconomy = null;
     private static Permission mPermissions = null;
     private static Chat mChat = null;
     private CoreListener mCoreListener;
 
     // Config Details
-    private static Configuration mConfig = null;
     private ConfigController mConfigController = null;
 
     // Command Controller
     private CommandController mCommandController;
 
     // Database Information
-    Database mDatabase;
+    private Database mDatabase;
 
     // WageTables
     private HashMap<String, IWageTable> mWageTables;
@@ -60,21 +59,23 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     @Override
     public void onEnable ()
     {
+        mLogger = getLogger ();
+
         // Setup the Main Configuration class and likewise
         // any other needed config files, notably the WageTables.
         mConfigController = new ConfigController (this);
         mConfigController.createDefaultConfig ();
         mConfigController.registerConfigFiles ();
 
-        // Temp Database access : Use the Database Factory here based on the Config file
-        mDatabase = new MySQL_Conn (this,"localhost:3306", "creed_test", "creed", "test");
+        // Setup Database
+        cpSetupDatabase ();
 
         // We need to register the listeners for the Plugin
         this.registerListeners ();
 
         if (!setupEconomy ())
         {
-            getServer().getPluginManager().disablePlugin(this);
+            getServer ().getPluginManager ().disablePlugin (this);
             return;
         }
         setupPermissions ();
@@ -86,12 +87,11 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
         mWageTables = new HashMap<> ();
         registerWageTables ();
 
-
         // This will initialize the PlayerManager Singleton
         PlayerManager.Instance ().initializePlayerManager (this, mDatabase);
 
         // This will notify the end of initialization
-        this.getLogger().log(Level.INFO, "Initializaion of CraftyProfessions Completed!");
+        getLogger ().info("Initializaion of CraftyProfessions Completed!");
     }
 
     /**
@@ -119,7 +119,7 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     {
         if (null == getServer().getPluginManager ().getPlugin ("Vault"))
         {
-            mLog.severe ("Vault is not Installed! Disabling Plugin");
+            getLogger ().severe ("Vault is not Installed! Disabling Plugin");
             return false;
         }
 
@@ -127,7 +127,7 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
 
         if (null == rsp)
         {
-            mLog.severe ("No Economy Plugin Found! Disabling Plugin");
+            getLogger ().severe ("No Economy Plugin Found! Disabling Plugin");
             return false;
         }
 
@@ -219,8 +219,6 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     {
         mWageTables.put ("Miner_Wage", new MinerWage());
 
-
-
         for (Map.Entry<String, IWageTable> table : mWageTables.entrySet ())
         {
             table.getValue ().readTable (mConfigController);
@@ -259,7 +257,7 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
         }
         finally
         {
-            mLog.log (Level.INFO, "Writing Materials is DONE!");
+            getLogger ().log (Level.INFO, "Writing Materials is DONE!");
             try
             {
                 if (bw != null)
@@ -279,11 +277,25 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     }
 
     /**
-     * Returns the Logger of the Spigot CP
+     * Logs a message to the internal Log method.
+     * Uses the interfaced Log method.
      */
-    public Logger cpGetLogger ()
+    public static void LogMessage (Level level, String message)
     {
-        return this.getLogger ();
+        mLogger.log (level, message);
+    }
+
+    public static void LogMessage (Level level, String subSystemPrefix ,String message)
+    {
+        mLogger.log (level, "[" + subSystemPrefix + "] " + message);
+    }
+
+    /**
+     * Logs a message to the console
+     */
+    public void Log (Level level, String message)
+    {
+        LogMessage (level, message);
     }
 
     /**
@@ -322,13 +334,23 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
      */
     public void cpSetupDatabase ()
     {
-        // Grab the Database Type from the config file
-        String dbType = mConfigController.getDefaultString ("DatabaseType");
+        getLogger ().info ("Setting up database connection and Checking for "
+            + "created Database this might take awhile ...");
 
-        // Construct the Connection Object from Factory
+        mDatabase = DatabaseFactory.buildDatabase (this, mConfigController);
 
-        // Give the Constructed connection type to mDatabase
+        if (!mDatabase.initializeDatabase ())
+        {
+            getLogger ().severe ("Something went wrong - Disabling Plugin");
+            getServer ().getPluginManager ().disablePlugin (this);
+        }
+    }
 
-        // If the type is MySQL send in the information into the factory.
+    /**
+     * Retrieve a resource of the plugin.
+     */
+    public InputStream cpGetResource (String resource)
+    {
+        return this.getResource (resource);
     }
 }

@@ -5,6 +5,7 @@ import com.magnarisa.spigot_craftyprofessions.database.Database;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 /**
  * The Player manager manages the Players associated with the Players who
@@ -57,7 +58,7 @@ public final class PlayerManager
 
         mPlayerList = new ConcurrentHashMap<> ();
 
-        mPlugin.cpGetLogger ().info ("Initialization of the PlayerManager is completed!");
+        mPlugin.Log (Level.INFO, "Initialization of the PlayerManager is completed!");
     }
     /**
      * This method will save all of the players to the database

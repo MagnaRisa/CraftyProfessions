@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.logging.Level;
 
 /**
  * The Command Controller is the central hub for all of the command
@@ -106,6 +105,7 @@ public class CommandController extends AbsCmdController implements CommandExecut
         registerCommand (new CommandLookup (db));
         registerCommand (new CommandResetProfile (db));
         registerCommand (new CommandTest (db));
+        registerCommand (new CommandReaderTest (db));
 
 
         /*Random Command Registration*/

@@ -2,7 +2,8 @@ package com.magnarisa;
 
 import com.magnarisa.spigot_craftyprofessions.database.Database;
 
-import java.util.logging.Logger;
+import java.io.InputStream;
+import java.util.logging.Level;
 
 /**
  * This class is the main Abstraction layer for CraftyProfessions
@@ -22,12 +23,9 @@ import java.util.logging.Logger;
 public interface ICraftyProfessions
 {
     /**
-     * Returns the logger of CraftyProfessions regardless
-     * of what server implementation is used.
-     *
-     * @return The Logger of the plugin
+     * Performs a log to the console window.
      */
-    Logger cpGetLogger ();
+    void Log (Level level, String message);
 
     /**
      * This method outlines the economy hook setup
@@ -54,4 +52,6 @@ public interface ICraftyProfessions
     Database cpGetDatabase ();
 
     void cpSetupDatabase ();
+
+    InputStream cpGetResource (String resource);
 }

@@ -1,5 +1,6 @@
 package com.magnarisa.spigot_craftyprofessions.database;
 
+import com.magnarisa.AbsConfigController;
 import com.magnarisa.ICraftyProfessions;
 import javafx.util.Pair;
 
@@ -10,7 +11,8 @@ import java.util.logging.Level;
 
 public class MySQL_Conn extends Database
 {
-    private Connection mConnection;
+    private final String MYSQL_TABLE_STMTS = "com/magnarisa/resources/sql_files/mariadb_create_tables.sql";
+
     private String mHost;
     private String mDatabase;
     private String mDBUser;
@@ -32,10 +34,10 @@ public class MySQL_Conn extends Database
      *
      * Return: None
      *************************************************************************/
-    public MySQL_Conn (ICraftyProfessions plugin, String hostName, String db,
-                        String user, String identifier)
+    public MySQL_Conn (ICraftyProfessions plugin, AbsConfigController config,
+                    String hostName, String db, String user, String identifier)
     {
-        super (plugin);
+        super (plugin, config);
         mHost = hostName;
         mDatabase = db;
         mDBUser = user;
@@ -43,7 +45,7 @@ public class MySQL_Conn extends Database
     }
 
     /**************************************************************************
-     * Method: db_connect
+     * Method: dbConnect
      *
      * Description: Creates a MySQL connection to the constructed MySQL_Conn
      *              Object. This method uses the information from the
@@ -51,22 +53,20 @@ public class MySQL_Conn extends Database
      *
      * @return The connection to the Database
      *************************************************************************/
-    public Connection db_connect ()
+    public Connection dbConnect ()
     {
-        if (mConnection != null)
-        {
-            return mConnection;
-        }
-
         try
         {
-          mConnection = DriverManager.getConnection ("jdbc:mysql://"
-              + mHost + "/" + mDatabase, mDBUser, mDBIdentifier);
+            if (mConnection == null || mConnection.isClosed ())
+            {
+                mConnection = DriverManager.getConnection ("jdbc:mysql://"
+                    + mHost + "/" + mDatabase, mDBUser, mDBIdentifier);
+            }
         }
         catch (SQLException exception)
         {
-            mPlugin.cpGetLogger ().log (Level.SEVERE,
-                "Database Connection Error: ", exception);
+            mPlugin.Log(Level.SEVERE,
+                "Database Connection Error: " + exception);
         }
 
         return mConnection;
@@ -100,30 +100,15 @@ public class MySQL_Conn extends Database
         }
         catch (SQLException exception)
         {
-            mPlugin.cpGetLogger ().log (Level.SEVERE,
-                "Database Query Error: ", exception);
+            mPlugin.Log (Level.SEVERE,
+                "Database Query Error: " + exception);
         }
 
         return array;
     }
 
-    @Override
-    public void db_close (PreparedStatement stmt, ResultSet set)
+    protected String getCreateTableStmts ()
     {
-        super.db_close (stmt, set);
-
-        try
-        {
-            if (mConnection != null)
-            {
-                mConnection.close();
-            }
-        }
-        catch (SQLException exception)
-        {
-            mPlugin.cpGetLogger ().log (Level.WARNING,
-                "Could not close Connection: " + exception);
-        }
-
+        return MYSQL_TABLE_STMTS;
     }
 }

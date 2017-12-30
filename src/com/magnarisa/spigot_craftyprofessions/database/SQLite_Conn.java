@@ -1,5 +1,6 @@
 package com.magnarisa.spigot_craftyprofessions.database;
 
+import com.magnarisa.AbsConfigController;
 import com.magnarisa.ICraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.CraftyProfessions;
 
@@ -10,9 +11,8 @@ import java.util.logging.Level;
 
 public class SQLite_Conn extends Database
 {
-    public final String SQLITE_DB_NAME = "craftyProfSQLite.db";
-
-    private Connection mConnection;
+    private final String SQLITE_DB_NAME = "crafty_professions_SQLite.db";
+    private final String SQLITE_TABLE_STMTS = "com/magnarisa/resources/sql_files/sqlite_create_tables.sql";
 
     /**************************************************************************
      * Constructor: SQLite_Conn
@@ -24,13 +24,13 @@ public class SQLite_Conn extends Database
      *
      * Return: None
      *************************************************************************/
-    public SQLite_Conn (ICraftyProfessions plugin)
+    public SQLite_Conn (ICraftyProfessions plugin, AbsConfigController config)
     {
-        super (plugin);
+        super (plugin, config);
     }
 
     /**************************************************************************
-     * Method: db_connect
+     * Method: dbConnect
      *
      * Description: This method will create and return a MySQL database
      *              connection.
@@ -40,15 +40,10 @@ public class SQLite_Conn extends Database
      * Return:
      * @return The connection to the database
      *************************************************************************/
-    public Connection db_connect ()
+    public Connection dbConnect ()
     {
         CraftyProfessions plugin = (CraftyProfessions) mPlugin;
         File dataFolder = new File (plugin.getDataFolder (), SQLITE_DB_NAME);
-
-        if (mConnection != null)
-        {
-            return mConnection;
-        }
 
         if (!dataFolder.exists ())
         {
@@ -56,8 +51,8 @@ public class SQLite_Conn extends Database
             {
                 if (dataFolder.createNewFile ())
                 {
-                    plugin.getLogger ().info ("Database not created, "
-                        + "Creating it now...");
+                    CraftyProfessions.LogMessage (Level.INFO, Database.DATABASE_PREFIX,
+                        "Database file not created, Creating it now...");
                 }
             }
             catch (IOException e)
@@ -69,55 +64,25 @@ public class SQLite_Conn extends Database
 
         try
         {
-            if (mConnection != null && !mConnection.isClosed ())
+            if (mConnection == null || mConnection.isClosed ())
             {
-                return mConnection;
+                mConnection = DriverManager.getConnection ("jdbc:sqlite:"
+                    + dataFolder);
             }
-
-            mConnection = DriverManager.getConnection ("jdbc:sqlite:"
-                + dataFolder);
 
             return mConnection;
         }
         catch (SQLException e)
         {
-            plugin.getLogger ().log(Level.SEVERE,
-                "SQLite Exception on Initialization" , e);
+            CraftyProfessions.LogMessage (Level.SEVERE, Database.DATABASE_PREFIX,
+                "SQLite Exception on Initialization" + e);
         }
 
-        return null;
+        return mConnection;
     }
 
-    /**************************************************************************
-     * Method: db_close
-     *
-     * Description: The method will close the prep statement and result set
-     *              passed into the method. If either of these are already
-     *              null, then they will not be closed.
-     *
-     * Parameters:
-     * @param stmt - The statement to close
-     * @param set - The result set to close
-     *
-     * Return: None
-     *************************************************************************/
-    @Override
-    public void db_close (PreparedStatement stmt, ResultSet set)
+    protected String getCreateTableStmts ()
     {
-        super.db_close (stmt, set);
-
-        try
-        {
-            if (mConnection != null)
-            {
-                mConnection.close();
-            }
-        }
-        catch (SQLException exception)
-        {
-            mPlugin.cpGetLogger ().log (Level.WARNING,
-                "Could not close Connection: " + exception);
-        }
-
+        return SQLITE_TABLE_STMTS;
     }
 }
