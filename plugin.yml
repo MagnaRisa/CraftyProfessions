@@ -10,30 +10,6 @@ author: CreedTheFreak
 depend: [Vault]
 database: true
 
-######################### Databases ########################
-# There are Three different types of databases that are
-# currently supported. SQLite which is a local database.
-# MySQL through the connector/J of MariaDB, and then
-# MariaDB itself. Simply put the database you would
-# like to use within the Type Parameter.
-#
-# Types: SQLite [Default], MySQL
-#
-# The Host, Database, User, and Password should be
-# used for MySQL or MariaDB but not SQLite.
-#
-DBMS:
-  type: MySQL
-  # The URL to your database
-  # Example: localhost:3306 or 127.0.0.1:3306
-  host: localhost:3306
-  # The name of the Database to use
-  db_name: creed_test
-  # The username of your database
-  user: creed
-  # The password for the database user
-  password: test
-
 ########################## Commands ########################
 commands:
   prof:
