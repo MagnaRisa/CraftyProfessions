@@ -10,7 +10,7 @@ author: CreedTheFreak
 depend: [Vault]
 database: true
 
-###################### Commands ####################
+########################## Commands ########################
 commands:
   prof:
     description: The entry point into the commands for CraftyProfessions
@@ -25,7 +25,7 @@ commands:
     aliases: [shower, showersquad, showersqad, showersquad]
 
 
-################ Permissions ################
+#################### Permissions ####################
 #
 # Input some sort of sassy description here
 #

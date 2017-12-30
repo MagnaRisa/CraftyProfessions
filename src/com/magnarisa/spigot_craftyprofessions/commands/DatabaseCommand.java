@@ -9,16 +9,15 @@ import com.magnarisa.spigot_craftyprofessions.database.Database;
  */
 public abstract class DatabaseCommand implements ICommand
 {
-    protected Database mDataBase;
+    protected Database mDatabase;
     private CommandData mCommandData;
 
     protected DatabaseCommand (Database db, CommandData data)
     {
-        mDataBase = db;
+        mDatabase = db;
         mCommandData = data;
     }
 
-    @Override
     public String cmdName ()
     {
         return mCommandData.getCommandArg ();

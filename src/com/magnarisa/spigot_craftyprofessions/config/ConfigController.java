@@ -214,4 +214,29 @@ public class ConfigController extends AbsConfigController
 
         return config;
     }
+
+    /***************************************************************************
+     *                |--------------------------------|
+     *                |--- Yaml Configuration Files ---|
+     *                |--------------------------------|
+     *
+     * The following methods are defined as the Spigot implementation for
+     * obtaining values for the configuration files.
+     *
+     *
+     **************************************************************************/
+    public Integer getInt (String path)
+    {
+        return mPlugin.getConfig ().getInt (path);
+    }
+
+    public Double getDouble (String path)
+    {
+        return mPlugin.getConfig ().getDouble (path);
+    }
+
+    public String getString (String path)
+    {
+        return mPlugin.getConfig().getString (path);
+    }
 }
