@@ -1,7 +1,7 @@
 package com.magnarisa.spigot_craftyprofessions.container;
 
 import com.magnarisa.spigot_craftyprofessions.professions.IProfession;
-import net.milkbowl.vault.VaultEco;
+import net.milkbowl.vault.economy.*;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
@@ -52,8 +52,12 @@ public class CraftyPlayer
      * should be called after x amount of ticks of the player receiving money and
      * right before the player logs off if the Player Pool is more than 0.
      */
-    public void payoutPlayerPool (VaultEco.VaultAccount playerAccount)
+    public void payoutPlayerPool (Economy economy)
     {
+        if (mPlayer.isOnline ())
+        {
+            economy.depositPlayer (mPlayer, mPlayerPool.doubleValue ());
+        }
         //playerAccount.add (mPlayerPool.doubleValue ());
         //mPlayerPool = new BigDecimal (0.0).setScale (2, RoundingMode.HALF_UP);
     }

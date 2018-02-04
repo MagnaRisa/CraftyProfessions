@@ -2,7 +2,7 @@
 # this plugin does depend on Vault in order to distribute the money
 # earned to a separate economy plugin.
 name: CraftyProfessions
-version: 0.0.6
+version: @VERSION@
 description: This is a Professions plugin which will be completely customizable.
 main: com.magnarisa.spigot_craftyprofessions.CraftyProfessions
 author: CreedTheFreak
