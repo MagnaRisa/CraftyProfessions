@@ -3,8 +3,8 @@ package com.magnarisa.spigot_craftyprofessions.commands.DatabaseCommands;
 import com.magnarisa.spigot_craftyprofessions.commands.DatabaseCommand;
 import com.magnarisa.spigot_craftyprofessions.container.CommandData;
 import com.magnarisa.spigot_craftyprofessions.container.CraftyPlayer;
-import com.magnarisa.spigot_craftyprofessions.database.Database;
-import com.magnarisa.spigot_craftyprofessions.database.MySQL_Conn;
+import com.magnarisa.common.database.databaseConn.Database;
+import com.magnarisa.common.database.databaseConn.MySQL_Conn;
 import javafx.util.Pair;
 
 import java.util.List;

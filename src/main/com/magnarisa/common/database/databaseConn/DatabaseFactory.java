@@ -1,6 +1,6 @@
-package com.magnarisa.spigot_craftyprofessions.database;
+package com.magnarisa.common.database.databaseConn;
 
-import com.magnarisa.ICraftyProfessions;
+import com.magnarisa.common.ICraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.CraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.config.ConfigController;
 

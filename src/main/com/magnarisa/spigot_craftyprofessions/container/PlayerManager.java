@@ -1,7 +1,7 @@
 package com.magnarisa.spigot_craftyprofessions.container;
 
-import com.magnarisa.ICraftyProfessions;
-import com.magnarisa.spigot_craftyprofessions.database.Database;
+import com.magnarisa.common.ICraftyProfessions;
+import com.magnarisa.common.database.databaseConn.Database;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,7 +63,7 @@ public final class PlayerManager
     /**
      * This method will save all of the players to the database
      */
-    public void saveAllPlayer ()
+    public void saveAllPlayers ()
     {
         for (CraftyPlayer player : mPlayerList.values ())
         {
@@ -83,13 +83,14 @@ public final class PlayerManager
 
     /**
      * This method will remove the player with the specified UUID from the
-     * PlayerManager.
+     * PlayerManager. Generally this will happen whenever a player logs
+     * out of the game or a Disconnect is handled.
      *
-     * @param playerUUID - The Player to remove from the Manager.
+     * @param dbUID - The Player to remove from the Manager.
      */
-    public void removePlayer (UUID playerUUID)
+    private void removePlayer (Long dbUID)
     {
-        mPlayerList.remove (playerUUID);
+        mPlayerList.remove (dbUID);
     }
 
     public void savePlayer (CraftyPlayer player)

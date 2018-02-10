@@ -1,12 +1,12 @@
-package com.magnarisa.spigot_craftyprofessions.database;
+package com.magnarisa.common.database.databaseConn;
 
-import com.magnarisa.AbsConfigController;
-import com.magnarisa.ICraftyProfessions;
+import com.magnarisa.common.AbsConfigController;
+import com.magnarisa.common.ICraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.CraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.container.CraftyPlayer;
-import com.magnarisa.spigot_craftyprofessions.utility.LevelEquation;
-import com.magnarisa.spigot_craftyprofessions.utility.SQLReader;
-import com.magnarisa.spigot_craftyprofessions.utility.TimeUtil;
+import com.magnarisa.common.utility.LevelEquation;
+import com.magnarisa.common.utility.SQLReader;
+import com.magnarisa.common.utility.TimeUtil;
 
 import java.io.IOException;
 import java.sql.*;
@@ -390,6 +390,17 @@ public abstract class Database
 
             prepStmt.execute ();
         }
+    }
+
+    /**
+     * <p>This method is used to log Database errors to the plugin. This was created so that the plugin
+     * reference won't have to be passed to all of the query methods.</p>
+     *
+     * @param message The error message to be logged to the plugins logger method.
+     */
+    public void logDBMessage (Level level, String message)
+    {
+        mPlugin.Log (level, message);
     }
 
     /**************************************************************************

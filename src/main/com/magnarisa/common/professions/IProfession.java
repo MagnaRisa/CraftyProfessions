@@ -1,4 +1,4 @@
-package com.magnarisa.spigot_craftyprofessions.professions;
+package com.magnarisa.common.professions;
 
 /**
  * This is the Abstract Class for a Profession. This will be

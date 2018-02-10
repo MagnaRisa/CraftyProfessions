@@ -1,4 +1,4 @@
-package com.magnarisa.spigot_craftyprofessions.exceptions;
+package com.magnarisa.common.exceptions;
 
 /**
  * This exception is thrown when a certain config file cannot be found.

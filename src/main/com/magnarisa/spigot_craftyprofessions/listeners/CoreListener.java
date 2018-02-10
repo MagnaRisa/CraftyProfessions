@@ -1,11 +1,11 @@
 package com.magnarisa.spigot_craftyprofessions.listeners;
 
-import com.magnarisa.ICraftyProfessions;
+import com.magnarisa.common.ICraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.CraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.container.CraftyPlayer;
 import com.magnarisa.spigot_craftyprofessions.container.IWageTable;
 import com.magnarisa.spigot_craftyprofessions.container.PlayerManager;
-import com.magnarisa.spigot_craftyprofessions.database.Database;
+import com.magnarisa.common.database.databaseConn.Database;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

@@ -38,3 +38,5 @@ ProfessionLevels:
   # Note that the top Prestige Value is 10, going above this will not effect
   # in game mechanics.
   BaseExp: 500
+
+Debug: true

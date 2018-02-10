@@ -1,6 +1,6 @@
 package com.magnarisa.spigot_craftyprofessions.container;
 
-import com.magnarisa.spigot_craftyprofessions.professions.IProfession;
+import com.magnarisa.common.professions.IProfession;
 import net.milkbowl.vault.economy.*;
 import org.bukkit.entity.Player;
 

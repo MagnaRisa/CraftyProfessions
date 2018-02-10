@@ -1,4 +1,4 @@
-package com.magnarisa.spigot_craftyprofessions.utility;
+package com.magnarisa.common.utility;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

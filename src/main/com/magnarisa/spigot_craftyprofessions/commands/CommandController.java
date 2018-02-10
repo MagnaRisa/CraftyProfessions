@@ -1,12 +1,12 @@
 package com.magnarisa.spigot_craftyprofessions.commands;
 
-import com.magnarisa.AbsCmdController;
-import com.magnarisa.ICraftyProfessions;
+import com.magnarisa.common.AbsCmdController;
+import com.magnarisa.common.ICraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.commands.DatabaseCommands.*;
 import com.magnarisa.spigot_craftyprofessions.commands.ProfessionCommands.*;
 import com.magnarisa.spigot_craftyprofessions.container.PlayerManager;
-import com.magnarisa.spigot_craftyprofessions.database.Database;
-import com.magnarisa.spigot_craftyprofessions.exceptions.*;
+import com.magnarisa.common.database.databaseConn.Database;
+import com.magnarisa.common.exceptions.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

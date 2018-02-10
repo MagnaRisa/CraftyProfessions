@@ -1,4 +1,4 @@
-package com.magnarisa;
+package com.magnarisa.common;
 
 public abstract class AbsConfigController
 {

@@ -1,4 +1,4 @@
-package com.magnarisa.spigot_craftyprofessions.exceptions;
+package com.magnarisa.common.exceptions;
 
 /**
  * This exception signifies a command that is given with

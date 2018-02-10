@@ -1,15 +1,15 @@
 package com.magnarisa.spigot_craftyprofessions;
 
-import com.magnarisa.AbsCmdController;
-import com.magnarisa.AbsConfigController;
-import com.magnarisa.ICraftyProfessions;
+import com.magnarisa.common.AbsCmdController;
+import com.magnarisa.common.AbsConfigController;
+import com.magnarisa.common.ICraftyProfessions;
 import com.magnarisa.spigot_craftyprofessions.commands.CommandController;
 import com.magnarisa.spigot_craftyprofessions.config.ConfigController;
 import com.magnarisa.spigot_craftyprofessions.container.IWageTable;
 import com.magnarisa.spigot_craftyprofessions.container.MinerWage;
 import com.magnarisa.spigot_craftyprofessions.container.PlayerManager;
-import com.magnarisa.spigot_craftyprofessions.database.Database;
-import com.magnarisa.spigot_craftyprofessions.database.DatabaseFactory;
+import com.magnarisa.common.database.databaseConn.Database;
+import com.magnarisa.common.database.databaseConn.DatabaseFactory;
 import com.magnarisa.spigot_craftyprofessions.listeners.CoreListener;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;

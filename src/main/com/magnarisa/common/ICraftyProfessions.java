@@ -1,6 +1,6 @@
-package com.magnarisa;
+package com.magnarisa.common;
 
-import com.magnarisa.spigot_craftyprofessions.database.Database;
+import com.magnarisa.common.database.databaseConn.Database;
 
 import java.io.InputStream;
 import java.util.logging.Level;

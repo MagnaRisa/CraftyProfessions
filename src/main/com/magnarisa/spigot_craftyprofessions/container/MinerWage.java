@@ -1,7 +1,7 @@
 package com.magnarisa.spigot_craftyprofessions.container;
 
 import com.magnarisa.spigot_craftyprofessions.config.ConfigController;
-import com.magnarisa.spigot_craftyprofessions.utility.CurrencyUtil;
+import com.magnarisa.common.utility.CurrencyUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 

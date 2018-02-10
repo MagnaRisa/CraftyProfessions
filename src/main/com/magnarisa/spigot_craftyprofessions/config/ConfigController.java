@@ -1,9 +1,9 @@
 package com.magnarisa.spigot_craftyprofessions.config;
 
 import com.google.common.base.Charsets;
-import com.magnarisa.AbsConfigController;
+import com.magnarisa.common.AbsConfigController;
 import com.magnarisa.spigot_craftyprofessions.container.TableName;
-import com.magnarisa.spigot_craftyprofessions.exceptions.ConfigNotFoundException;
+import com.magnarisa.common.exceptions.ConfigNotFoundException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -215,6 +215,17 @@ public class ConfigController extends AbsConfigController
         return config;
     }
 
+    /**
+     * <p>Returns if the config option for Debug mode is true</p>
+     *
+     * @return true  - If Debug is on
+     *         false - If Debug is off
+     */
+    public boolean getDebug ()
+    {
+        return getBoolean ("Debug");
+    }
+
     /***************************************************************************
      *                |--------------------------------|
      *                |--- Yaml Configuration Files ---|
@@ -238,5 +249,10 @@ public class ConfigController extends AbsConfigController
     public String getString (String path)
     {
         return mPlugin.getConfig().getString (path);
+    }
+
+    public boolean getBoolean (String path)
+    {
+        return mPlugin.getConfig ().getBoolean (path);
     }
 }

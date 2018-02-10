@@ -1,4 +1,4 @@
-package com.magnarisa.spigot_craftyprofessions.exceptions;
+package com.magnarisa.common.exceptions;
 
 import org.bukkit.ChatColor;
 

@@ -2,7 +2,7 @@ package com.magnarisa.spigot_craftyprofessions.commands;
 
 import com.magnarisa.spigot_craftyprofessions.container.CommandData;
 import com.magnarisa.spigot_craftyprofessions.container.CraftyPlayer;
-import com.magnarisa.spigot_craftyprofessions.database.Database;
+import com.magnarisa.common.database.databaseConn.Database;
 
 /**
  * The abstract command that controls the Database operations
