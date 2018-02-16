@@ -10,9 +10,10 @@ package com.magnarisa.common.database.queries;
 public class queryLib
 {
     public static final String selectUserData = "SELECT * FROM Users WHERE UUID = ?";
-    public static final String selectCareers = "SELECT * "
+    public static final String selectCareers = "SELECT Username "
                                             + "FROM Users, Careers, Professions"
-                                            + "";
+                                            + "WHERE Users.UserID = Careers.UserID"
+                                            + "? = Users.UserID";
     public static final String selectHobbies = "SELECT * FROM Hobbies";
 
 
