@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 /** [HUGE WIP]
@@ -16,8 +17,10 @@ import java.util.UUID;
 public class CraftyPlayer
 {
     private Player mPlayer;
-    private ArrayList<IProfession> mPlayerProfessions;
     private BigDecimal mPlayerPool;
+
+    // The Users list of professions.
+    private HashMap<String, IProfession> mPlayerProfessions;
 
     /**
      * This is the Default Constructor for the CraftyPlayer object in which
@@ -32,10 +35,13 @@ public class CraftyPlayer
     public CraftyPlayer (Player player, ArrayList<IProfession> professions)
     {
         mPlayer = player;
-
-        mPlayerProfessions = professions;
-
         mPlayerPool = new BigDecimal (0.0).setScale (2, RoundingMode.HALF_UP);
+
+        // Construct an easy way to reference a users professions.
+        for (IProfession prof : professions)
+        {
+            mPlayerProfessions.put (prof.getName(), prof);
+        }
     }
     /**
      * This method will return the UUID of the CPPlayer

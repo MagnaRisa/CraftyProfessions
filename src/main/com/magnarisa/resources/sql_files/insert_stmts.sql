@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------------------------------------------------------------------
--- This file should NOT be changed. Doing so will cause unforeseeable errors within the program. You have been Warned!
+-- This file should NOT be changed. Doing so will cause unforeseeable errors within the plugin. You have been Warned!
 -- ---------------------------------------------------------------------------------------------------------------------
 
 -- -------------------------------------

@@ -23,12 +23,12 @@ public final class queryUser
     public boolean checkCareers (UnsignedLong userID, Database db)
     {
         PreparedStatement prepStmt;
-        ResultSet resultSet;
+        ResultSet resultSet = null;
 
         try
         {
-            prepStmt = db.dbConnect ().prepareStatement (queryLib.queryUserData);
-            resultSet = prepStmt.executeQuery ();
+            // Send the queryLib the connection then close it afterwards
+            resultSet = queryLib.queryUserCareers (db, userID);
 
             return resultSet.next ();
         }
@@ -49,7 +49,7 @@ public final class queryUser
      *
      * @return True or False: If the specific user has hobbies or not
      */
-    public boolean checkHobbies (UnsignedLong userID, Database db)
+   /* public boolean checkHobbies (UnsignedLong userID, Database db)
     {
         PreparedStatement prepStmt;
         ResultSet resultSet;
@@ -69,7 +69,7 @@ public final class queryUser
             return false;
         }
     }
-
+*/
     /**
      * Retrieve the player from the database based on their UUID
      *
@@ -78,7 +78,7 @@ public final class queryUser
      *
      * @return The result set returned by the query
      */
-    public ResultSet retrievePlayer (UUID uuid, Database db)
+   /* public ResultSet retrievePlayer (UUID uuid, Database db)
     {
         PreparedStatement prepStmt;
         ResultSet resultSet;
@@ -94,6 +94,6 @@ public final class queryUser
         }
 
         return resultSet;
-    }
+    }*/
 
 }

@@ -46,11 +46,11 @@ public abstract class BlockTable implements IWageTable
      * @return The BigDecimal Value that the Item maps to within mBlockMap
      */
     @Override
-    public <T> BigDecimal mapItem (T item, String... stringArgs)
+    public <T> BigDecimal mapItem (T item, String profStatus)
     {
-        // Loop through the string args trying the differnt table types or specializations
+        // Loop through the string args trying the different table types or specializations
         // A crafty player might have. When we find a match we stop the search.
-        ConcurrentHashMap<String, BigDecimal> mapType = mBlockMap.get (stringArgs[0]);
+        ConcurrentHashMap<String, BigDecimal> mapType = mBlockMap.get (profStatus);
         Block generic;
 
         if (item instanceof Block && mapType != null)

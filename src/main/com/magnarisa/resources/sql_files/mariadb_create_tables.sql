@@ -1,20 +1,20 @@
 -- ---------------------------------------------------------------------------------------------------------------------
 -- This file should NOT be changed. Doing so will cause unforeseeable errors within the program. You have been Warned!
 -- ---------------------------------------------------------------------------------------------------------------------
--- DROP TABLE IF EXISTS SideJobSpecificAugments;
--- DROP TABLE IF EXISTS ProfSpecificAugments;
--- DROP TABLE IF EXISTS UserSideJobHasAugments;
--- DROP TABLE IF EXISTS UserProfHasAugments;
--- DROP TABLE IF EXISTS SideJobs;
--- DROP TABLE IF EXISTS Careers;
--- DROP TABLE IF EXISTS Bonus;
--- DROP TABLE IF EXISTS Specializations;
--- DROP TABLE IF EXISTS Augments;
--- DROP TABLE IF EXISTS BonusTypes;
--- DROP TABLE IF EXISTS Levels;
--- DROP TABLE IF EXISTS SubProfessions;
--- DROP TABLE IF EXISTS Professions;
--- DROP TABLE IF EXISTS Users;
+ DROP TABLE IF EXISTS SideJobSpecificAugments;
+ DROP TABLE IF EXISTS ProfSpecificAugments;
+ DROP TABLE IF EXISTS UserSideJobHasAugments;
+ DROP TABLE IF EXISTS UserProfHasAugments;
+ DROP TABLE IF EXISTS SideJobs;
+ DROP TABLE IF EXISTS Careers;
+ DROP TABLE IF EXISTS Bonus;
+ DROP TABLE IF EXISTS Specializations;
+ DROP TABLE IF EXISTS Augments;
+ DROP TABLE IF EXISTS BonusTypes;
+ DROP TABLE IF EXISTS Levels;
+ DROP TABLE IF EXISTS SubProfessions;
+ DROP TABLE IF EXISTS Professions;
+ DROP TABLE IF EXISTS Users;
 
 -- Create the User Table
 CREATE TABLE IF NOT EXISTS Users
@@ -125,14 +125,13 @@ CREATE TABLE IF NOT EXISTS Careers
 	CurrentExp DOUBLE DEFAULT 0,
 	TotalExp DOUBLE DEFAULT 0,
 	PrestigeLevel INT DEFAULT 0,
+	ProfStatus VARCHAR (25) DEFAULT 'default',
 	
 	CONSTRAINT Careers_UserID_ProfessionID_PK PRIMARY KEY (UserID, ProfessionID),
 	CONSTRAINT Careers_UserID_FK FOREIGN KEY (UserID)
 		REFERENCES Users (UserID) ON DELETE CASCADE,
 	CONSTRAINT Careers_ProfessionID_FK FOREIGN KEY (ProfessionID)
 		REFERENCES Professions (ProfessionID) ON DELETE CASCADE,
-	CONSTRAINT Careers_LevelID_FK FOREIGN KEY (LevelID)
-		REFERENCES Levels (LevelID) ON DELETE CASCADE,
 		
 	INDEX Careers_ProfessionID_IDX (ProfessionID)
 ) Engine=InnoDB CHARACTER SET utf8 COLLATE utf8_bin;
@@ -142,7 +141,7 @@ CREATE TABLE IF NOT EXISTS SideJobs
 (
 	UserID INT NOT NULL,
 	SubProfessionID INT NOT NULL,
-	LevelID INT NOT NULL,
+	LevelID INT DEFAULT 0,
 	CurrentExp DOUBLE DEFAULT 0,
 	TotalExp DOUBLE DEFAULT 0,
 	
@@ -151,8 +150,6 @@ CREATE TABLE IF NOT EXISTS SideJobs
 		REFERENCES Users (UserID) ON DELETE CASCADE,
 	CONSTRAINT SideJobs_SubprofessionID_FK FOREIGN KEY (SubProfessionID)
 		REFERENCES SubProfessions (SubProfessionID) ON DELETE CASCADE,
-	CONSTRAINT SideJobs_LevelID_FK FOREIGN KEY (LevelID)
-		REFERENCES Levels (LevelID) ON DELETE CASCADE,
 		
 	INDEX SideJobs_SubProfessionID_IDX (SubProfessionID)
 ) Engine=InnoDB CHARACTER SET utf8 COLLATE utf8_bin;

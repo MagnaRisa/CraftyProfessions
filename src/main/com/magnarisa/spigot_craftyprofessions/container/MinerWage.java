@@ -16,9 +16,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MinerWage extends BlockTable
 {
-    private final String MINER_PAYOUT = "Miner_Payout";
-    private final String STONE_AFFINITY = "Stone_Affinity";
-    private final String ORE_AFFINITY = "Ore_Affinity";
+    public static final String MINER_PAYOUT = "Miner_Payout";
+    private static final String STONE_AFFINITY = "Stone_Affinity";
+    private static final String ORE_AFFINITY = "Ore_Affinity";
+    private static final String MINER_WAGE_TABLE = "MinerWage";
 
     public MinerWage ()
     {
@@ -94,5 +95,16 @@ public class MinerWage extends BlockTable
 
         mBlockMap.get(path[0]).put (path[1], value);
         return true;
+    }
+
+    /**
+     * This method will allow grab the name of the WageTable
+     *
+     * @return The name of the wage table.
+     */
+    @Override
+    public String getTableName ()
+    {
+        return MINER_WAGE_TABLE;
     }
 }

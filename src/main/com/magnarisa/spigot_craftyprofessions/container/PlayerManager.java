@@ -88,7 +88,7 @@ public final class PlayerManager
      *
      * @param dbUID - The Player to remove from the Manager.
      */
-    private void removePlayer (Long dbUID)
+    public void removePlayer (UUID dbUID)
     {
         mPlayerList.remove (dbUID);
     }

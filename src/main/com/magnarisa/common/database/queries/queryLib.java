@@ -1,5 +1,11 @@
 package com.magnarisa.common.database.queries;
 
+import com.google.common.primitives.UnsignedLong;
+import com.magnarisa.common.database.databaseConn.Database;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 /**
  * This class houses the static queries that will need to be called to
  * retrieve data from the database. These static strings will be used
@@ -9,12 +15,61 @@ package com.magnarisa.common.database.queries;
  */
 public class queryLib
 {
-    public static final String selectUserData = "SELECT * FROM Users WHERE UUID = ?";
-    public static final String selectCareers = "SELECT Username "
-                                            + "FROM Users, Careers, Professions"
-                                            + "WHERE Users.UserID = Careers.UserID"
-                                            + "? = Users.UserID";
-    public static final String selectHobbies = "SELECT * FROM Hobbies";
+    // onUserLogin
+    // Grab the User and their internal DB ID.
+    private static final String selectUserData
+            = "SELECT * "
+            + "FROM Users "
+            + "WHERE UUID = ?";
 
+    // If they have any Careers or SideJobs we need to grab them.
+    private static final String selectUserCareers
+            = "SELECT * "
+            + "FROM Users, Careers, Professions "
+            + "WHERE Users.UserID = ? "
+            + "AND Users.UserID = Careers.UserID "
+            + "AND Professions.ProfessionID = Careers.ProfessionID";
+
+    private static final String selectUserSideJobs
+            = "SELECT * "
+            + "FROM Users, SideJobs, SubProfessions "
+            + "WHERE Users.UserID = ? "
+            + "AND Users.UserID = SideJobs.UserID "
+            + "AND SubProfessions.SubProfessionID = SideJobs.SubProfessionID";
+
+    // Grab the Level information from a LevelID
+    // db-test: Query marked for testing.
+    private static final String selectLevelInfo
+            = "SELECT * "
+            + "FROM Levels "
+            + "WHERE LevelID = ?";
+
+    // Select a (User, Profession) pair's augments.
+    // db-test: Query marked for testing.
+    private static final String selectUserProfessionAugs
+            = "SELECT * "
+            + "FROM Careers, UserProfHasAugments "
+            + "WHERE Careers.UserID = ? "
+            + "AND UserProfHasAugments.ProfessionID = ? "
+            + "AND Careers.UserID = UserProfHasAugments.UserID "
+            + "AND Careers.ProfessionID = UserProfHasAugments.ProfessionID";
+
+    // Select a (User, SubProfession) pair's augments
+    // db-test: Query maked for testing.
+    private static final String selectUserSideJobAugs
+            = "SELECT * "
+            + "FROM SideJobs, UserSideJobHasAugments "
+            + "WHERE Careers.UserID = ? "
+            + "AND UserSideJobHasAugments.SubProfessionID = ? "
+            + "AND Careers.UserID = UserSideJobHasAugments.UserID "
+            + "AND Careers.SubProfessionID = UserSideJobHasAugments.SubProfessionID";
+
+    // Remove these to the DAO's
+    public static ResultSet queryUserCareers (Database db, UnsignedLong UserID)
+    {
+        PreparedStatement prepStmt;
+
+        return null;
+    }
 
 }

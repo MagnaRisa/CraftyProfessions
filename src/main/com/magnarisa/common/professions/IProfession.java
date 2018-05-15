@@ -1,5 +1,7 @@
 package com.magnarisa.common.professions;
 
+import java.math.BigDecimal;
+
 /**
  * This is the Abstract Class for a Profession. This will be
  * the class in which all Professions are inherited from and
@@ -17,12 +19,24 @@ public interface IProfession
     String getName ();
 
     /**
+     * [MAY NOT NEED THIS]
+     *
      * This method will hash the given item
      *
      *
      */
-    void generateRevenue();
+    // void generateRevenue();
 
+    /**
+     * This method is used to update the professions
+     * status. For example from the "Miner_Payout" to
+     * the "Stone_Affinity" profession status.
+     *
+     * Likewise calling this method will also set the
+     * Miner Wage payout table to the corresponding
+     * upgraded version. Miner_Payout -> Stone_Affinity
+     */
+    void upgradeStatus (String newStatus);
 
     // Some way to pay a player or hold the money in a central location
     // Some way to generate the revenue

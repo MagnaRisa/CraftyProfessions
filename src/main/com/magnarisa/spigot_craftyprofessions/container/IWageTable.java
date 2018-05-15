@@ -17,11 +17,12 @@ public interface IWageTable
      *     with it within the Wage Table. </p>
      *
      * @param element This object to be mapped into the Table
+     * @param profStatus The status of the players profession
      *
      * @return The Value stored at that Table Location or null
      *          if the Table does not have the desired Item.
      */
-    <T> BigDecimal mapItem (T element, String... stringArgs);
+    <T> BigDecimal mapItem (T element, String profStatus);
 
     /**
      * <p> This method will allow us to read the wage table
@@ -69,4 +70,11 @@ public interface IWageTable
      *         False - If the operation was a failure
      */
     boolean modifyValue (BigDecimal newValue, String... path);
+
+    /**
+     * This method will allow grab the name of the WageTable
+     *
+     * @return The name of the wage table.
+     */
+    String getTableName ();
 }
