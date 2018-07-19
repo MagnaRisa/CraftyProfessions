@@ -1,5 +1,7 @@
 package com.magnarisa.spigot_craftyprofessions.container;
 
+import com.google.common.primitives.UnsignedLong;
+import com.magnarisa.common.container.IPlayer;
 import com.magnarisa.common.professions.IProfession;
 import net.milkbowl.vault.economy.*;
 import org.bukkit.entity.Player;
@@ -8,16 +10,20 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /** [HUGE WIP]
  * This is the Player Wrapper for the CraftyProfessions Plugin in which stores all
  * of the information for a CraftyProfessions player.
  */
-public class CraftyPlayer
+public class CraftyPlayer implements IPlayer
 {
+    // This is the players primary key within the Database
+    private UnsignedLong mPlayerID;
     private Player mPlayer;
     private BigDecimal mPlayerPool;
+
 
     // The Users list of professions.
     private HashMap<String, IProfession> mPlayerProfessions;
@@ -32,8 +38,9 @@ public class CraftyPlayer
      *                    player, then the data will be stored into the database when the player
      *                    logs out.
      */
-    public CraftyPlayer (Player player, ArrayList<IProfession> professions)
+    public CraftyPlayer (UnsignedLong dbID, Player player, ArrayList<IProfession> professions)
     {
+        mPlayerID = dbID;
         mPlayer = player;
         mPlayerPool = new BigDecimal (0.0).setScale (2, RoundingMode.HALF_UP);
 
@@ -88,5 +95,39 @@ public class CraftyPlayer
     public boolean checkPerms (final String perm)
     {
         return mPlayer.hasPermission (perm);
+    }
+
+    public void increasePool (BigDecimal value)
+    {
+        // I should probably make this secure.
+        mPlayerPool = mPlayerPool.add (value);
+    }
+
+    /**
+     * Lists the current professions of the User. This will more than likely be a
+     * command that the crafty player will be able to use in order to see all of
+     * the current professions that they have.
+     */
+    public void listProfessions ()
+    {
+        if (mPlayer instanceof Player)
+        {
+            if (mPlayerProfessions.isEmpty ())
+            {
+                mPlayer.sendMessage ("You currently have no Professions");
+            }
+            else
+            {
+                // Iterate over the list and send the Profession name to the User.
+                for (Map.Entry<String, IProfession> prof : mPlayerProfessions.entrySet ())
+                {
+                    mPlayer.sendMessage (prof.getKey ());
+                }
+            }
+        }
+        else
+        {
+            mPlayer.sendMessage ("You must be a Player to see your Professions");
+        }
     }
 }

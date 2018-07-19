@@ -39,6 +39,7 @@ public class ProfMiner implements IProfession
             mMinerStatus = status;
         }
     }
+
     /**
      * This method is used to return the Name of this Profession
      *

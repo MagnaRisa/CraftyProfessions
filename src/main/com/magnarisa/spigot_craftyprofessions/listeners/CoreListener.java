@@ -45,7 +45,7 @@ public class CoreListener implements Listener
 
         eventPlayer.sendMessage ("Player Logged in, Attempting to save to PlayerManager");
 
-        PlayerManager.Instance ().savePlayer (new CraftyPlayer (eventPlayer, null));
+        // PlayerManager.Instance ().savePlayer (new CraftyPlayer (eventPlayer, null));
        /* Player eventPlayer = event.getPlayer ();
 
         if (eventPlayer != null)

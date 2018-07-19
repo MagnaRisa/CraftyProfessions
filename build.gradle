@@ -1,12 +1,25 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-apply plugin: "java"
-apply plugin: "idea"
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'idea'
 
 version = '0.1.0'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
+
+/*
+// Projects
+allprojects {
+
+}
+
+// Apply the java plugin for all sub projects
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'idea'
+}*/
 
 repositories {
 	maven {
@@ -25,10 +38,12 @@ repositories {
 }
 
 dependencies {
-	compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.0'
-	compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.21.0'
-	compile group: 'org.spigotmc', name: 'spigot-api', version: '1.12.2-R0.1-SNAPSHOT'
-	compile group: 'net.milkbowl.vault', name: 'VaultAPI', version: '1.6'
+	compile (
+			[group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.0'],
+			[group: 'org.xerial', name: 'sqlite-jdbc', version: '3.21.0'],
+			[group: 'org.spigotmc', name: 'spigot-api', version: '1.12.2-R0.1-SNAPSHOT'],
+			[group: 'net.milkbowl.vault', name: 'VaultAPI', version: '1.6']
+	)
 }
 
 processResources {
@@ -39,18 +54,59 @@ processResources {
 
 sourceSets {
 	main {
-		java.srcDir "src/main"
+		java {
+			srcDir "src/main"
+		}
+		resources {
+			srcDir "src/main/com/magnarisa/resources/"
+		}
 	}
 	
 	test {
-		java.srcDir "src/test"
+		java {
+			srcDir "src/test"
+		}
 	}
 }
 
-jar {
+// Remove this later
+/*jar {
 	from configurations.compile.collect {zipTree it}
-}
+}*/
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '4.4.1'
+	gradleVersion = '4.8.1'
+}
+
+task spigotjar(type: Jar) {
+	from(sourceSets.main.output) {
+		include 'com/magnarisa/common/**'
+		include 'com/magnarisa/spigot_craftyprofessions/**'
+	}
+
+	from ('src/main/com/magnarisa') {
+		include 'resources/**'
+	}
+
+	include 'plugin.yml'
+	include 'config.yml'
+	
+	group = 'CraftyProfession Jar'
+	description = 'Builds the spigot version of Crafty Professions'
+}
+
+task spongejar(type: Jar) {
+	from(sourceSets.main.output) {
+		include "com/magnarisa/common/**"
+		include "com/magnarisa/sponge_craftyprofessions/**"
+		include "com/magnarisa/resources/**"
+	}
+	group = 'CraftyProfession Jar'
+	description = 'Builds the sponge version of Crafty Professions'
+}
+
+task makeall (dependsOn: ["spigotjar", "spongejar"]) {
+	group = 'CraftyProfession Jar'
+	description = 'Builds all versions of the Crafty Professions jars'
+	println 'Compiling all versions of CraftyProfessions! Please Wait...'
 }

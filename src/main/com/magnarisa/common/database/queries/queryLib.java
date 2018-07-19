@@ -3,7 +3,6 @@ package com.magnarisa.common.database.queries;
 import com.google.common.primitives.UnsignedLong;
 import com.magnarisa.common.database.databaseConn.Database;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
@@ -64,12 +63,14 @@ public class queryLib
             + "AND Careers.UserID = UserSideJobHasAugments.UserID "
             + "AND Careers.SubProfessionID = UserSideJobHasAugments.SubProfessionID";
 
-    // Remove these to the DAO's
-    public static ResultSet queryUserCareers (Database db, UnsignedLong UserID)
-    {
-        PreparedStatement prepStmt;
+//    private static final String updateUserData
+//            = "UPDATE ";
 
+    // TODO: Implement this properly. Us the DB and ID to find the users careers.
+    public static ResultSet queryUserCareers (Database db, UnsignedLong userID)
+    {
         return null;
     }
+
 
 }
