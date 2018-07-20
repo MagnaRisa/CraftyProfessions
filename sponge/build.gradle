@@ -1,0 +1,109 @@
+/**
+ * PROJECT INFORMATION:
+ * The sponge project will compile all of the classes and dependencies that
+ * the sponge version of crafty professions will need to work on sponge servers.
+ * This project will include the :common project for shared classes specific
+ * to crafty professions.
+ */
+
+/**
+ * VARIABLES AND PROPERTIES
+ * Outlines all of the general properties and variables within the build script.
+ */
+version = rootProject.cp_build + '-' + rootProject.sponge_version + '-' + rootProject.common_version
+def archive = rootProject.jar_root_prefix + '-sponge-' + rootProject.cp_build + '-' + rootProject.sponge_version + '-' + rootProject.common_version + '.jar'
+
+evaluationDependsOn(':common')
+
+/**
+ * DEPENDENCIES: The modules that the sponge build requires
+ */
+dependencies {
+    implementation project (':common')
+}
+
+/**
+ * SOURCE SETS:
+ * The main source sets for the sponge project.
+ * This outlines the directories to be compiled and
+ * included within the Sponge Jar
+ */
+sourceSets {
+    main {
+        java {
+            srcDir "src/main/java"
+        }
+        resources {
+            srcDir "src/main/resources"
+        }
+    }
+
+    test {
+        java {
+            srcDir "src/test"
+        }
+    }
+}
+
+/**
+ * TASK: Creates the Sponge Non-Fat Jar File
+ */
+def spongeProjects = [':common', ':sponge']
+task spongeJar(type: Jar) {
+    doFirst {
+        println 'Building the sponge jar file...'
+    }
+
+    archiveName = archive
+    dependsOn = spongeProjects.collect { it + ':compileJava'}
+
+    from files(spongeProjects.collect { project(it).sourceSets.main.output })
+
+    group = 'CP Sponge'
+    description = 'Build the Sponge Jar file of CraftyProfessions'
+}
+
+/**
+ * TASK: Cleans the root output spongeJar file and
+ */
+task spongeClean(type: Delete) {
+    logger.info ('Cleaning sponge directories and jar files...')
+
+    delete 'build'
+    delete "../output/${archive}"
+    followSymlinks = true
+
+    group = 'CP Sponge'
+    description = 'Clean the sponge build directory'
+}
+
+/**
+ * TASK: Copy the compiled sponge jar into an output directory easier to access.
+ */
+task spongeCopy (type: Copy) {
+    logger.info ('Copying jar file from build directory into root output directory...')
+
+    from "build/libs/${archive}"
+    into '../output'
+
+    group = 'CP Sponge'
+    description = 'Copy the compiled jar file into a new Output Dir'
+}
+
+/**
+ * TASK: Utilize all sponge tasks to create and manage the Sponge Jar file
+ */
+task makeSponge (dependsOn: ['spongeClean', 'spongeJar', 'spongeCopy']) {
+    spongeJar.mustRunAfter spongeClean
+    spongeCopy.mustRunAfter spongeJar
+
+    group = 'CP Sponge'
+    description = 'Combines all of the Crafty Sponge Tasks into one single Task'
+}
+
+/**
+ * ARTIFACTS: The artifacts for the Sponge Build
+ */
+artifacts {
+    archives spongeJar
+}

@@ -1,112 +1,68 @@
-import org.apache.tools.ant.filters.ReplaceTokens
+plugins {
+    id 'java'
+    id 'idea'
+    id 'application'
+}
 
-apply plugin: 'application'
-apply plugin: 'java'
-apply plugin: 'idea'
+/**
+ * The extensions of the root project
+ *
+ * Versioning
+ *
+ * cp_build - The current build of the plugin
+ *
+ * spigot/sponge version - The current version of the sponge and spigot builds
+ * respectively. The layout of the versions are as follows 'x.y' where x is the
+ * major version and y is the minor version of the plugin.
+ *
+ * common version - The common version of the plugin. These are all the common
+ * files between both the plugins and is appended to the end of the jar file name.
+ */
+ext {
+    spigot_version = '0.1'
+    sponge_version = '0.0'
+    common_version = '0.1'
+    cp_build = 'alpha'
+    jar_root_prefix = 'craftyprof'
+}
 
-version = '0.1.0'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+}
+
+allprojects {
+    group = 'CraftyProfessions'
+}
+
+dependencies {
+    implementation project(':common')
+    implementation project(':spigot')
+    implementation project(':sponge')
+}
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
-/*
-// Projects
-allprojects {
+task makeall (dependsOn: [':spigot:makeSpigot', ':sponge:makeSponge']) {
 
+    group = 'Crafty Profession'
+    description = 'Builds all of the jar files associated with crafty professions.'
 }
 
-// Apply the java plugin for all sub projects
-subprojects {
-	apply plugin: 'java'
-	apply plugin: 'idea'
-}*/
+task pluginName {
+    doFirst {
+        println "  _____            __ _           _____            __              _                  "
+        println " / ____|          / _| |         |  __ \\          / _|            (_)                 "
+        println "| |     _ __ __ _| |_| |_ _   _  | |__) | __ ___ | |_ ___  ___ ___ _  ___  _ __  ___  "
+        println "| |    | '__/ _` |  _| __| | | | |  ___/ '__/ _ \\|  _/ _ \\/ __/ __| |/ _ \\| '_ \\/ __| "
+        println "| |____| | | (_| | | | |_| |_| | | |   | | | (_) | ||  __/\\__ \\__ \\ | (_) | | | \\__ \\ "
+        println " \\_____|_|  \\__,_|_|  \\__|\\__, | |_|   |_|  \\___/|_| \\___||___/___/_|\\___/|_| |_|___/ "
+        println "                           __/ | "
+        println "                          |___/  "
+    }
 
-repositories {
-	maven {
-		url 'http://nexus.hc.to/content/repositories/pub_releases'
-	}
-
-	maven {
-		url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-	}
-
-	maven {
-		url 'https://hub.spigotmc.org/nexus/content/groups/public/'
-	}
-
-	mavenCentral()
+    group = 'Crafty Profession'
+    description = 'Displays the name of the plugin, in ascii art form!'
 }
 
-dependencies {
-	compile (
-			[group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.0'],
-			[group: 'org.xerial', name: 'sqlite-jdbc', version: '3.21.0'],
-			[group: 'org.spigotmc', name: 'spigot-api', version: '1.12.2-R0.1-SNAPSHOT'],
-			[group: 'net.milkbowl.vault', name: 'VaultAPI', version: '1.6']
-	)
-}
-
-processResources {
-	filter ReplaceTokens, tokens: [
-	        "VERSION": version
-	]
-}
-
-sourceSets {
-	main {
-		java {
-			srcDir "src/main"
-		}
-		resources {
-			srcDir "src/main/com/magnarisa/resources/"
-		}
-	}
-	
-	test {
-		java {
-			srcDir "src/test"
-		}
-	}
-}
-
-// Remove this later
-/*jar {
-	from configurations.compile.collect {zipTree it}
-}*/
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '4.8.1'
-}
-
-task spigotjar(type: Jar) {
-	from(sourceSets.main.output) {
-		include 'com/magnarisa/common/**'
-		include 'com/magnarisa/spigot_craftyprofessions/**'
-	}
-
-	from ('src/main/com/magnarisa') {
-		include 'resources/**'
-	}
-
-	include 'plugin.yml'
-	include 'config.yml'
-	
-	group = 'CraftyProfession Jar'
-	description = 'Builds the spigot version of Crafty Professions'
-}
-
-task spongejar(type: Jar) {
-	from(sourceSets.main.output) {
-		include "com/magnarisa/common/**"
-		include "com/magnarisa/sponge_craftyprofessions/**"
-		include "com/magnarisa/resources/**"
-	}
-	group = 'CraftyProfession Jar'
-	description = 'Builds the sponge version of Crafty Professions'
-}
-
-task makeall (dependsOn: ["spigotjar", "spongejar"]) {
-	group = 'CraftyProfession Jar'
-	description = 'Builds all versions of the Crafty Professions jars'
-	println 'Compiling all versions of CraftyProfessions! Please Wait...'
-}

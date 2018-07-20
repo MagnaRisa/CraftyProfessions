@@ -1,1 +1,8 @@
-// include 'core', 'spigot', 'sponge'
+rootProject.name = 'CraftyProfessions'
+
+// All subprojects depend on common
+include 'common'
+
+// Both of these subprojects depend on common
+include 'spigot'
+include 'sponge'
