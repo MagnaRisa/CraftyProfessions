@@ -5,16 +5,16 @@ CraftyProfessions is a Jobs plugin for Minecraft Spigot which will distribute Mo
 In order to build CraftyProfessions simply clone the repository and run the following commands.
 
 ### Make All Projects
-Make both the spigot and sponge jar files.
-`./gradlew makeall`
+<p>Make both the spigot and sponge jar files.</p>
+<code>./gradlew makeall</code>
 
 ### Spigot Project
-Creates the jar file for the spigot version of crafty professions.
-`./gradlew makeSpigot`
+<p>Creates the jar file for the spigot version of crafty professions.</p>
+<code>./gradlew makeSpigot</code>
 
 ### Sponge Project
-Creates the jar file for the sponge version of crafty professions.
-`./gradlew makeSponge`
+<p>Creates the jar file for the sponge version of crafty professions.</p>
+<code>./gradlew makeSponge</code>
 
 ### After Compilation
 All jar files can be found in the output/ directory at the root of the project.
