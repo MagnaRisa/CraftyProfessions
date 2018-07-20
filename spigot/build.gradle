@@ -1,0 +1,156 @@
+/**
+ * PROJECT INFORMATION:
+ * The spigot project will compile all of the classes and dependencies that
+ * the spigot version of crafty professions will need to work on spigot servers.
+ * This project will include the :common project for shared classes specific
+ * to crafty professions.
+ */
+
+/**
+ * IMPORTS: The Imports of the Build Script
+ */
+import org.apache.tools.ant.filters.ReplaceTokens
+
+/**
+ * VARIABLES AND PROPERTIES
+ * Outlines the general properties and variables of the build script
+ */
+version = rootProject.cp_build + '-' + rootProject.spigot_version + '-' + rootProject.common_version
+def archive = rootProject.jar_root_prefix + '-spigot-' + rootProject.cp_build + '-' + rootProject.spigot_version + '-' + rootProject.common_version + '.jar'
+
+evaluationDependsOn(':common')
+
+/**
+ * DEPENDENCIES: The modules that the spigot build requires
+ */
+dependencies {
+    implementation project (':common')
+
+    implementation (
+            [group: 'org.spigotmc', name: 'spigot-api', version: '1.12.2-R0.1-SNAPSHOT'],
+            [group: 'net.milkbowl.vault', name: 'VaultAPI', version: '1.6']
+    )
+}
+
+/**
+ * REPOSITORIES: Dependency Repositories
+ */
+repositories {
+    maven { url 'http://nexus.hc.to/content/repositories/pub_releases' }
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'https://hub.spigotmc.org/nexus/content/groups/public/' }
+    mavenCentral()
+}
+
+/**
+ * PROCESS RESOURCES: Applies filter to replace tokens found within project files.
+ */
+processResources {
+    filter ReplaceTokens, tokens: [
+            "VERSION": version
+    ]
+}
+
+/**
+ * SOURCE SETS:
+ * The main source sets for the spigot project.
+ * This outlines the directories to be compiled and
+ * included within the Spigot Jar
+ */
+sourceSets {
+    main {
+        java {
+            srcDir "src/main"
+        }
+        resources {
+            // TODO: Rename this to appropriate path
+            srcDir "src/main/resources"
+        }
+    }
+
+    test {
+        java {
+            srcDir "src/test"
+        }
+    }
+}
+
+/**
+ * TASK: Gives information about the spigot project such as version and archiveBaseName
+ */
+task spigotJarInfo {
+    doFirst {
+        println 'CP Spigot Version: ' + version
+        println 'CP Spigot Archive: ' + archive
+    }
+
+    group = 'CP Spigot'
+    description = 'Displays info about the spigot jar file name'
+}
+
+/**
+ * TASK: Creates the Spigot Non-Fat Jar File
+ */
+def spigotProjects = [':common', ':spigot']
+task spigotJar(type: Jar) {
+    doFirst {
+        println 'Built the spigot jar file...'
+    }
+
+    archiveName = archive
+    dependsOn = spigotProjects.collect { it + ':compileJava'}
+
+    from files(spigotProjects.collect { project(it).sourceSets.main.output })
+
+    group = 'CP Spigot'
+    description = 'Build the Spigot Jar file of CraftyProfessions'
+}
+
+/**
+ * TASK: Cleans the root output spigotJar file and
+ */
+task spigotClean (type: Delete) {
+    doFirst {
+        println 'Cleaning spigot directories and jar files...'
+    }
+
+    delete 'build'
+    delete "../output/${archive}"
+    followSymlinks = true
+
+    group = 'CP Spigot'
+    description = 'Clean the spigot build directory'
+}
+
+/**
+ * TASK: Copy the compiled spigot jar into an output directory easier to access.
+ */
+task spigotCopy (type: Copy) {
+    doFirst {
+        println 'Copying jar file from build directory into root output directory...'
+    }
+
+    from "build/libs/${archive}"
+    into '../output/'
+
+    group = 'CP Spigot'
+    description = 'Copy the compiled jar file into a new Output Dir'
+}
+
+/**
+ * TASK: Runs all the tasks building spigot requires.
+ */
+task makeSpigot (dependsOn: ['spigotClean', 'spigotJar', 'spigotCopy']) {
+    spigotJar.mustRunAfter spigotClean
+    spigotCopy.mustRunAfter spigotJar
+
+    group = 'CP Spigot'
+    description = 'Combines all of the crafty spigot tasks into a single task'
+}
+
+/**
+ * ARTIFACTS: The artifacts for the Spigot Build
+ */
+artifacts {
+    archives spigotJar
+}

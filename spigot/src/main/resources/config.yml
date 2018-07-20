@@ -1,0 +1,42 @@
+################################################################################
+# +-+-+-+-+-+-+-+-+-+-+-+-+-+ Database Information +-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+################################################################################
+# The database information specifies where
+# The information of the Plugin should be stored
+# such as user data. If you do not know what MySQL is
+# or how to operate a MySQL server leave the value as SQLite
+
+# MySQL or SQLite [DEFAULT]
+DatabaseType: SQLite
+
+# Below defines the connection information
+# for the MySQL database.
+MySQL:
+  # The Hostname of your SQL database
+  # Example: localhost:3306 or 127.0.0.1:3306
+  host: localhost:3306
+
+  # The name of the Database to use
+  db_name: cp_testing
+
+  # The username of your database
+  user: creed
+
+  # The password for the database user
+  password: test
+
+################################################################################
+# +-+-+-+-+-+-+-+-+-+-+ Profession Level Configuration +-+-+-+-+-+-+-+-+-+-+-+-+
+################################################################################
+ProfessionLevels:
+  # This value will modify the overall Experience value of the Levels. Modifying
+  # this value after the database has been setup is not advised! If you would
+  # like to visually see the exp levels based on changing this value, then go
+  # [https://goo.gl/7GzG3v]. Simply copy the Sheet to your drive by clicking the
+  # icon next to the Star at the top left of the Sheet next to the sheet name
+  # and then modify the BaseExp Value and Prestige Value to update the Table.
+  # Note that the top Prestige Value is 10, going above this will not effect
+  # in game mechanics.
+  BaseExp: 500
+
+Debug: true

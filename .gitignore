@@ -63,7 +63,10 @@ fabric.properties
 
 # Gradle Files and Directories
 .gradle
-/build/
+/common/build/
+/spigot/build/
+/sponge/build/
+/output/
 
 # Ignore Gradle GUI config
 gradle-app.setting

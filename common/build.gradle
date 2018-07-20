@@ -1,0 +1,52 @@
+/**
+ * PROJECT INFORMATION:
+ * The common project outlines all of the common features of both the
+ * Spigot version of the plugin and the Sponge version. This will allow
+ * for both the spigot and sponge versions to utilize the same API for
+ * common resources such as the Database, Exceptions, Containers, the
+ * abstract professions and classes. This project CAN be built into a Jar
+ * and utilized as a dependency, but for the projects I am compiling the
+ * source code into the Spigot and Sponge Jars to reduce work of having
+ * to include a common jar file when using the different versions of the
+ * plugin.
+ */
+
+/**
+ * REPOSITORIES: Dependency Repositories
+ */
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+/**
+ * DEPENDENCIES: The modules that the common build requires
+ */
+dependencies {
+    implementation group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.23.1'
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.5'
+}
+
+/**
+ * SOURCE SETS:
+ * The main source sets for the common project.
+ * This outlines the directories to be compiled and
+ * included within the Jar
+ */
+sourceSets {
+    main {
+        java {
+            srcDir "src/main/java"
+        }
+        resources {
+            srcDir "src/main/resources"
+        }
+    }
+
+    test {
+        java {
+            srcDir "src/test"
+        }
+    }
+}
