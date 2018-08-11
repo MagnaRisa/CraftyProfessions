@@ -15,7 +15,7 @@ import java.util.logging.Level;
 public abstract class Database
 {
     public static final String DATABASE_PREFIX = "Database";
-    private static final String SQL_INSERT_STATEMENTS = "com/magnarisa/resources/sql_files/insert_stmts.sql";
+    private static final String SQL_INSERT_STATEMENTS = "sql_files/insert_stmts.sql";
     private static final String SQL_CREATE_STMT = "CREATE TABLE IF NOT EXISTS";
     private static final String SQL_INSERT_STMT = "INSERT INTO";
 

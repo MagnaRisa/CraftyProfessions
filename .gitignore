@@ -43,6 +43,9 @@ cmake-build-debug/
 
 # IntelliJ
 /out/
+/common/out/
+/spigot/out/
+/sponge/out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
