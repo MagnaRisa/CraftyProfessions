@@ -75,12 +75,15 @@ public abstract class BlockTable implements IWageTable
      *
      * @param controller The configuration controller in order to gain
      *                   access to a specified resource file.
+     *
+     * TODO: Fix this Method, it's currently really Broken
      */
     @Override
     public void writeTable (AbsConfigController controller)
     {
-        Gson
-        JSONObject rootObject = new JSONObject (new HashMap<String, BigDecimal> ());
+        Gson rootGson = new Gson ();
+        // rootGson.toJson
+//        JSONObject rootObject = new JSONObject (new HashMap<String, BigDecimal> ());
 //      YamlConfiguration wageTable = controller.getSpecialConfig (mTableName.getFileName ());
 
         try
@@ -89,7 +92,7 @@ public abstract class BlockTable implements IWageTable
 
             for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
             {
-                JSONObject childObject = new JSONObject (new HashMap<String, BigDecimal> ());
+//                JSONObject childObject = new JSONObject (new HashMap<String, BigDecimal> ());
 
                 ConcurrentHashMap<String, BigDecimal> tableMap = tableEntry.getValue ();
                 ConcurrentHashMap<String, BigDecimal> blockMapSection = mBlockMap.get (tableEntry.getKey ());
@@ -97,13 +100,13 @@ public abstract class BlockTable implements IWageTable
                 for (Map.Entry<String, BigDecimal> entry : tableMap.entrySet ())
                 {
                     // Build the json object
-                    childObject.put (entry.getKey(), entry.getValue ());
+//                    childObject.put (entry.getKey(), entry.getValue ());
                 }
 
-                rootObject.put (tableEntry.getKey (), childObject);
+//                rootObject.put (tableEntry.getKey (), childObject);
             }
 
-            writer.write (rootObject.toJSONString ());
+//            writer.write (rootObject.toJSONString ());
         }
         catch (IOException exception)
         {
