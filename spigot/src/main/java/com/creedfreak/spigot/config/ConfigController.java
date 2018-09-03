@@ -180,7 +180,7 @@ public class ConfigController extends AbsConfigController
 
         if (!resourceFile.exists ())
         {
-            mPlugin.saveResource (resourceFile.getName (), false);
+            mPlugin.saveResource ("wage_data/" + resourceFile.getName (), false);
         }
 
         mWageFiles.put (resource, resourceFile);

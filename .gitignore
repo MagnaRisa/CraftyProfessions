@@ -43,6 +43,9 @@ cmake-build-debug/
 
 # IntelliJ
 /out/
+/common/out/
+/spigot/out/
+/sponge/out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -63,6 +66,7 @@ fabric.properties
 
 # Gradle Files and Directories
 .gradle
+/build/
 /common/build/
 /spigot/build/
 /sponge/build/

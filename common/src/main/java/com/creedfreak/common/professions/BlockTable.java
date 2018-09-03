@@ -1,8 +1,13 @@
 package com.creedfreak.common.professions;
 
 import com.creedfreak.common.AbsConfigController;
+import com.google.gson.Gson;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -70,25 +75,107 @@ public abstract class BlockTable implements IWageTable
      *
      * @param controller The configuration controller in order to gain
      *                   access to a specified resource file.
+     *
+     * TODO: Fix this Method, it's currently really Broken
      */
     @Override
     public void writeTable (AbsConfigController controller)
     {
-        /*YamlConfiguration wageTable = controller.getSpecialConfig (mTableName.getFileName ());
+        Gson rootGson = new Gson ();
+        // rootGson.toJson
+//        JSONObject rootObject = new JSONObject (new HashMap<String, BigDecimal> ());
+//      YamlConfiguration wageTable = controller.getSpecialConfig (mTableName.getFileName ());
 
-        for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
+        try
         {
-            ConcurrentHashMap<String, BigDecimal> tableMap = tableEntry.getValue ();
-            ConcurrentHashMap<String, BigDecimal> blockMapSection = mBlockMap.get (tableEntry.getKey ());
+            FileWriter writer = new FileWriter ("");
 
-            for (Map.Entry<String, BigDecimal> entry : tableMap.entrySet ())
+            for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
             {
-                wageTable.set (tableEntry.getKey () + "." + entry.getKey (), blockMapSection.get (entry.getKey ()));
-            }
-        }
+//                JSONObject childObject = new JSONObject (new HashMap<String, BigDecimal> ());
 
-        controller.saveConfig (wageTable, mTableName.getFileName ());*/
+                ConcurrentHashMap<String, BigDecimal> tableMap = tableEntry.getValue ();
+                ConcurrentHashMap<String, BigDecimal> blockMapSection = mBlockMap.get (tableEntry.getKey ());
+
+                for (Map.Entry<String, BigDecimal> entry : tableMap.entrySet ())
+                {
+                    // Build the json object
+//                    childObject.put (entry.getKey(), entry.getValue ());
+                }
+
+//                rootObject.put (tableEntry.getKey (), childObject);
+            }
+
+//            writer.write (rootObject.toJSONString ());
+        }
+        catch (IOException exception)
+        {
+            exception.printStackTrace ();
+        }
     }
+
+//    {
+//        "Miner_Payout": {
+//            "STONE": 0.01,
+//            "COAL_ORE": 0.50,
+//            "IRON_ORE": 1.00,
+//            "GOLD_ORE": 2.00,
+//            "LAPIS_ORE": 1.50,
+//            "REDSTONE_ORE": 1.30,
+//            "GLOWING_REDSTONE_ORE": 1.30,
+//            "DIAMOND_ORE": 5.00,
+//            "EMERALD_ORE": 7.50,
+//            "QUARTZ_ORE": 2.00,
+//            "MOSSY_COBBLESTONE": 1.20,
+//            "OBSIDIAN": 2.50,
+//            "ENDER_STONE": 0.03,
+//            "HARD_CLAY": 0.01,
+//            "NETHERRACK": 0.01,
+//            "MOB_SPAWNER": 20.00,
+//            "MONSTER_EGGS": 0.03,
+//            "GLOWSTONE": 1.00
+//    },
+//
+//
+//        "Stone_Affinity": {
+//            "STONE" : 0.03,
+//            "STONE(1)" : 0.04,
+//            "STONE(3)": 0.04,
+//            "STONE(5)" : 0.04,
+//            "HARD_CLAY" : 0.03,
+//            "NETHERRACK" : 0.03,
+//            "MONSTER_EGGS" : 0.06,
+//            "GLOWSTONE" : 2.00
+//    },
+//
+//        "Ore_Affinity": {
+//            "COAL_ORE": 0.50,
+//            "IRON_ORE": 1.00,
+//            "GOLD_ORE": 2.00,
+//            "LAPIS_ORE": 1.50,
+//            "REDSTONE_ORE": 1.30,
+//            "GLOWING_REDSTONE_ORE": 1.30,
+//            "DIAMOND_ORE": 5.00,
+//            "EMERALD_ORE": 7.50,
+//            "QUARTZ_ORE": 2.00
+//    }
+//    }
+
+//    for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
+//    {
+//        ConcurrentHashMap<String, BigDecimal> tableMap = tableEntry.getValue ();
+//        ConcurrentHashMap<String, BigDecimal> blockMapSection = mBlockMap.get (tableEntry.getKey ());
+//
+//
+//
+//        for (Map.Entry<String, BigDecimal> entry : tableMap.entrySet ())
+//        {
+//            object.put (tableEntry.getKey() + "." + entry.getKey (), )
+//            wageTable.set (tableEntry.getKey () + "." + entry.getKey (), blockMapSection.get (entry.getKey ()));
+//        }
+//    }
+//
+//            controller.saveConfig (wageTable, mTableName.getFileName ());
 
 
     @Override

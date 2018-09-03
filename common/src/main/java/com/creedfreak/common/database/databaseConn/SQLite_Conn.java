@@ -11,7 +11,7 @@ import java.util.logging.Level;
 public class SQLite_Conn extends Database
 {
     private final String SQLITE_DB_NAME = "crafty_professions_SQLite.db";
-    private final String SQLITE_TABLE_STMTS = "com/magnarisa/resources/sql_files/sqlite_create_tables.sql";
+    private final String SQLITE_TABLE_STMTS = "sql_files/sqlite_create_tables.sql";
 
     /**************************************************************************
      * Constructor: SQLite_Conn
