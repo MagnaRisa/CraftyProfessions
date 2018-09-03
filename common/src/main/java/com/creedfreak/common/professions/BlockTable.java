@@ -114,52 +114,6 @@ public abstract class BlockTable implements IWageTable
         }
     }
 
-//    {
-//        "Miner_Payout": {
-//            "STONE": 0.01,
-//            "COAL_ORE": 0.50,
-//            "IRON_ORE": 1.00,
-//            "GOLD_ORE": 2.00,
-//            "LAPIS_ORE": 1.50,
-//            "REDSTONE_ORE": 1.30,
-//            "GLOWING_REDSTONE_ORE": 1.30,
-//            "DIAMOND_ORE": 5.00,
-//            "EMERALD_ORE": 7.50,
-//            "QUARTZ_ORE": 2.00,
-//            "MOSSY_COBBLESTONE": 1.20,
-//            "OBSIDIAN": 2.50,
-//            "ENDER_STONE": 0.03,
-//            "HARD_CLAY": 0.01,
-//            "NETHERRACK": 0.01,
-//            "MOB_SPAWNER": 20.00,
-//            "MONSTER_EGGS": 0.03,
-//            "GLOWSTONE": 1.00
-//    },
-//
-//
-//        "Stone_Affinity": {
-//            "STONE" : 0.03,
-//            "STONE(1)" : 0.04,
-//            "STONE(3)": 0.04,
-//            "STONE(5)" : 0.04,
-//            "HARD_CLAY" : 0.03,
-//            "NETHERRACK" : 0.03,
-//            "MONSTER_EGGS" : 0.06,
-//            "GLOWSTONE" : 2.00
-//    },
-//
-//        "Ore_Affinity": {
-//            "COAL_ORE": 0.50,
-//            "IRON_ORE": 1.00,
-//            "GOLD_ORE": 2.00,
-//            "LAPIS_ORE": 1.50,
-//            "REDSTONE_ORE": 1.30,
-//            "GLOWING_REDSTONE_ORE": 1.30,
-//            "DIAMOND_ORE": 5.00,
-//            "EMERALD_ORE": 7.50,
-//            "QUARTZ_ORE": 2.00
-//    }
-//    }
 
 //    for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
 //    {
