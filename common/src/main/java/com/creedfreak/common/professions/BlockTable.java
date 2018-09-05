@@ -1,6 +1,8 @@
 package com.creedfreak.common.professions;
 
 import com.creedfreak.common.AbsConfigController;
+import com.creedfreak.common.container.WageTableHandler;
+import com.creedfreak.common.utility.JsonWrapper;
 import com.google.gson.Gson;
 
 import java.io.FileWriter;
@@ -8,7 +10,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This implementation of a Wage Table is based around the Blocks
@@ -27,16 +28,24 @@ public abstract class BlockTable implements IWageTable
      * you only really want to either place a block for a job or break it. But when handling
      * actions like breaking and planting crops this type of table should work nicely.
      */
-    protected ConcurrentHashMap<String, ConcurrentHashMap<String, BigDecimal>> mBlockMap;
+    protected HashMap mBlockMap;
     protected TableName mTableName;
     private boolean mbHasChanged;
 
     protected BlockTable (TableName tableName)
     {
         mTableName = tableName;
-        mBlockMap = new ConcurrentHashMap<> ();
         mbHasChanged = false;
     }
+
+    @Override
+    public void readTable (String resource)
+    {
+        JsonWrapper wrapper = new JsonWrapper ();
+
+        mBlockMap = wrapper.readJson (WageTableHandler.DEFAULT_WT_TYPE, resource);
+    }
+
 
     /**
      * This method will map the given item into the mBlockMap
@@ -73,64 +82,20 @@ public abstract class BlockTable implements IWageTable
      * This method will write the table specified by the internal parents
      * protected mTableName field.
      *
-     * @param controller The configuration controller in order to gain
-     *                   access to a specified resource file.
+     * @param resource The file to write the json to.
      *
      * TODO: Fix this Method, it's currently really Broken
      */
     @Override
-    public void writeTable (AbsConfigController controller)
+    public void writeTable (String resource)
     {
-        Gson rootGson = new Gson ();
-        // rootGson.toJson
-//        JSONObject rootObject = new JSONObject (new HashMap<String, BigDecimal> ());
-//      YamlConfiguration wageTable = controller.getSpecialConfig (mTableName.getFileName ());
-
-        try
+        if (mbHasChanged)
         {
-            FileWriter writer = new FileWriter ("");
+            JsonWrapper wrapper = new JsonWrapper ();
 
-            for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
-            {
-//                JSONObject childObject = new JSONObject (new HashMap<String, BigDecimal> ());
-
-                ConcurrentHashMap<String, BigDecimal> tableMap = tableEntry.getValue ();
-                ConcurrentHashMap<String, BigDecimal> blockMapSection = mBlockMap.get (tableEntry.getKey ());
-
-                for (Map.Entry<String, BigDecimal> entry : tableMap.entrySet ())
-                {
-                    // Build the json object
-//                    childObject.put (entry.getKey(), entry.getValue ());
-                }
-
-//                rootObject.put (tableEntry.getKey (), childObject);
-            }
-
-//            writer.write (rootObject.toJSONString ());
-        }
-        catch (IOException exception)
-        {
-            exception.printStackTrace ();
+            wrapper.writeJson (mBlockMap, WageTableHandler.DEFAULT_WT_TYPE, resource);
         }
     }
-
-
-//    for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
-//    {
-//        ConcurrentHashMap<String, BigDecimal> tableMap = tableEntry.getValue ();
-//        ConcurrentHashMap<String, BigDecimal> blockMapSection = mBlockMap.get (tableEntry.getKey ());
-//
-//
-//
-//        for (Map.Entry<String, BigDecimal> entry : tableMap.entrySet ())
-//        {
-//            object.put (tableEntry.getKey() + "." + entry.getKey (), )
-//            wageTable.set (tableEntry.getKey () + "." + entry.getKey (), blockMapSection.get (entry.getKey ()));
-//        }
-//    }
-//
-//            controller.saveConfig (wageTable, mTableName.getFileName ());
-
 
     @Override
     public boolean hasChanged ()

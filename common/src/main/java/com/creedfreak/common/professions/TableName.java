@@ -21,8 +21,13 @@ public enum TableName
     Merchant("merchant_wage.yml");
 
     private String mFileName;
+    // Could create tiers that will define the various
+    // levels of a wage table. For example I could setup
+    // a list of strings that define the names of the various
+    // tiers.
 
-    private TableName (String fileName)
+
+    TableName (String fileName)
     {
         mFileName = fileName;
     }

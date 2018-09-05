@@ -63,7 +63,6 @@ sourceSets {
             srcDir "src/main/java"
         }
         resources {
-            // TODO: Rename this to appropriate path
             srcDir "src/main/resources"
         }
     }

@@ -31,10 +31,9 @@ public interface IWageTable
      *      table names should be in the format of
      *      profession_wage.yml</p>
      *
-     * @param controller The config controller in which to retrieve
-     *                   the configuration for reading.
+     * @param resource The file to read from
      */
-    void readTable (AbsConfigController controller);
+    void readTable (String resource);
 
     /**
      * <p> writeTable will essentially take any modified data
@@ -43,10 +42,9 @@ public interface IWageTable
      *      called whenever the command to modify the table
      *      is called. </p>
      *
-     * @param controller The config controller in which to retrieve
-     *                   the configuration for writing.
+     * @param resource The file in which to write to.
      */
-    void writeTable (AbsConfigController controller);
+    void writeTable (String resource);
 
     /**
      * This method will return an internal boolean which will

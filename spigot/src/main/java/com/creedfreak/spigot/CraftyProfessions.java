@@ -3,6 +3,7 @@ package com.creedfreak.spigot;
 import com.creedfreak.common.AbsCmdController;
 import com.creedfreak.common.AbsConfigController;
 import com.creedfreak.common.ICraftyProfessions;
+import com.creedfreak.common.container.WageTableHandler;
 import com.creedfreak.spigot.commands.CommandController;
 import com.creedfreak.spigot.config.ConfigController;
 import com.creedfreak.common.professions.IWageTable;
@@ -48,7 +49,7 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     private Database mDatabase;
 
     // WageTables
-    private HashMap<String, IWageTable> mWageTables;
+    private WageTableHandler mTableHandler = null;
 
     /**
      * This method will do all of the plugins initialization of
@@ -81,9 +82,9 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
 
         mCoreListener.setEconomyHook (mEconomy);
 
-        /*The registering of the wage tables are below*/
-        mWageTables = new HashMap<> ();
-        registerWageTables ();
+        // Initialize the Wage Tables.
+        mTableHandler = WageTableHandler.getInstance ();
+        mTableHandler.InitializeWageTables ();
 
         // This will initialize the PlayerManager Singleton
         PlayerManager.Instance ().initializePlayerManager (this, mDatabase);
@@ -162,7 +163,7 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
             mPermissions = rsp.getProvider ();
         }
 
-        return mPermissions != null;
+        return (mPermissions != null);
     }
 
     /**
@@ -211,22 +212,6 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
 
         // Register the Core Listener of CraftyProfessions
         pluginManager.registerEvents (mCoreListener, this);
-    }
-
-    private void registerWageTables ()
-    {
-        mWageTables.put ("Miner_Wage", new MinerWage());
-
-        for (Map.Entry<String, IWageTable> table : mWageTables.entrySet ())
-        {
-            table.getValue ().readTable (mConfigController);
-        }
-
-    }
-
-    public IWageTable getWageTable (String tableName)
-    {
-        return mWageTables.get (tableName);
     }
 
     /** NEED TO DELETE THIS LATER DEBUGGING ONLY
