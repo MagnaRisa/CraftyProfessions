@@ -1,5 +1,6 @@
 package com.creedfreak.common.container;
 
+import com.creedfreak.common.professions.BlockTable;
 import com.creedfreak.common.professions.IWageTable;
 import com.creedfreak.common.professions.MinerWage;
 import com.creedfreak.common.professions.TableName;
@@ -48,7 +49,7 @@ public class WageTableHandler
 	public void InitializeWageTables ()
 	{
 		// Initialize all tables here.
-		mTableHandler.put (TableName.Miner, new MinerWage ());
+		mTableHandler.put (TableName.Miner, new BlockTable (TableName.Miner));
 		// mTableHandler.put (TableName.Alchemy, new AlchemyWage ());
 
 		// Read in all of the wage tables within the wage table handler.

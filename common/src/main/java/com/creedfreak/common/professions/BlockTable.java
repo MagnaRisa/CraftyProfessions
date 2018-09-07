@@ -1,21 +1,16 @@
 package com.creedfreak.common.professions;
 
-import com.creedfreak.common.AbsConfigController;
 import com.creedfreak.common.container.WageTableHandler;
 import com.creedfreak.common.utility.JsonWrapper;
-import com.google.gson.Gson;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This implementation of a Wage Table is based around the Blocks
  * of Minecraft, this way any Professions that revolve around
  */
-public abstract class BlockTable implements IWageTable
+public class BlockTable implements IWageTable
 {
     /**
      * TODO: This Should be the table design that is used throughout all the wage tables.
@@ -28,11 +23,11 @@ public abstract class BlockTable implements IWageTable
      * you only really want to either place a block for a job or break it. But when handling
      * actions like breaking and planting crops this type of table should work nicely.
      */
-    protected HashMap mBlockMap;
-    protected TableName mTableName;
+    private HashMap mBlockMap;
+    private TableName mTableName;
     private boolean mbHasChanged;
 
-    protected BlockTable (TableName tableName)
+    public BlockTable (TableName tableName)
     {
         mTableName = tableName;
         mbHasChanged = false;
@@ -45,7 +40,6 @@ public abstract class BlockTable implements IWageTable
 
         mBlockMap = wrapper.readJson (WageTableHandler.DEFAULT_WT_TYPE, resource);
     }
-
 
     /**
      * This method will map the given item into the mBlockMap
@@ -83,8 +77,6 @@ public abstract class BlockTable implements IWageTable
      * protected mTableName field.
      *
      * @param resource The file to write the json to.
-     *
-     * TODO: Fix this Method, it's currently really Broken
      */
     @Override
     public void writeTable (String resource)
@@ -97,9 +89,25 @@ public abstract class BlockTable implements IWageTable
         }
     }
 
+    /**
+     * @return if the table has been changed or not.
+     */
     @Override
     public boolean hasChanged ()
     {
         return mbHasChanged;
+    }
+
+    /**
+     *
+     * @param key The key whose value is to be changed
+     * @param value The value in which to modify the previous value
+     *
+     * @return If the modification was valid or not.
+     */
+    public boolean modifyValue (String key, Double value)
+    {
+
+        return false;
     }
 }

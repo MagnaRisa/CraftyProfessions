@@ -61,18 +61,11 @@ public interface IWageTable
      * This method will allow the modification of a specific value
      * within the wage table.
      *
-     * @param path The path to the key whose value you want to change
-     * @param newValue The new value to set into the given paths value
+     * @param key The key whose value is to be changed
+     * @param value The value in which to modify the previous value
      *
      * @return True  - If the operation was a success
      *         False - If the operation was a failure
      */
-    boolean modifyValue (BigDecimal newValue, String... path);
-
-    /**
-     * This method will allow grab the name of the WageTable
-     *
-     * @return The name of the wage table.
-     */
-    String getTableName ();
+    boolean modifyValue (String key, Double value);
 }

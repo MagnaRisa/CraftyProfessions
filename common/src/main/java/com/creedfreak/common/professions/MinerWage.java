@@ -57,15 +57,4 @@ public class MinerWage extends BlockTable
 //        mBlockMap.get(path[0]).put (path[1], value);
         return true;
     }
-
-    /**
-     * This method will allow grab the name of the WageTable
-     *
-     * @return The name of the wage table.
-     */
-    @Override
-    public String getTableName ()
-    {
-        return MINER_WAGE_TABLE;
-    }
 }
