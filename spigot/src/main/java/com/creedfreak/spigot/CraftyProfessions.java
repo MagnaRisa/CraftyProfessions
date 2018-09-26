@@ -84,7 +84,7 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
 
         // Initialize the Wage Tables.
         mTableHandler = WageTableHandler.getInstance ();
-        mTableHandler.InitializeWageTables ();
+        mTableHandler.InitializeWageTables (mConfigController.getDebug (), mLogger);
 
         // This will initialize the PlayerManager Singleton
         PlayerManager.Instance ().initializePlayerManager (this, mDatabase);

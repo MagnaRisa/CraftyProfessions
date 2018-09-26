@@ -11,8 +11,6 @@ public class ProfMiner implements IProfession
 
     // This is the Users current Miner Status
     private String mMinerStatus;
-    // The reference to the Concurrent Wage Table
-    private MinerWage mValueTable;
 
     // These are the Augments a user has for this profession.
     // Note that these are not used to calculate the modifiers
@@ -24,32 +22,25 @@ public class ProfMiner implements IProfession
     private Double mIncomeBonus;
     private Double mTokenBonus;
 
-    public ProfMiner (IWageTable wageTable, String status)
+    public ProfMiner (String status)
     {
-        // Check the wage table before passing it into this constructor
-        mValueTable = (MinerWage) wageTable;
-
-        // Set the users Profession Status
-        if (status.equalsIgnoreCase ("default"))
-        {
-            mMinerStatus = MinerWage.MINER_PAYOUT;
-        }
-        else
-        {
-            mMinerStatus = status;
-        }
+        // What wage table will the player use?
+        // This value is stored in the database until retrieved.
+        mMinerStatus = status;
     }
 
-    /**
-     * This method is used to return the Name of this Profession
-     *
-     * @return The Name of the Profession [Miner]
-     */
     public String getName ()
     {
         return PROF_NAME;
     }
 
+    /**
+     * This method is called when the user upgrades their Miner profession status.
+     * This will upgrade the users current states to their new status which will
+     * point to a different wage table to be used for payment.
+     *
+     * @param newStatus - The new Miner status. i.e. Ore_Affinity or Stone_Affinity
+     */
     public void upgradeStatus (String newStatus)
     {
         mMinerStatus = newStatus;

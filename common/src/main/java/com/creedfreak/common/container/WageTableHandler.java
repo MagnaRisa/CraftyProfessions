@@ -1,9 +1,9 @@
 package com.creedfreak.common.container;
 
 import com.creedfreak.common.professions.BlockTable;
+import com.creedfreak.common.professions.IProfession;
 import com.creedfreak.common.professions.IWageTable;
-import com.creedfreak.common.professions.MinerWage;
-import com.creedfreak.common.professions.TableName;
+import com.creedfreak.common.professions.TableType;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -11,7 +11,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
+/**
+ * The Wage Table Handler will
+ *
+ *
+ * The Wage Table Handler also implements the method
+ */
 public class WageTableHandler
 {
 	public static final Type DEFAULT_WT_TYPE =
@@ -19,7 +26,7 @@ public class WageTableHandler
 
 	private static WageTableHandler Instance = new WageTableHandler ();
 
-	private HashMap<TableName, IWageTable> mTableHandler;
+	private HashMap<TableType, IWageTable> mTableHandler;
 
 	/**
 	 * The default constructor for the WageTableHandler. This is private to
@@ -45,17 +52,38 @@ public class WageTableHandler
 	 * InitializeWageTables will use the default wage table name array to
 	 * read in all of the wage tables and store them within the internal
 	 * Table Handler object.
+	 *
+	 * This method also doubles as the initialization of the Flyweight factory
+	 * which handles all of the Wage Tables for dispersal at a later time after
+	 * they have been initialized.
 	 */
-	public void InitializeWageTables ()
+	public void InitializeWageTables (boolean debug, Logger Log)
 	{
-		// Initialize all tables here.
-		mTableHandler.put (TableName.Miner, new BlockTable (TableName.Miner));
-		// mTableHandler.put (TableName.Alchemy, new AlchemyWage ());
+		// Initialize all block tables here.
+		mTableHandler.put (TableType.Miner, new BlockTable (TableType.Miner));
+		mTableHandler.put (TableType.Architect, new BlockTable (TableType.Architect));
+
+		// Initialize all item related tables here.
+		// mTableHandler.put (TableType.Alchemy, new AlchemyWage ());
+
+		if (debug)
+		{
+			Log.info ("Starting Initialization of Wage Tables...");
+		}
 
 		// Read in all of the wage tables within the wage table handler.
-		for (Map.Entry<TableName, IWageTable> entry : mTableHandler.entrySet ())
+		for (Map.Entry<TableType, IWageTable> entry : mTableHandler.entrySet ())
 		{
 			entry.getValue ().readTable (entry.getKey ().getFileName());
+			if (debug)
+			{
+				Log.info ("Initialized " + entry.getKey ().getFileName ());
+			}
+		}
+
+		if (debug)
+		{
+			Log.info ("Initialization of Wage Tables are complete!");
 		}
 	}
 
@@ -67,7 +95,7 @@ public class WageTableHandler
 	 */
 	public void WriteWageTables ()
 	{
-		for (Map.Entry<TableName, IWageTable> entry : mTableHandler.entrySet ())
+		for (Map.Entry<TableType, IWageTable> entry : mTableHandler.entrySet ())
 		{
 			entry.getValue ().writeTable (entry.getKey ().getFileName ());
 		}
@@ -80,11 +108,11 @@ public class WageTableHandler
 	 *
 	 * @return modifiedTables - The list of modified tables.
 	 */
-	public List<TableName> ModifiedTables ()
+	public List<TableType> ModifiedTables ()
 	{
-		List<TableName> modifiedTables = new ArrayList<>();
+		List<TableType> modifiedTables = new ArrayList<>();
 
-		for (Map.Entry<TableName, IWageTable> entry : mTableHandler.entrySet ())
+		for (Map.Entry<TableType, IWageTable> entry : mTableHandler.entrySet ())
 		{
 			if (entry.getValue ().hasChanged ())
 			{
@@ -93,5 +121,18 @@ public class WageTableHandler
 		}
 
 		return modifiedTables;
+	}
+
+	/**
+	 * The factory method to retrieve the Wage Tables according to the
+	 * flyweight pattern.
+	 *
+	 * @param tableType - The type of table reference to return.
+	 *
+	 * @return - mTableHandler.get(tableType) - The specified Wage Table.
+	 */
+	public IWageTable GetWageTable (TableType tableType)
+	{
+		return mTableHandler.get (tableType);
 	}
 }

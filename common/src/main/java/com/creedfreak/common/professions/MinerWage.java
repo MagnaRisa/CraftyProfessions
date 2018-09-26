@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * TODO: Is this class still needed? We only really need a block map now. The table type is defined by a TableName.
+ * TODO: Is this class still needed? We only really need a block map now. The table type is defined by a TableType.
  * This Class is the implementation for the MinerWage Table
  * used to fetch the wage of a specific block mined or broken
  * based on that blocks name.
@@ -25,7 +25,7 @@ public class MinerWage extends BlockTable
 
     public MinerWage ()
     {
-        super (TableName.Miner);
+        super (TableType.Miner);
     }
 
      /**

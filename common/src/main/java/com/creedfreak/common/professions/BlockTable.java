@@ -3,7 +3,6 @@ package com.creedfreak.common.professions;
 import com.creedfreak.common.container.WageTableHandler;
 import com.creedfreak.common.utility.JsonWrapper;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 
 /**
@@ -24,12 +23,12 @@ public class BlockTable implements IWageTable
      * actions like breaking and planting crops this type of table should work nicely.
      */
     private HashMap mBlockMap;
-    private TableName mTableName;
+    private TableType mTableType;
     private boolean mbHasChanged;
 
-    public BlockTable (TableName tableName)
+    public BlockTable (TableType tableType)
     {
-        mTableName = tableName;
+        mTableType = tableType;
         mbHasChanged = false;
     }
 
@@ -49,32 +48,25 @@ public class BlockTable implements IWageTable
      *
      * @param item The item to look for the in the BlockMap
      *
+     * @throws NullPointerException - If one of the hash map retrievals return
+     *             null then when the method tries to access them we should get
+     *             a null pointer exception. We need to deal with it wherever
+     *             mapItem is called.
+     *
      * @return The BigDecimal Value that the Item maps to within mBlockMap
      */
     @Override
-    public <T> BigDecimal mapItem (T item, String profStatus)
+    @SuppressWarnings("unchecked")
+    public Double mapItem (String item, String profStatus) throws NullPointerException
     {
-        // Loop through the string args trying the different table types or specializations
-        // A crafty player might have. When we find a match we stop the search.
-        /*ConcurrentHashMap<String, BigDecimal> mapType = mBlockMap.get (profStatus);
-        T generic;
+        HashMap<String, Double> internalMap = (HashMap<String, Double>) mBlockMap.get (profStatus);
 
-        if (mapType != null)
-        {
-            generic = (Block) item;
-        }
-        else
-        {
-            return null;
-        }
-
-        return mapType.get (generic.getType().toString ());*/
-        return null;
+        return internalMap.get (item);
     }
 
     /** CURRENTLY UNTESTED! NEED TO REPLICATE THIS IN THE READING OF THE FILE AS WELL
      * This method will write the table specified by the internal parents
-     * protected mTableName field.
+     * protected mTableType field.
      *
      * @param resource The file to write the json to.
      */

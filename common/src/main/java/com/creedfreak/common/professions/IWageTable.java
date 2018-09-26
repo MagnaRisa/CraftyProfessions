@@ -1,12 +1,14 @@
 package com.creedfreak.common.professions;
 
-import com.creedfreak.common.AbsConfigController;
-
 import java.math.BigDecimal;
 
 /**
  * This Interface outlines the common uses of a Wage Table for the
  * various professions within the Plugin.
+ *
+ * This class is the "Flyweight" within the flyweight pattern
+ * implemented to avoid having the WageTableHandler handle
+ * all of the generic requests
  */
 public interface IWageTable
 {
@@ -22,12 +24,12 @@ public interface IWageTable
      * @return The Value stored at that Table Location or null
      *          if the Table does not have the desired Item.
      */
-    <T> BigDecimal mapItem (T element, String profStatus);
+    Double mapItem (String element, String profStatus);
 
     /**
      * <p> This method will allow us to read the wage table
      *      from a specific file specified from the given
-     *      tableName parameter. In general all of the wage
+     *      TableType parameter. In general all of the wage
      *      table names should be in the format of
      *      profession_wage.yml</p>
      *
