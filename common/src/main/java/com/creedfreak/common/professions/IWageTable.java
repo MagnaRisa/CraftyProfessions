@@ -1,12 +1,14 @@
 package com.creedfreak.common.professions;
 
-import com.creedfreak.common.AbsConfigController;
-
 import java.math.BigDecimal;
 
 /**
  * This Interface outlines the common uses of a Wage Table for the
  * various professions within the Plugin.
+ *
+ * This class is the "Flyweight" within the flyweight pattern
+ * implemented to avoid having the WageTableHandler handle
+ * all of the generic requests
  */
 public interface IWageTable
 {
@@ -22,19 +24,18 @@ public interface IWageTable
      * @return The Value stored at that Table Location or null
      *          if the Table does not have the desired Item.
      */
-    <T> BigDecimal mapItem (T element, String profStatus);
+    float mapItem (String element, String profStatus);
 
     /**
      * <p> This method will allow us to read the wage table
      *      from a specific file specified from the given
-     *      tableName parameter. In general all of the wage
+     *      TableType parameter. In general all of the wage
      *      table names should be in the format of
      *      profession_wage.yml</p>
      *
-     * @param controller The config controller in which to retrieve
-     *                   the configuration for reading.
+     * @param resource The file to read from
      */
-    void readTable (AbsConfigController controller);
+    void readTable (String resource);
 
     /**
      * <p> writeTable will essentially take any modified data
@@ -43,10 +44,9 @@ public interface IWageTable
      *      called whenever the command to modify the table
      *      is called. </p>
      *
-     * @param controller The config controller in which to retrieve
-     *                   the configuration for writing.
+     * @param resource The file in which to write to.
      */
-    void writeTable (AbsConfigController controller);
+    void writeTable (String resource);
 
     /**
      * This method will return an internal boolean which will
@@ -63,18 +63,11 @@ public interface IWageTable
      * This method will allow the modification of a specific value
      * within the wage table.
      *
-     * @param path The path to the key whose value you want to change
-     * @param newValue The new value to set into the given paths value
+     * @param key The key whose value is to be changed
+     * @param value The value in which to modify the previous value
      *
      * @return True  - If the operation was a success
      *         False - If the operation was a failure
      */
-    boolean modifyValue (BigDecimal newValue, String... path);
-
-    /**
-     * This method will allow grab the name of the WageTable
-     *
-     * @return The name of the wage table.
-     */
-    String getTableName ();
+    boolean modifyValue (String key, Double value);
 }

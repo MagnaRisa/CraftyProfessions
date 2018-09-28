@@ -2,7 +2,7 @@ package com.creedfreak.spigot.config;
 
 import com.google.common.base.Charsets;
 import com.creedfreak.common.AbsConfigController;
-import com.creedfreak.common.professions.TableName;
+import com.creedfreak.common.professions.TableType;
 import com.creedfreak.common.exceptions.ConfigNotFoundException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -55,7 +55,7 @@ public class ConfigController extends AbsConfigController
      */
     public void registerConfigFiles ()
     {
-        for (TableName resource : TableName.values ())
+        for (TableType resource : TableType.values ())
         {
             loadFile (resource.getFileName ());
         }
@@ -150,7 +150,7 @@ public class ConfigController extends AbsConfigController
         {
             mPlugin.saveConfig ();
 
-            for (TableName resource : TableName.values ())
+            for (TableType resource : TableType.values ())
             {
                 saveConfig (resource.getFileName ());
             }

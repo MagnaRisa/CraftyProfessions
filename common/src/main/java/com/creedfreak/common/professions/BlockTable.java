@@ -1,20 +1,15 @@
 package com.creedfreak.common.professions;
 
-import com.creedfreak.common.AbsConfigController;
-import com.google.gson.Gson;
+import com.creedfreak.common.container.WageTableHandler;
+import com.creedfreak.common.utility.JsonWrapper;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This implementation of a Wage Table is based around the Blocks
  * of Minecraft, this way any Professions that revolve around
  */
-public abstract class BlockTable implements IWageTable
+public class BlockTable implements IWageTable
 {
     /**
      * TODO: This Should be the table design that is used throughout all the wage tables.
@@ -27,15 +22,22 @@ public abstract class BlockTable implements IWageTable
      * you only really want to either place a block for a job or break it. But when handling
      * actions like breaking and planting crops this type of table should work nicely.
      */
-    protected ConcurrentHashMap<String, ConcurrentHashMap<String, BigDecimal>> mBlockMap;
-    protected TableName mTableName;
+    private HashMap mBlockMap;
+    private TableType mTableType;
     private boolean mbHasChanged;
 
-    protected BlockTable (TableName tableName)
+    public BlockTable (TableType tableType)
     {
-        mTableName = tableName;
-        mBlockMap = new ConcurrentHashMap<> ();
+        mTableType = tableType;
         mbHasChanged = false;
+    }
+
+    @Override
+    public void readTable (String resource)
+    {
+        JsonWrapper wrapper = new JsonWrapper ();
+
+        mBlockMap = wrapper.readJson (WageTableHandler.DEFAULT_WT_TYPE, resource);
     }
 
     /**
@@ -46,95 +48,59 @@ public abstract class BlockTable implements IWageTable
      *
      * @param item The item to look for the in the BlockMap
      *
+     * @throws NullPointerException - If one of the hash map retrievals return
+     *             null then when the method tries to access them we should get
+     *             a null pointer exception. We need to deal with it wherever
+     *             mapItem is called.
+     *
      * @return The BigDecimal Value that the Item maps to within mBlockMap
      */
     @Override
-    public <T> BigDecimal mapItem (T item, String profStatus)
+    @SuppressWarnings("unchecked")
+    public float mapItem (String item, String profStatus) throws NullPointerException
     {
-        // Loop through the string args trying the different table types or specializations
-        // A crafty player might have. When we find a match we stop the search.
-        /*ConcurrentHashMap<String, BigDecimal> mapType = mBlockMap.get (profStatus);
-        T generic;
+        // The Block may will always be in the form of HashMap<String, Double>
+        HashMap<String, Float> internalMap = (HashMap<String, Float>) mBlockMap.get (profStatus);
 
-        if (mapType != null)
-        {
-            generic = (Block) item;
-        }
-        else
-        {
-            return null;
-        }
-
-        return mapType.get (generic.getType().toString ());*/
-        return null;
+        return internalMap.get (item);
     }
 
     /** CURRENTLY UNTESTED! NEED TO REPLICATE THIS IN THE READING OF THE FILE AS WELL
      * This method will write the table specified by the internal parents
-     * protected mTableName field.
+     * protected mTableType field.
      *
-     * @param controller The configuration controller in order to gain
-     *                   access to a specified resource file.
-     *
-     * TODO: Fix this Method, it's currently really Broken
+     * @param resource The file to write the json to.
      */
     @Override
-    public void writeTable (AbsConfigController controller)
+    public void writeTable (String resource)
     {
-        Gson rootGson = new Gson ();
-        // rootGson.toJson
-//        JSONObject rootObject = new JSONObject (new HashMap<String, BigDecimal> ());
-//      YamlConfiguration wageTable = controller.getSpecialConfig (mTableName.getFileName ());
-
-        try
+        if (mbHasChanged)
         {
-            FileWriter writer = new FileWriter ("");
+            JsonWrapper wrapper = new JsonWrapper ();
 
-            for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
-            {
-//                JSONObject childObject = new JSONObject (new HashMap<String, BigDecimal> ());
-
-                ConcurrentHashMap<String, BigDecimal> tableMap = tableEntry.getValue ();
-                ConcurrentHashMap<String, BigDecimal> blockMapSection = mBlockMap.get (tableEntry.getKey ());
-
-                for (Map.Entry<String, BigDecimal> entry : tableMap.entrySet ())
-                {
-                    // Build the json object
-//                    childObject.put (entry.getKey(), entry.getValue ());
-                }
-
-//                rootObject.put (tableEntry.getKey (), childObject);
-            }
-
-//            writer.write (rootObject.toJSONString ());
-        }
-        catch (IOException exception)
-        {
-            exception.printStackTrace ();
+            wrapper.writeJson (mBlockMap, WageTableHandler.DEFAULT_WT_TYPE, resource);
         }
     }
 
-
-//    for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
-//    {
-//        ConcurrentHashMap<String, BigDecimal> tableMap = tableEntry.getValue ();
-//        ConcurrentHashMap<String, BigDecimal> blockMapSection = mBlockMap.get (tableEntry.getKey ());
-//
-//
-//
-//        for (Map.Entry<String, BigDecimal> entry : tableMap.entrySet ())
-//        {
-//            object.put (tableEntry.getKey() + "." + entry.getKey (), )
-//            wageTable.set (tableEntry.getKey () + "." + entry.getKey (), blockMapSection.get (entry.getKey ()));
-//        }
-//    }
-//
-//            controller.saveConfig (wageTable, mTableName.getFileName ());
-
-
+    /**
+     * @return if the table has been changed or not.
+     */
     @Override
     public boolean hasChanged ()
     {
         return mbHasChanged;
+    }
+
+    /**
+     *
+     * @param key The key whose value is to be changed
+     * @param value The value in which to modify the previous value
+     *
+     * @return If the modification was valid or not.
+     */
+    public boolean modifyValue (String key, Double value)
+    {
+
+        return false;
     }
 }
