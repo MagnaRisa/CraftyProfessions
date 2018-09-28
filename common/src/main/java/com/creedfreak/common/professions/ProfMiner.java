@@ -1,15 +1,14 @@
 package com.creedfreak.common.professions;
 
-import com.creedfreak.common.professions.IWageTable;
-import com.creedfreak.common.professions.MinerWage;
+import com.creedfreak.common.container.WageTableHandler;
 
 import java.util.List;
 
-public class ProfMiner implements IProfession
+public class ProfMiner extends Profession
 {
     public static final String PROF_NAME = "Miner";
 
-    // This is the Users current Miner Status
+    // This is the Users current Miner Status i.e. Miner_Payout, Ore_Affinity, etc...
     private String mMinerStatus;
 
     // These are the Augments a user has for this profession.
@@ -18,15 +17,26 @@ public class ProfMiner implements IProfession
     private List<IAugment> mAugments;
 
     // These are the bonus values modified by the Augments of the professions.
-    private Double mExpierenceBonus;
-    private Double mIncomeBonus;
-    private Double mTokenBonus;
+    private float mExpierenceBonus;
+    private float mIncomeBonus;
+    private float mTokenBonus;
 
-    public ProfMiner (String status)
+    // TODO: References Issue #27
+    //private float mWagePool;
+
+    public ProfMiner (String status, float exp, float income, float token) throws NullPointerException
     {
+        // Initialize the Wage Table; Should never change.
+        super();
+
         // What wage table will the player use?
         // This value is stored in the database until retrieved.
         mMinerStatus = status;
+
+        // Construct the object with the users specific bonuses.
+        mExpierenceBonus = exp;
+        mIncomeBonus = income;
+        mTokenBonus = token;
     }
 
     public String getName ()

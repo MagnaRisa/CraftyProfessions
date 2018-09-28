@@ -94,7 +94,8 @@ public class CoreListener implements Listener
         }
         */
 
-        IWageTable wageTable = mProfessions.getWageTable ("Miner_Wage");
+        // INFO: The below implementation of retrieving a wage table is deprecated and needs to be removed.
+/*        IWageTable wageTable = mProfessions.getWageTable ("Miner_Wage");
         if (wageTable == null)
         {
             player.sendMessage ("Wage Table is NULL");
@@ -108,7 +109,7 @@ public class CoreListener implements Listener
             return;
         }
 
-        player.sendMessage (event.getBlock().getType () + " is Worth " + value.toString ());
+        player.sendMessage (event.getBlock().getType () + " is Worth " + value.toString ());*/
     }
 
     @EventHandler

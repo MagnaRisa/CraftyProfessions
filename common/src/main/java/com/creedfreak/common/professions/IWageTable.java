@@ -24,7 +24,7 @@ public interface IWageTable
      * @return The Value stored at that Table Location or null
      *          if the Table does not have the desired Item.
      */
-    Double mapItem (String element, String profStatus);
+    float mapItem (String element, String profStatus);
 
     /**
      * <p> This method will allow us to read the wage table

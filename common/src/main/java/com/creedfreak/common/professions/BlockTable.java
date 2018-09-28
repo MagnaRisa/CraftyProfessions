@@ -57,9 +57,10 @@ public class BlockTable implements IWageTable
      */
     @Override
     @SuppressWarnings("unchecked")
-    public Double mapItem (String item, String profStatus) throws NullPointerException
+    public float mapItem (String item, String profStatus) throws NullPointerException
     {
-        HashMap<String, Double> internalMap = (HashMap<String, Double>) mBlockMap.get (profStatus);
+        // The Block may will always be in the form of HashMap<String, Double>
+        HashMap<String, Float> internalMap = (HashMap<String, Float>) mBlockMap.get (profStatus);
 
         return internalMap.get (item);
     }

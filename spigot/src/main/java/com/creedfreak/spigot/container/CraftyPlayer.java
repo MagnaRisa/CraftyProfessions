@@ -2,7 +2,7 @@ package com.creedfreak.spigot.container;
 
 import com.google.common.primitives.UnsignedLong;
 import com.creedfreak.common.container.IPlayer;
-import com.creedfreak.common.professions.IProfession;
+import com.creedfreak.common.professions.Profession;
 import net.milkbowl.vault.economy.*;
 import org.bukkit.entity.Player;
 
@@ -26,7 +26,7 @@ public class CraftyPlayer implements IPlayer
 
 
     // The Users list of professions.
-    private HashMap<String, IProfession> mPlayerProfessions;
+    private HashMap<String, Profession> mPlayerProfessions;
 
     /**
      * This is the Default Constructor for the CraftyPlayer object in which
@@ -38,14 +38,14 @@ public class CraftyPlayer implements IPlayer
      *                    player, then the data will be stored into the database when the player
      *                    logs out.
      */
-    public CraftyPlayer (UnsignedLong dbID, Player player, ArrayList<IProfession> professions)
+    public CraftyPlayer (UnsignedLong dbID, Player player, ArrayList<Profession> professions)
     {
         mPlayerID = dbID;
         mPlayer = player;
         mPlayerPool = new BigDecimal (0.0).setScale (2, RoundingMode.HALF_UP);
 
         // Construct an easy way to reference a users professions.
-        for (IProfession prof : professions)
+        for (Profession prof : professions)
         {
             mPlayerProfessions.put (prof.getName(), prof);
         }
@@ -119,7 +119,7 @@ public class CraftyPlayer implements IPlayer
             else
             {
                 // Iterate over the list and send the Profession name to the User.
-                for (Map.Entry<String, IProfession> prof : mPlayerProfessions.entrySet ())
+                for (Map.Entry<String, Profession> prof : mPlayerProfessions.entrySet ())
                 {
                     mPlayer.sendMessage (prof.getKey ());
                 }

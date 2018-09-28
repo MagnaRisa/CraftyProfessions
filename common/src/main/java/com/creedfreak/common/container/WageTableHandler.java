@@ -1,7 +1,6 @@
 package com.creedfreak.common.container;
 
 import com.creedfreak.common.professions.BlockTable;
-import com.creedfreak.common.professions.IProfession;
 import com.creedfreak.common.professions.IWageTable;
 import com.creedfreak.common.professions.TableType;
 import com.google.gson.reflect.TypeToken;
@@ -22,7 +21,7 @@ import java.util.logging.Logger;
 public class WageTableHandler
 {
 	public static final Type DEFAULT_WT_TYPE =
-			new TypeToken<HashMap<String, HashMap<String, Double>>> () {}.getType ();
+			new TypeToken<HashMap<String, HashMap<String, Float>>> () {}.getType ();
 
 	private static WageTableHandler Instance = new WageTableHandler ();
 

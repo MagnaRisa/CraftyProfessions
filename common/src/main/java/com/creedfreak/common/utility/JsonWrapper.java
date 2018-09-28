@@ -1,6 +1,5 @@
 package com.creedfreak.common.utility;
 
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
@@ -8,13 +7,11 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.math.BigDecimal;
 import java.util.HashMap;
 
 // TODO: Write better exception handling messages. This should log the error to the console and disable the plugin.
 public class JsonWrapper
 {
-	private static final Type DEFAULT_WAGE_TABLE_TYPE = new TypeToken<HashMap<String, HashMap<String, BigDecimal>>> () {}.getType ();
 
 	private Gson mGson;
 	private JsonReader mJsonReader = null;
