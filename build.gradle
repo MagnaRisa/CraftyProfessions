@@ -45,7 +45,7 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 task makeall (dependsOn: [':spigot:makeSpigot', ':sponge:makeSponge', ':pluginName']) {
-    
+
     group = 'Crafty Profession'
     description = 'Builds all of the jar files associated with crafty professions.'
 }

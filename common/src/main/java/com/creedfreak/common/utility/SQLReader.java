@@ -7,17 +7,14 @@ import java.util.logging.Level;
 
 public class SQLReader
 {
+    private static final String systemPrefix = "SQL_READER";
+
     public static final String EOF = "-1";
     private static final CharSequence COMMENT = "-- ";
     private static final CharSequence STATEMENT_END = ";";
 
     private BufferedReader mSQLReader;
-    private ICraftyProfessions mPlugin;
 
-    public SQLReader (ICraftyProfessions plugin)
-    {
-        mPlugin = plugin;
-    }
     /**************************************************************************
      * Method:      openReader
      *
@@ -67,7 +64,7 @@ public class SQLReader
         }
         catch (IOException exception)
         {
-            mPlugin.LogMessage (Level.SEVERE, "Could Not Close Resource:" + exception);
+            Logger.Instance ().Error (systemPrefix, "Could Not Close Resource:" + exception);
         }
     }
 
@@ -110,11 +107,11 @@ public class SQLReader
         }
         catch (IOException exception)
         {
-            mPlugin.LogMessage (Level.SEVERE, "Could Not Read From File:" + exception);
+            Logger.Instance ().Error (systemPrefix, "Could Not Read From File:" + exception);
         }
         catch (NullPointerException exception)
         {
-            mPlugin.LogMessage (Level.SEVERE, "End of SQL should have no empty lines!");
+            Logger.Instance ().Error (systemPrefix, "End of SQL should have no empty lines!");
         }
         return cleanStatement (builder);
     }

@@ -3,6 +3,7 @@ package com.creedfreak.common.container;
 import com.creedfreak.common.professions.BlockTable;
 import com.creedfreak.common.professions.IWageTable;
 import com.creedfreak.common.professions.TableType;
+import com.creedfreak.common.utility.Logger;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * The Wage Table Handler will
@@ -27,6 +27,8 @@ public class WageTableHandler
 
 	private HashMap<TableType, IWageTable> mTableHandler;
 
+	private Logger mLogger;
+
 	/**
 	 * The default constructor for the WageTableHandler. This is private to
 	 * prevent any other instantiations elsewhere to uphold the
@@ -35,6 +37,7 @@ public class WageTableHandler
 	private WageTableHandler ()
 	{
 		mTableHandler = new HashMap<>();
+		mLogger = Logger.Instance ();
 	}
 
 	/**
@@ -56,7 +59,7 @@ public class WageTableHandler
 	 * which handles all of the Wage Tables for dispersal at a later time after
 	 * they have been initialized.
 	 */
-	public void InitializeWageTables (boolean debug, Logger Log)
+	public void InitializeWageTables (boolean debug)
 	{
 		// Initialize all block tables here.
 		mTableHandler.put (TableType.Miner, new BlockTable (TableType.Miner));
@@ -67,7 +70,7 @@ public class WageTableHandler
 
 		if (debug)
 		{
-			Log.info ("Starting Initialization of Wage Tables...");
+			mLogger.Debug ("WageTableHandler", "Initializing Wage Tables...");
 		}
 
 		// Read in all of the wage tables within the wage table handler.
@@ -76,13 +79,13 @@ public class WageTableHandler
 			entry.getValue ().readTable (entry.getKey ().getFileName());
 			if (debug)
 			{
-				Log.info ("Initialized " + entry.getKey ().getFileName ());
+				mLogger.Debug ("WageTableHandler", "Initialized " + entry.getKey ().getFileName ());
 			}
 		}
 
 		if (debug)
 		{
-			Log.info ("Initialization of Wage Tables are complete!");
+			mLogger.Debug ("Initialization of Wage Tables are complete!");
 		}
 	}
 

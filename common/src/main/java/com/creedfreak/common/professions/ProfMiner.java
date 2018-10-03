@@ -56,4 +56,9 @@ public class ProfMiner extends Profession
         mMinerStatus = newStatus;
     }
 
+    public String getStatus ()
+    {
+        return mMinerStatus;
+    }
+
 }

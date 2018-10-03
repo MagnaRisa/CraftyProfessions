@@ -1,8 +1,7 @@
 package com.creedfreak.common.professions;
 
 import com.creedfreak.common.container.WageTableHandler;
-
-import java.util.HashMap;
+import com.creedfreak.common.utility.Logger;
 
 /**
  * This is the Abstract Class for a Profession. This will be
@@ -13,6 +12,7 @@ import java.util.HashMap;
 public abstract class Profession
 {
     private IWageTable mWageTable;
+    private float mWagePool;
 
     protected Profession ()
     {
@@ -42,16 +42,40 @@ public abstract class Profession
      * is generating and thus is getting past along to this method.
      *
      * @param element - The block, item, or action that the event generates.
-     * @param profStatus - The current status of the players profession. What table
-     *                   does the element get hashed into.
      *
-     * @return - The value of the element found or null if nothing is found. The
-     *              return of null in this case is used to indicate that we have
-     *              the wrong wage table.
+     * @return - true or false, if the value retrived from the HashMap was a null
+     *              value or not. If null is encountered then
      */
-    public double work (String element, String profStatus)
+    public boolean work (String element)
     {
-        return mWageTable.mapItem (element, profStatus);
+        boolean retVal = true;
+
+        try
+        {
+            mWagePool += mWageTable.mapItem (element, this.getStatus ());
+        }
+        catch (NullPointerException except)
+        {
+            Logger.Instance ().Error ("PROFESSION", except.getMessage ());
+            Logger.Instance ().Debug ("[REMOVE THIS] THIS IS A TEST, DOES THE ERROR GET LOGGED OR THROWN...");
+            retVal = false;
+        }
+        return retVal;
+    }
+
+    /**
+     * Retrieves the value of the current players earned wages of a specific profession.
+     * The wage is then cleared back to zero to start calculating again until next
+     * pay period.
+     *
+     * @return - The current wage of this profession.
+     */
+    public float pickupWages ()
+    {
+        float retVal = mWagePool;
+        mWagePool = 0.0f;
+
+        return retVal;
     }
 
     /**
@@ -64,6 +88,8 @@ public abstract class Profession
      * upgraded version. Miner_Payout -> Stone_Affinity
      */
     abstract void upgradeStatus (String newStatus);
+
+    abstract String getStatus ();
 
     // Some way to pay a player or hold the money in a central location
     // Some way to generate the revenue
