@@ -2,10 +2,10 @@ package com.creedfreak.common.container;
 
 import com.creedfreak.common.ICraftyProfessions;
 import com.creedfreak.common.database.databaseConn.Database;
+import com.creedfreak.common.utility.Logger;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
 /**
  * The Player manager manages the Players associated with the Players who
@@ -16,15 +16,21 @@ import java.util.logging.Level;
  */
 public final class PlayerManager
 {
+    private static final String PM_PREFIX = "PlayerManager";
+
     private ICraftyProfessions mPlugin;
     private Database mDatabase;
+    private Logger mLogger;
 
     private static PlayerManager mPlayerManager;
 
     // Change the UUID to the internal database ID
     private ConcurrentHashMap<UUID, IPlayer> mPlayerList;
 
-    private PlayerManager () {}
+    private PlayerManager ()
+    {
+        mLogger = Logger.Instance ();
+    }
 
     /**
      * This is the central access point for the PlayerManager.
@@ -58,7 +64,7 @@ public final class PlayerManager
 
         mPlayerList = new ConcurrentHashMap<> ();
 
-        mPlugin.LogMessage (Level.INFO, "Initialization of the PlayerManager is completed!");
+        mLogger.Info (PM_PREFIX, "Initialization of the PlayerManager is completed!");
     }
     /**
      * This method will save all of the players to the database

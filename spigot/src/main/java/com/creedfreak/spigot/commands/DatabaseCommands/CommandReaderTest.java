@@ -20,9 +20,9 @@ public class CommandReaderTest extends DatabaseCommand
     @Override
     public boolean execute (CraftyPlayer sender, String... args)
     {
-        mDatabase.dbConnect ();
+/*        mDatabase.dbConnect ();
 
-        mDatabase.testReader (sender);
+        mDatabase.testReader (sender);*/
 
         return true;
     }
