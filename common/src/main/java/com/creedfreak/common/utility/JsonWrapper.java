@@ -33,25 +33,18 @@ public class JsonWrapper
 	 * @param token - The Type to pass to the Json Reader in order to parse the Json objects correctly.
 	 * @param resource - The path to the resource we want to parse.
 	 *
+	 * @throws IOException - If the file cannot be found or read from then throw an IO exception
+	 *
 	 * @return - A HashMap which contains the json information from the resource parameter.
 	 */
-	public HashMap readJson (Type token, String resource)
+	public HashMap readJson (Type token, String resource) throws IOException
 	{
 		BufferedReader bufferedReader = new BufferedReader (new InputStreamReader (mClassLoader.getResourceAsStream (resource)));
 		HashMap parsedTable = null;
 
-		try
-		{
-			mJsonReader = mGson.newJsonReader (bufferedReader);
-
-			parsedTable = mGson.fromJson (mJsonReader, token);
-
-			mJsonReader.close();
-		}
-		catch (IOException exception)
-		{
-			exception.printStackTrace ();
-		}
+		mJsonReader = mGson.newJsonReader (bufferedReader);
+		parsedTable = mGson.fromJson (mJsonReader, token);
+		mJsonReader.close();
 
 		return parsedTable;
 	}
@@ -63,25 +56,17 @@ public class JsonWrapper
 	 * @param map - The HashMap to write out to file.
 	 * @param token - The Type of the HashMap in which to write to the file.
 	 * @param resource - The path to the file to write out to.
+	 *
+	 * @throws IOException -
 	 */
-	public void writeJson (HashMap map, Type token, String resource)
+	public void writeJson (HashMap map, Type token, String resource) throws IOException
 	{
 		BufferedWriter bufferedWriter;
 
-		try
-		{
-			bufferedWriter = new BufferedWriter (new OutputStreamWriter (new FileOutputStream (resource)));
+		bufferedWriter = new BufferedWriter (new OutputStreamWriter (new FileOutputStream (resource)));
+		mJsonWriter = mGson.newJsonWriter (bufferedWriter);
+		mGson.toJson (map, token, mJsonWriter);
 
-			mJsonWriter = mGson.newJsonWriter (bufferedWriter);
-
-			// Writes the map to the specified source opened by the Buffered Writer.
-			mGson.toJson (map, token, mJsonWriter);
-
-			mJsonWriter.close ();
-		}
-		catch (IOException exception)
-		{
-			exception.printStackTrace ();
-		}
+		mJsonWriter.close ();
 	}
 }

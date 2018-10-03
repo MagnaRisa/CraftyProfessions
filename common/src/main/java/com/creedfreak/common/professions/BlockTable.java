@@ -3,6 +3,7 @@ package com.creedfreak.common.professions;
 import com.creedfreak.common.container.WageTableHandler;
 import com.creedfreak.common.utility.JsonWrapper;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -23,20 +24,33 @@ public class BlockTable implements IWageTable
      */
     private HashMap mBlockMap;
     private TableType mTableType;
+
+    private State mbState;
     private boolean mbHasChanged;
 
     public BlockTable (TableType tableType)
     {
         mTableType = tableType;
         mbHasChanged = false;
+        mbState = State.Enabled;
     }
 
     @Override
-    public void readTable (String resource)
+    public boolean readTable (String resource)
     {
+        boolean retVal = true;
         JsonWrapper wrapper = new JsonWrapper ();
 
-        mBlockMap = wrapper.readJson (WageTableHandler.DEFAULT_WT_TYPE, resource);
+        try
+        {
+            mBlockMap = wrapper.readJson (WageTableHandler.DEFAULT_WT_TYPE, resource);
+        }
+        catch (IOException except)
+        {
+            retVal = false;
+        }
+
+        return retVal;
     }
 
     /**
@@ -75,14 +89,24 @@ public class BlockTable implements IWageTable
      * @param resource The file to write the json to.
      */
     @Override
-    public void writeTable (String resource)
+    public boolean writeTable (String resource)
     {
+        boolean retVal = true;
+
         if (mbHasChanged)
         {
             JsonWrapper wrapper = new JsonWrapper ();
 
-            wrapper.writeJson (mBlockMap, WageTableHandler.DEFAULT_WT_TYPE, resource);
+            try
+            {
+                wrapper.writeJson (mBlockMap, WageTableHandler.DEFAULT_WT_TYPE, resource);
+            }
+            catch (IOException except)
+            {
+                retVal = false;
+            }
         }
+        return retVal;
     }
 
     /**
@@ -105,5 +129,23 @@ public class BlockTable implements IWageTable
     public boolean modifyValue (String key, Double value)
     {
         return false;
+    }
+
+    /**
+     * @return get the current state of this table.
+     */
+    public State getState ()
+    {
+        return mbState;
+    }
+
+    /**
+     * Sets the current state of the wage table.
+     *
+     * @param state - Is the table disabled(false) or enabled(true).
+     */
+    public void setState (State state)
+    {
+        mbState = state;
     }
 }
