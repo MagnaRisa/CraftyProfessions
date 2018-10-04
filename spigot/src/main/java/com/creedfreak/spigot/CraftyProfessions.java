@@ -3,10 +3,10 @@ package com.creedfreak.spigot;
 import com.creedfreak.common.AbsCmdController;
 import com.creedfreak.common.AbsConfigController;
 import com.creedfreak.common.ICraftyProfessions;
+import com.creedfreak.common.container.WageTableHandler;
+import com.creedfreak.common.utility.Logger;
 import com.creedfreak.spigot.commands.CommandController;
 import com.creedfreak.spigot.config.ConfigController;
-import com.creedfreak.common.professions.IWageTable;
-import com.creedfreak.common.professions.MinerWage;
 import com.creedfreak.common.container.PlayerManager;
 import com.creedfreak.common.database.databaseConn.Database;
 import com.creedfreak.common.database.databaseConn.DatabaseFactory;
@@ -20,10 +20,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Authors: CreedTheFreak
@@ -32,7 +29,10 @@ import java.util.logging.Logger;
  */
 public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
 {
-    private static Logger mLogger;
+    // Currently edited from here, will be a config option at a later date.
+    private static boolean mDebug = true;
+
+    private Logger mLogger = null;
     private static Economy mEconomy = null;
     private static Permission mPermissions = null;
     private static Chat mChat = null;
@@ -48,7 +48,15 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     private Database mDatabase;
 
     // WageTables
-    private HashMap<String, IWageTable> mWageTables;
+    private WageTableHandler mTableHandler = null;
+
+    /**
+     * @return The debug status of the plugin
+     */
+    public static boolean debug ()
+    {
+        return mDebug;
+    }
 
     /**
      * This method will do all of the plugins initialization of
@@ -57,7 +65,8 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
     @Override
     public void onEnable ()
     {
-        mLogger = getLogger ();
+        mLogger = Logger.Instance ();
+        mLogger.initLogger (getLogger ());
 
         // Setup the Main Configuration class and likewise
         // any other needed config files, notably the WageTables.
@@ -81,9 +90,9 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
 
         mCoreListener.setEconomyHook (mEconomy);
 
-        /*The registering of the wage tables are below*/
-        mWageTables = new HashMap<> ();
-        registerWageTables ();
+        // Initialize the Wage Tables.
+        mTableHandler = WageTableHandler.getInstance ();
+        mTableHandler.InitializeWageTables (mConfigController.getDebug ());
 
         // This will initialize the PlayerManager Singleton
         PlayerManager.Instance ().initializePlayerManager (this, mDatabase);
@@ -162,7 +171,7 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
             mPermissions = rsp.getProvider ();
         }
 
-        return mPermissions != null;
+        return (mPermissions != null);
     }
 
     /**
@@ -213,22 +222,6 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
         pluginManager.registerEvents (mCoreListener, this);
     }
 
-    private void registerWageTables ()
-    {
-        mWageTables.put ("Miner_Wage", new MinerWage());
-
-        for (Map.Entry<String, IWageTable> table : mWageTables.entrySet ())
-        {
-            table.getValue ().readTable (mConfigController);
-        }
-
-    }
-
-    public IWageTable getWageTable (String tableName)
-    {
-        return mWageTables.get (tableName);
-    }
-
     /** NEED TO DELETE THIS LATER DEBUGGING ONLY
      * This method is Purely for the Use of obtaining a list of Materials to access later
      */
@@ -272,45 +265,6 @@ public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
                 e.printStackTrace ();
             }
         }
-    }
-
-    /**
-     * Logs a message to the console
-     *
-     * If the Logger of the plugin is found to be NULL
-     * Then the plugin will retrieve the Logger from bukkit.
-     */
-    private void Log (Level level, String message)
-    {
-        if (mLogger != null)
-        {
-            mLogger.log (level, message);
-        }
-        else
-        {
-            mLogger = getLogger ();
-
-            mLogger.log (Level.WARNING, "The plugin logger was found to be null!");
-            mLogger.log (Level.INFO, "Assigned a new logger to the Plugin!");
-        }
-    }
-
-    public void LogMessage (Level level, String message)
-    {
-        Log (level, message);
-    }
-
-    public void LogMessage (Level level, String subSystemPrefix, String message)
-    {
-        Log (level, "[" + subSystemPrefix + "] " + message);
-    }
-
-    /**
-     * Logs a message to the console using a sub system prefix
-     */
-    public void Log (Level level, String subSystemPrefix, String message)
-    {
-        this.Log (level, subSystemPrefix + message);
     }
 
     /**

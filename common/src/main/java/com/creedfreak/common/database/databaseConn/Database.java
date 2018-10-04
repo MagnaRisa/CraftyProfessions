@@ -4,6 +4,7 @@ import com.creedfreak.common.AbsConfigController;
 import com.creedfreak.common.ICraftyProfessions;
 import com.creedfreak.common.container.IPlayer;
 import com.creedfreak.common.utility.LevelEquation;
+import com.creedfreak.common.utility.Logger;
 import com.creedfreak.common.utility.SQLReader;
 import com.creedfreak.common.utility.TimeUtil;
 
@@ -19,6 +20,7 @@ public abstract class Database
     private static final String SQL_CREATE_STMT = "CREATE TABLE IF NOT EXISTS";
     private static final String SQL_INSERT_STMT = "INSERT INTO";
 
+    protected Logger mLogger;
     protected Connection mConnection;
     protected ICraftyProfessions mPlugin;
     protected AbsConfigController mConfiguration;
@@ -39,6 +41,8 @@ public abstract class Database
      *************************************************************************/
     public Database (ICraftyProfessions plugin, AbsConfigController config)
     {
+        mLogger = Logger.Instance ();
+
         mPlugin = plugin;
         mConfiguration = config;
 
@@ -94,8 +98,7 @@ public abstract class Database
         }
         catch (SQLException exception)
         {
-            mPlugin.LogMessage (Level.WARNING,
-                "Could not close Database Connection: " + exception);
+            mLogger.Warn (DATABASE_PREFIX, "Could not close Database Connection: " + exception.getMessage ());
         }
     }
 
@@ -127,7 +130,7 @@ public abstract class Database
         }
         catch (SQLException exception)
         {
-            mPlugin.LogMessage(Level.SEVERE, "Failed to close SQL Connection" + exception);
+            mLogger.Error (DATABASE_PREFIX, "Failed to close SQL Connection" + exception.getMessage ());
         }
     }
 
@@ -155,25 +158,24 @@ public abstract class Database
 
         if (!checkDBExists () && success)
         {
-            mPlugin.LogMessage (Level.INFO, DATABASE_PREFIX,
+            mLogger.Info (DATABASE_PREFIX,
                 "Total number of Create Table statements ran: " + mNumTables);
 
             success = insertIntoTables ();
 
             if (success)
             {
-                mPlugin.LogMessage (Level.INFO, DATABASE_PREFIX,
+                mLogger.Info (DATABASE_PREFIX,
                     "Database has been created and the required data has been inserted!");
             }
 
             mTotalTimeElapsed = TimeUtil.toSeconds (System.nanoTime () - initialTime);
-            mPlugin.LogMessage (Level.INFO, DATABASE_PREFIX,
-                "Total time elapsed for database Construction: "
+            mLogger.Info (DATABASE_PREFIX,"Total time elapsed for database Construction: "
                     + timeFormat.format (mTotalTimeElapsed) + "sec");
         }
         else
         {
-            mPlugin.LogMessage (Level.INFO, DATABASE_PREFIX, "Database found! Setup not necessary");
+            mLogger.Info (DATABASE_PREFIX, "Database found! Setup not necessary");
         }
 
         return success;
@@ -193,7 +195,7 @@ public abstract class Database
     protected boolean createTables ()
     {
         Connection connection = dbConnect ();
-        SQLReader reader = new SQLReader (mPlugin);
+        SQLReader reader = new SQLReader ();
         String sqlStmt;
 
         try
@@ -214,13 +216,12 @@ public abstract class Database
         }
         catch (IOException | SQLException exception)
         {
-            mPlugin.LogMessage (Level.SEVERE, DATABASE_PREFIX,
-                "Could not Create Database Tables: " + exception);
+            mLogger.Error (DATABASE_PREFIX,"Could not Create Database Tables: " + exception);
             return false;
         }
         catch (Exception exception)
         {
-            mPlugin.LogMessage (Level.SEVERE, DATABASE_PREFIX,"Unhandled Exception: " + exception);
+            mLogger.Error (DATABASE_PREFIX,"Unhandled Exception: " + exception);
             return false;
         }
         finally
@@ -249,7 +250,7 @@ public abstract class Database
         Double baseEXPValue = mConfiguration.getDouble ("ProfessionLevels.BaseExp");
 
         Connection connection = dbConnect ();
-        SQLReader reader = new SQLReader (mPlugin);
+        SQLReader reader = new SQLReader ();
         String sqlStmt;
 
         try
@@ -271,16 +272,15 @@ public abstract class Database
         }
         catch (IOException | SQLException exception)
         {
-            mPlugin.LogMessage (Level.SEVERE, DATABASE_PREFIX,
-                "Could Not Insert Initialization Data Into Database: "
-                + exception);
+            mLogger.Error (DATABASE_PREFIX,
+                    "Could Not Insert Initialization Data Into Database: " + exception);
             return false;
         }
         finally
         {
             dbClose ();
             reader.closeReader ();
-            mPlugin.LogMessage (Level.INFO, DATABASE_PREFIX,
+            mLogger.Info (DATABASE_PREFIX,
                 "Total number of Insertion statements ran: " + mNumInsertsRan);
         }
         return true;
@@ -316,7 +316,7 @@ public abstract class Database
         }
         catch (SQLException exception)
         {
-            mPlugin.LogMessage (Level.SEVERE, DATABASE_PREFIX,
+            mLogger.Error (DATABASE_PREFIX,
                 "Could not locate tables within checkDBExists! Defaulting return type to false");
             return false;
         }
@@ -389,33 +389,5 @@ public abstract class Database
 
             prepStmt.execute ();
         }
-    }
-
-    /**
-     * <p>This method is used to log Database errors to the plugin. This was created so that the plugin
-     * reference won't have to be passed to all of the query methods.</p>
-     *
-     * @param message The error message to be logged to the plugins logger method.
-     */
-    public void logDBMessage (Level level, String message)
-    {
-        mPlugin.LogMessage (level, message);
-    }
-
-    /**************************************************************************
-     * Method:      testReader [DELETE THIS METHOD EVENTUALLY]
-     *
-     * Description: This method tests the readers ability and will also test
-     *              the internal spacing of the SQL Statements. This way I can
-     *              vet the file reading ability without crashing all the time.
-     *
-     * Parameters:
-     * @param player - The player to send the messages to.
-     *
-     * Return: None
-     *************************************************************************/
-    public void testReader (IPlayer player)
-    {
-        player.sendMessage ("This Command is Empty!");
     }
 }

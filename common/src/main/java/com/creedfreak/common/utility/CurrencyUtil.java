@@ -9,8 +9,11 @@ public class CurrencyUtil
 
     public static BigDecimal formatDouble (Double toFormat)
     {
-        BigDecimal currency = new BigDecimal (toFormat);
+        return new BigDecimal (toFormat).setScale (SCALE, RoundingMode.DOWN);
+    }
 
-        return currency.setScale (SCALE, RoundingMode.DOWN);
+    public static BigDecimal formatFloat (Float toFormat)
+    {
+        return new BigDecimal (toFormat).setScale (SCALE, RoundingMode.DOWN);
     }
 }

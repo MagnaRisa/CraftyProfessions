@@ -65,8 +65,7 @@ public class MySQL_Conn extends Database
         }
         catch (SQLException exception)
         {
-            mPlugin.LogMessage(Level.SEVERE,
-                "Database Connection Error: " + exception);
+            mLogger.Error (Database.DATABASE_PREFIX,"Database Connection Error: " + exception);
         }
 
         return mConnection;
@@ -100,8 +99,7 @@ public class MySQL_Conn extends Database
         }
         catch (SQLException exception)
         {
-            mPlugin.LogMessage (Level.SEVERE,
-                "Database Query Error: " + exception);
+            mLogger.Error (Database.DATABASE_PREFIX,"Database Query Error: " + exception);
         }
 
         return array;

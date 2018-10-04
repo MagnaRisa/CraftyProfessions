@@ -9,11 +9,14 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+
 /**
+ * TODO: Is this class still needed? We only really need a block map now. The table type is defined by a TableType.
  * This Class is the implementation for the MinerWage Table
  * used to fetch the wage of a specific block mined or broken
  * based on that blocks name.
  */
+@Deprecated
 public class MinerWage extends BlockTable
 {
     public static final String MINER_PAYOUT = "Miner_Payout";
@@ -23,53 +26,11 @@ public class MinerWage extends BlockTable
 
     public MinerWage ()
     {
-        super (TableName.Miner);
-    }
-
-    /**
-     * This method will read in the specified table name labeled
-     * resource in the parameters. The specified resource is then
-     * grabbed from the ConfigController and the config file is
-     * read into the MinerWage Table to be stored in memory
-     * for quick access to the data.
-     *
-     * @param controller The configuration controller in order to gain
-     *                   access to a specified resource file.
-     */
-    public void readTable (AbsConfigController controller)
-    {
-        /*YamlConfiguration wageTable = controller.getSpecialConfig (mTableName.getFileName ());
-
-        mBlockMap.put (MINER_PAYOUT, new ConcurrentHashMap<> ());
-        mBlockMap.put (STONE_AFFINITY, new ConcurrentHashMap<> ());
-        mBlockMap.put (ORE_AFFINITY, new ConcurrentHashMap<> ());
-
-        ConfigurationSection minerPayout = wageTable.getConfigurationSection (MINER_PAYOUT);
-        Map<String, Object> table = minerPayout.getValues (true);
-
-        for (Map.Entry<String, Object> entry : table.entrySet ())
-        {
-            mBlockMap.get (MINER_PAYOUT).put (entry.getKey(), CurrencyUtil.formatDouble ((Double) entry.getValue()));
-        }
-
-        minerPayout = wageTable.getConfigurationSection (STONE_AFFINITY);
-        table = minerPayout.getValues (true);
-
-        for (Map.Entry<String, Object> entry : table.entrySet ())
-        {
-            mBlockMap.get (STONE_AFFINITY).put (entry.getKey(), CurrencyUtil.formatDouble ((Double) entry.getValue()));
-        }
-
-        minerPayout = wageTable.getConfigurationSection (ORE_AFFINITY);
-        table = minerPayout.getValues (true);
-
-        for (Map.Entry<String, Object> entry : table.entrySet ())
-        {
-            mBlockMap.get (ORE_AFFINITY).put (entry.getKey(), CurrencyUtil.formatDouble ((Double) entry.getValue()));
-        }*/
+        super (TableType.Miner);
     }
 
      /**
+      * TODO: This needs Syncronization before it can function appropriately
      * The goal of this method is to be able to modify a value within the
      * Wage Table from a command or by other means.
      *
@@ -82,30 +43,19 @@ public class MinerWage extends BlockTable
 
     public boolean modifyValue (BigDecimal value, String... path)
     {
-        Map<String, BigDecimal> map = mBlockMap.get (path[0]);
-        if (map == null)
-        {
-            return false;
-        }
-
-        BigDecimal oldValue = map.get (path[1]);
-        if (oldValue == null)
-        {
-            return false;
-        }
-
-        mBlockMap.get(path[0]).put (path[1], value);
+//        Map<String, BigDecimal> map = mBlockMap.get (path[0]);
+//        if (map == null)
+//        {
+//            return false;
+//        }
+//
+//        BigDecimal oldValue = map.get (path[1]);
+//        if (oldValue == null)
+//        {
+//            return false;
+//        }
+//
+//        mBlockMap.get(path[0]).put (path[1], value);
         return true;
-    }
-
-    /**
-     * This method will allow grab the name of the WageTable
-     *
-     * @return The name of the wage table.
-     */
-    @Override
-    public String getTableName ()
-    {
-        return MINER_WAGE_TABLE;
     }
 }

@@ -1,8 +1,9 @@
 package com.creedfreak.spigot.config;
 
+import com.creedfreak.common.utility.Logger;
 import com.google.common.base.Charsets;
 import com.creedfreak.common.AbsConfigController;
-import com.creedfreak.common.professions.TableName;
+import com.creedfreak.common.professions.TableType;
 import com.creedfreak.common.exceptions.ConfigNotFoundException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,11 +24,13 @@ import java.util.logging.Level;
  */
 public class ConfigController extends AbsConfigController
 {
-    private JavaPlugin mPlugin = null;
+    private static final String systemPrefix = "CONFIG";
 
+    private JavaPlugin mPlugin;
     private File mConfigFile;
     private YamlConfiguration mConfig;
 
+    private Logger mLogger = null;
     private Map<String, File> mWageFiles;
     private Map<String, YamlConfiguration> mWageConfigs;
 
@@ -42,6 +45,7 @@ public class ConfigController extends AbsConfigController
         mPlugin = plugin;
         mWageFiles = new HashMap<> ();
         mWageConfigs = new HashMap<> ();
+        mLogger = Logger.Instance ();
     }
 
     /**
@@ -55,7 +59,7 @@ public class ConfigController extends AbsConfigController
      */
     public void registerConfigFiles ()
     {
-        for (TableName resource : TableName.values ())
+        for (TableType resource : TableType.values ())
         {
             loadFile (resource.getFileName ());
         }
@@ -72,19 +76,19 @@ public class ConfigController extends AbsConfigController
             if (!mPlugin.getDataFolder ().exists ())
             {
                 mPlugin.getDataFolder ().mkdirs ();
-                mPlugin.getLogger().info ("CraftyProfessions Data Folder has been created");
+                mLogger.Info (systemPrefix, "CraftyProfessions Data Folder has been created");
             }
 
             mConfigFile = new File (mPlugin.getDataFolder (), "config.yml");
 
             if (!mConfigFile.exists ())
             {
-                mPlugin.getLogger ().info ("config.yml Not Found, Creating File and Loading Defaults!");
+                mLogger.Info (systemPrefix, "config.yml Not Found, Creating File and Loading Defaults!");
                 mPlugin.saveDefaultConfig ();
             }
             else
             {
-                mPlugin.getLogger ().info ("config.yml Found, Loading File!");
+                mLogger.Info (systemPrefix, "config.yml Found, Loading File!");
             }
         }
         catch (Exception e)
@@ -133,11 +137,11 @@ public class ConfigController extends AbsConfigController
         }
         catch (ConfigNotFoundException e)
         {
-            mPlugin.getLogger ().log (Level.WARNING, "Config not found, Cannot Save the Config File to " + resource);
+            mLogger.Warn (systemPrefix, "Config not found, Cannot Save the Config File to " + resource);
         }
         catch (IOException e)
         {
-            mPlugin.getLogger ().log (Level.WARNING, e.getMessage ());
+            mLogger.Warn (systemPrefix, e.getMessage ());
         }
     }
 
@@ -150,18 +154,18 @@ public class ConfigController extends AbsConfigController
         {
             mPlugin.saveConfig ();
 
-            for (TableName resource : TableName.values ())
+            for (TableType resource : TableType.values ())
             {
                 saveConfig (resource.getFileName ());
             }
         }
         catch (ConfigNotFoundException e)
         {
-            mPlugin.getLogger ().log (Level.WARNING, "Could not save config: ", e.getMessage ());
+            mLogger.Warn (systemPrefix, "Could not save config: " + e.getMessage ());
         }
         catch (IOException e)
         {
-            mPlugin.getLogger ().log (Level.WARNING, e.getMessage ());
+            mLogger.Warn (systemPrefix, e.getMessage ());
         }
 
     }

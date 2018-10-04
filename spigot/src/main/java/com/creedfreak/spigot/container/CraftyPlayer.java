@@ -2,16 +2,13 @@ package com.creedfreak.spigot.container;
 
 import com.google.common.primitives.UnsignedLong;
 import com.creedfreak.common.container.IPlayer;
-import com.creedfreak.common.professions.IProfession;
+import com.creedfreak.common.professions.Profession;
 import net.milkbowl.vault.economy.*;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /** [HUGE WIP]
  * This is the Player Wrapper for the CraftyProfessions Plugin in which stores all
@@ -22,11 +19,13 @@ public class CraftyPlayer implements IPlayer
     // This is the players primary key within the Database
     private UnsignedLong mPlayerID;
     private Player mPlayer;
-    private BigDecimal mPlayerPool;
 
+    // May not need the player pool if the wages are stored within the players Professions.
+    private float mPlayerPool;
+    private boolean mPrintEarnedWages;
 
     // The Users list of professions.
-    private HashMap<String, IProfession> mPlayerProfessions;
+    private List<Profession> mProfessions;
 
     /**
      * This is the Default Constructor for the CraftyPlayer object in which
@@ -38,17 +37,15 @@ public class CraftyPlayer implements IPlayer
      *                    player, then the data will be stored into the database when the player
      *                    logs out.
      */
-    public CraftyPlayer (UnsignedLong dbID, Player player, ArrayList<IProfession> professions)
+    public CraftyPlayer (UnsignedLong dbID, Player player, List<Profession> professions)
     {
         mPlayerID = dbID;
         mPlayer = player;
-        mPlayerPool = new BigDecimal (0.0).setScale (2, RoundingMode.HALF_UP);
+        mPlayerPool = 0.0f;
 
-        // Construct an easy way to reference a users professions.
-        for (IProfession prof : professions)
-        {
-            mPlayerProfessions.put (prof.getName(), prof);
-        }
+        mProfessions = professions;
+
+        mPrintEarnedWages = false;
     }
     /**
      * This method will return the UUID of the CPPlayer
@@ -65,14 +62,22 @@ public class CraftyPlayer implements IPlayer
      * should be called after x amount of ticks of the player receiving money and
      * right before the player logs off if the Player Pool is more than 0.
      */
-    public void payoutPlayerPool (Economy economy)
+    public float payoutPlayerPool ()
     {
-        if (mPlayer.isOnline ())
+    	float retVal = 0.0f;
+
+        for (Profession prof : mProfessions)
         {
-            economy.depositPlayer (mPlayer, mPlayerPool.doubleValue ());
+            if (mPrintEarnedWages)
+            {
+                // TODO: Implement custom currency symbols in the config file to allow different currencies to be displayed.
+                mPlayer.sendMessage ("As a " + prof.getName () + " you earned $" + prof.pickupWages ());
+            }
+
+			retVal += prof.pickupWages ();
         }
-        //playerAccount.add (mPlayerPool.doubleValue ());
-        //mPlayerPool = new BigDecimal (0.0).setScale (2, RoundingMode.HALF_UP);
+
+        return retVal;
     }
 
     /**
@@ -97,12 +102,6 @@ public class CraftyPlayer implements IPlayer
         return mPlayer.hasPermission (perm);
     }
 
-    public void increasePool (BigDecimal value)
-    {
-        // I should probably make this secure.
-        mPlayerPool = mPlayerPool.add (value);
-    }
-
     /**
      * Lists the current professions of the User. This will more than likely be a
      * command that the crafty player will be able to use in order to see all of
@@ -110,30 +109,54 @@ public class CraftyPlayer implements IPlayer
      */
     public void listProfessions ()
     {
-        if (mPlayer instanceof Player)
+        if (null != mPlayer)
         {
-            if (mPlayerProfessions.isEmpty ())
+            if (mProfessions.isEmpty ())
             {
                 mPlayer.sendMessage ("You currently have no Professions");
             }
             else
             {
                 // Iterate over the list and send the Profession name to the User.
-                for (Map.Entry<String, IProfession> prof : mPlayerProfessions.entrySet ())
+	            mPlayer.sendMessage ("Your Current Professions Are:");
+                for (Profession prof : mProfessions)
                 {
-                    mPlayer.sendMessage (prof.getKey ());
+                	mPlayer.sendMessage (prof.getName ());
                 }
             }
         }
-        else
-        {
-            mPlayer.sendMessage ("You must be a Player to see your Professions");
-        }
     }
 
-    // TODO: Implement with SpigotAPI
-    public void payoutPlayerPool ()
+	/**
+     * Question: Can we have multiple blocks associated with multiple wage tables?
+     * Infer: This could work if we use a map to store the various types of events,
+     * Infer: place and break. Once the event occurs we grab the correct map and
+     * Infer: hash the event element into that map.
+     *
+	 * Sets the print earned wages field to either true or false. This field indicates if
+	 * the players wages should be printed out to them or not.
+	 *
+	 * Default Value for mPrintEarnedWages = false;
+	 *
+	 * @param printWages - true = Print wage values to them when they get paid.
+	 *                     false = Don't print wage values when they get paid.
+	 */
+	public void setPrintEarnedWages (boolean printWages)
     {
+    	mPrintEarnedWages = printWages;
+    }
 
+    public void doWork (String element)
+    {
+        int size = mProfessions.size ();
+        // This algorithm currently has O(n) access time, this is not ideal.
+        for (int i = 0; i < size; i++)
+        {
+            if (mProfessions.get (i).work (element))
+            {
+                // Exit the loop as soon as we find a match.
+                i = size;
+            }
+        }
     }
 }

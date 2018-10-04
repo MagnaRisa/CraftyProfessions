@@ -1,23 +1,18 @@
 package com.creedfreak.common.professions;
 
-import com.creedfreak.common.AbsConfigController;
-import com.google.gson.Gson;
+import com.creedfreak.common.container.WageTableHandler;
+import com.creedfreak.common.utility.JsonWrapper;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This implementation of a Wage Table is based around the Blocks
  * of Minecraft, this way any Professions that revolve around
  */
-public abstract class BlockTable implements IWageTable
+public class BlockTable implements IWageTable
 {
     /**
-     * TODO: This Should be the table design that is used throughout all the wage tables.
      * So my intended purpose here is that whenever someone breaks or places
      * a block which could be a possibility for any jobs if configured for it
      * is to be able to handle multiple types of actions. So for instance If you
@@ -27,160 +22,130 @@ public abstract class BlockTable implements IWageTable
      * you only really want to either place a block for a job or break it. But when handling
      * actions like breaking and planting crops this type of table should work nicely.
      */
-    protected ConcurrentHashMap<String, ConcurrentHashMap<String, BigDecimal>> mBlockMap;
-    protected TableName mTableName;
+    private HashMap mBlockMap;
+    private TableType mTableType;
+
+    private State mbState;
     private boolean mbHasChanged;
 
-    protected BlockTable (TableName tableName)
+    public BlockTable (TableType tableType)
     {
-        mTableName = tableName;
-        mBlockMap = new ConcurrentHashMap<> ();
+        mTableType = tableType;
         mbHasChanged = false;
+        mbState = State.Enabled;
+    }
+
+    @Override
+    public boolean readTable (String resource)
+    {
+        boolean retVal = true;
+        JsonWrapper wrapper = new JsonWrapper ();
+
+        try
+        {
+            mBlockMap = wrapper.readJson (WageTableHandler.DEFAULT_WT_TYPE, resource);
+        }
+        catch (IOException except)
+        {
+            retVal = false;
+        }
+
+        return retVal;
     }
 
     /**
      * This method will map the given item into the mBlockMap
-     * this will return a BigDecimal Value if the item is found
+     * this will return a float value if the element is found
      * or null if the item is not found within the Map.
-     * TODO: Reimplement this method, with more generics. Maybe create your own temporary block class and then interface that class with both spigot and sponge
      *
-     * @param item The item to look for the in the BlockMap
+     * @param element The item to look for the in the BlockMap
+     *
+     * @throws NullPointerException - If one of the hash map retrievals return
+     *             null then when the method tries to access them we should get
+     *             a null pointer exception. We need to deal with it wherever
+     *             mapItem is called.
      *
      * @return The BigDecimal Value that the Item maps to within mBlockMap
      */
     @Override
-    public <T> BigDecimal mapItem (T item, String profStatus)
+    @SuppressWarnings("unchecked")
+    public float mapItem (String element, String profStatus) throws NullPointerException
     {
-        // Loop through the string args trying the different table types or specializations
-        // A crafty player might have. When we find a match we stop the search.
-        /*ConcurrentHashMap<String, BigDecimal> mapType = mBlockMap.get (profStatus);
-        T generic;
+        // The Block may will always be in the form of HashMap<String, Double>
+        HashMap<String, Float> internalMap = (HashMap<String, Float>) mBlockMap.get (profStatus);
 
-        if (mapType != null)
+        if (null == internalMap)
         {
-            generic = (Block) item;
-        }
-        else
-        {
-            return null;
+            throw new NullPointerException ("Could not mapItem! Retrieval of Block Map returned Null");
         }
 
-        return mapType.get (generic.getType().toString ());*/
-        return null;
+        return internalMap.get (element);
     }
 
     /** CURRENTLY UNTESTED! NEED TO REPLICATE THIS IN THE READING OF THE FILE AS WELL
      * This method will write the table specified by the internal parents
-     * protected mTableName field.
+     * protected mTableType field.
      *
-     * @param controller The configuration controller in order to gain
-     *                   access to a specified resource file.
-     *
-     * TODO: Fix this Method, it's currently really Broken
+     * @param resource The file to write the json to.
      */
     @Override
-    public void writeTable (AbsConfigController controller)
+    public boolean writeTable (String resource)
     {
-        Gson rootGson = new Gson ();
-        // rootGson.toJson
-//        JSONObject rootObject = new JSONObject (new HashMap<String, BigDecimal> ());
-//      YamlConfiguration wageTable = controller.getSpecialConfig (mTableName.getFileName ());
+        boolean retVal = true;
 
-        try
+        if (mbHasChanged)
         {
-            FileWriter writer = new FileWriter ("");
+            JsonWrapper wrapper = new JsonWrapper ();
 
-            for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
+            try
             {
-//                JSONObject childObject = new JSONObject (new HashMap<String, BigDecimal> ());
-
-                ConcurrentHashMap<String, BigDecimal> tableMap = tableEntry.getValue ();
-                ConcurrentHashMap<String, BigDecimal> blockMapSection = mBlockMap.get (tableEntry.getKey ());
-
-                for (Map.Entry<String, BigDecimal> entry : tableMap.entrySet ())
-                {
-                    // Build the json object
-//                    childObject.put (entry.getKey(), entry.getValue ());
-                }
-
-//                rootObject.put (tableEntry.getKey (), childObject);
+                wrapper.writeJson (mBlockMap, WageTableHandler.DEFAULT_WT_TYPE, resource);
             }
-
-//            writer.write (rootObject.toJSONString ());
+            catch (IOException except)
+            {
+                retVal = false;
+            }
         }
-        catch (IOException exception)
-        {
-            exception.printStackTrace ();
-        }
+        return retVal;
     }
 
-//    {
-//        "Miner_Payout": {
-//            "STONE": 0.01,
-//            "COAL_ORE": 0.50,
-//            "IRON_ORE": 1.00,
-//            "GOLD_ORE": 2.00,
-//            "LAPIS_ORE": 1.50,
-//            "REDSTONE_ORE": 1.30,
-//            "GLOWING_REDSTONE_ORE": 1.30,
-//            "DIAMOND_ORE": 5.00,
-//            "EMERALD_ORE": 7.50,
-//            "QUARTZ_ORE": 2.00,
-//            "MOSSY_COBBLESTONE": 1.20,
-//            "OBSIDIAN": 2.50,
-//            "ENDER_STONE": 0.03,
-//            "HARD_CLAY": 0.01,
-//            "NETHERRACK": 0.01,
-//            "MOB_SPAWNER": 20.00,
-//            "MONSTER_EGGS": 0.03,
-//            "GLOWSTONE": 1.00
-//    },
-//
-//
-//        "Stone_Affinity": {
-//            "STONE" : 0.03,
-//            "STONE(1)" : 0.04,
-//            "STONE(3)": 0.04,
-//            "STONE(5)" : 0.04,
-//            "HARD_CLAY" : 0.03,
-//            "NETHERRACK" : 0.03,
-//            "MONSTER_EGGS" : 0.06,
-//            "GLOWSTONE" : 2.00
-//    },
-//
-//        "Ore_Affinity": {
-//            "COAL_ORE": 0.50,
-//            "IRON_ORE": 1.00,
-//            "GOLD_ORE": 2.00,
-//            "LAPIS_ORE": 1.50,
-//            "REDSTONE_ORE": 1.30,
-//            "GLOWING_REDSTONE_ORE": 1.30,
-//            "DIAMOND_ORE": 5.00,
-//            "EMERALD_ORE": 7.50,
-//            "QUARTZ_ORE": 2.00
-//    }
-//    }
-
-//    for (Map.Entry<String, ConcurrentHashMap<String, BigDecimal>> tableEntry : mBlockMap.entrySet ())
-//    {
-//        ConcurrentHashMap<String, BigDecimal> tableMap = tableEntry.getValue ();
-//        ConcurrentHashMap<String, BigDecimal> blockMapSection = mBlockMap.get (tableEntry.getKey ());
-//
-//
-//
-//        for (Map.Entry<String, BigDecimal> entry : tableMap.entrySet ())
-//        {
-//            object.put (tableEntry.getKey() + "." + entry.getKey (), )
-//            wageTable.set (tableEntry.getKey () + "." + entry.getKey (), blockMapSection.get (entry.getKey ()));
-//        }
-//    }
-//
-//            controller.saveConfig (wageTable, mTableName.getFileName ());
-
-
+    /**
+     * @return if the table has been changed or not.
+     */
     @Override
     public boolean hasChanged ()
     {
         return mbHasChanged;
+    }
+
+    /**
+     * TODO: Intended only for Admins so there needs to be some sort of protection surrounding this method at the command level.
+     * TODO: Before we can implement this method the whole wage table structure needs to be synchronized.
+     * @param key The key whose value is to be changed
+     * @param value The value in which to modify the previous value
+     *
+     * @return If the modification was valid or not.
+     */
+    public boolean modifyValue (String key, Double value)
+    {
+        return false;
+    }
+
+    /**
+     * @return get the current state of this table.
+     */
+    public State getState ()
+    {
+        return mbState;
+    }
+
+    /**
+     * Sets the current state of the wage table.
+     *
+     * @param state - Is the table disabled(false) or enabled(true).
+     */
+    public void setState (State state)
+    {
+        mbState = state;
     }
 }

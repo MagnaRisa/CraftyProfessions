@@ -33,19 +33,18 @@ public interface IPlayer
      * Payout the players value pool to their economy account
      * If there is no economy then only add points to the players account.
      */
-    public void payoutPlayerPool ();
-
-    /**
-     * Add money to the players value pool.
-     *
-     * @param value The amount to add to the value pool.
-     *              This parameter and internal pool tracks decimals up to
-     *              two decimal places.
-     */
-    public void increasePool (BigDecimal value);
+    public float payoutPlayerPool ();
 
     /**
      * Displays the current professions the User currently have.
      */
     public void listProfessions ();
+
+    /**
+     * TODO: It may be the case where we will have to map into a large table of blocks and then check if they have the correct job.
+     * This method is used to generate revenue based on what the user has broken.
+     *
+     * @param elementName - The name of the block that was broken.
+     */
+    public void doWork (String elementName);
 }

@@ -2,11 +2,11 @@ package com.creedfreak.common.database.DAOs;
 
 import com.google.common.primitives.UnsignedLong;
 import com.creedfreak.common.database.databaseConn.Database;
-import com.creedfreak.common.professions.IProfession;
+import com.creedfreak.common.professions.Profession;
 
 import java.util.List;
 
-public class ProfessionsDAO implements IDaoBase<IProfession>
+public class ProfessionsDAO implements IDaoBase<Profession>
 {
     private Database mDatabase;
 
@@ -15,7 +15,7 @@ public class ProfessionsDAO implements IDaoBase<IProfession>
         mDatabase = database;
     }
 
-    public void save (IProfession row)
+    public void save (Profession row)
     {
 
     }
@@ -25,12 +25,12 @@ public class ProfessionsDAO implements IDaoBase<IProfession>
 
     }
 
-    public IProfession update (IProfession row)
+    public Profession update (Profession row)
     {
         return row;
     }
 
-    public List<IProfession> loadAll ()
+    public List<Profession> loadAll ()
     {
         return null;
     }
