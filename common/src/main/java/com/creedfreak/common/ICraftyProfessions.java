@@ -26,14 +26,6 @@ import java.util.logging.Logger;
 public interface ICraftyProfessions
 {
     /**
-     * Logs a message to the internal Log method.
-     * Uses the interfaced Log method.
-     */
-    void LogMessage (Level level, String message);
-
-    void LogMessage (Level level, String subSystemPrefix ,String message);
-
-    /**
      * This method outlines the economy hook setup
      */
     boolean cpSetupEconomy ();

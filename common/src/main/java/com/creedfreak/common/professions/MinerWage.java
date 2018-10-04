@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * used to fetch the wage of a specific block mined or broken
  * based on that blocks name.
  */
+@Deprecated
 public class MinerWage extends BlockTable
 {
     public static final String MINER_PAYOUT = "Miner_Payout";

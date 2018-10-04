@@ -2,6 +2,7 @@ package com.creedfreak.common.database.databaseConn;
 
 import com.creedfreak.common.ICraftyProfessions;
 import com.creedfreak.common.AbsConfigController;
+import com.creedfreak.common.utility.Logger;
 
 import java.util.logging.Level;
 
@@ -15,7 +16,7 @@ public class DatabaseFactory
 
         if (dbType.equalsIgnoreCase ("sqlite"))
         {
-            plugin.LogMessage (Level.INFO, Database.DATABASE_PREFIX, "Constructing SQLite Connection.");
+            Logger.Instance ().Info (Database.DATABASE_PREFIX, "Constructing SQLite Connection.");
             db = new SQLite_Conn (plugin, config);
         }
         else if (dbType.equalsIgnoreCase ("mysql"))
@@ -25,7 +26,7 @@ public class DatabaseFactory
             String user = config.getString ("MySQL.user");
             String identifier = config.getString ("MySQL.password");
 
-            plugin.LogMessage (Level.INFO,  Database.DATABASE_PREFIX,"Constructing MySQL Connection.");
+            Logger.Instance ().Info (Database.DATABASE_PREFIX,"Constructing MySQL Connection.");
             db = new MySQL_Conn (plugin, config, host, database, user,
                 identifier);
         }

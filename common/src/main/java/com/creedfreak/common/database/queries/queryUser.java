@@ -1,13 +1,12 @@
 package com.creedfreak.common.database.queries;
 
+import com.creedfreak.common.utility.Logger;
 import com.google.common.primitives.UnsignedLong;
 import com.creedfreak.common.database.databaseConn.Database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.UUID;
-import java.util.logging.Level;
 
 public final class queryUser
 {
@@ -34,8 +33,7 @@ public final class queryUser
         }
         catch (SQLException exception)
         {
-            db.logDBMessage (Level.SEVERE, exception.getMessage ()
-                + ": Unhandled exception while checking Careers!");
+            Logger.Instance ().Error (exception.getMessage () + ": Unhandled exception while checking Careers!");
             return false;
         }
     }

@@ -1,8 +1,10 @@
 package com.creedfreak.common.container;
 
+import com.creedfreak.common.exceptions.TableStateException;
 import com.creedfreak.common.professions.BlockTable;
 import com.creedfreak.common.professions.IWageTable;
 import com.creedfreak.common.professions.TableType;
+import com.creedfreak.common.utility.Logger;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -10,22 +12,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
- * The Wage Table Handler will
+ * The Wage Table Handler is used to manage all of the wage tables
+ * and their references. This includes retrieving, instantiating,
+ * writing to file, and removing of the wage tables.
  *
- *
- * The Wage Table Handler also implements the method
+ * The Wage Table Handler implements the method GetWageTable which
+ * serves as the flyweight factory for obtaining references to the
+ * flyweight object when needed.
  */
 public class WageTableHandler
 {
 	public static final Type DEFAULT_WT_TYPE =
 			new TypeToken<HashMap<String, HashMap<String, Float>>> () {}.getType ();
+	private static final String WTH_PREFIX = "WageTableHandler";
 
 	private static WageTableHandler Instance = new WageTableHandler ();
 
 	private HashMap<TableType, IWageTable> mTableHandler;
+	private HashMap<TableType, IWageTable> mDisabledTables;
+
+	private Logger mLogger;
 
 	/**
 	 * The default constructor for the WageTableHandler. This is private to
@@ -35,6 +43,7 @@ public class WageTableHandler
 	private WageTableHandler ()
 	{
 		mTableHandler = new HashMap<>();
+		mLogger = Logger.Instance ();
 	}
 
 	/**
@@ -56,9 +65,9 @@ public class WageTableHandler
 	 * which handles all of the Wage Tables for dispersal at a later time after
 	 * they have been initialized.
 	 */
-	public void InitializeWageTables (boolean debug, Logger Log)
+	public void InitializeWageTables (boolean debug)
 	{
-		// Initialize all block tables here.
+		// Initialize all block tables here. If they can't get read in. Delete them.
 		mTableHandler.put (TableType.Miner, new BlockTable (TableType.Miner));
 		mTableHandler.put (TableType.Architect, new BlockTable (TableType.Architect));
 
@@ -67,22 +76,27 @@ public class WageTableHandler
 
 		if (debug)
 		{
-			Log.info ("Starting Initialization of Wage Tables...");
+			mLogger.Debug (WTH_PREFIX, "Initializing Wage Tables...");
 		}
 
 		// Read in all of the wage tables within the wage table handler.
 		for (Map.Entry<TableType, IWageTable> entry : mTableHandler.entrySet ())
 		{
-			entry.getValue ().readTable (entry.getKey ().getFileName());
+			if (!(entry.getValue ().readTable (entry.getKey ().getFileName())))
+			{
+				mLogger.Error (WTH_PREFIX,"File " + entry.getKey ().getFileName ()
+						+ " could not be read in! Disabling!");
+				deleteTable (entry.getKey ());
+			}
 			if (debug)
 			{
-				Log.info ("Initialized " + entry.getKey ().getFileName ());
+				mLogger.Debug (WTH_PREFIX,"Initialized " + entry.getKey ().getFileName ());
 			}
 		}
 
 		if (debug)
 		{
-			Log.info ("Initialization of Wage Tables are complete!");
+			mLogger.Debug ("Initialization of Wage Tables are complete!");
 		}
 	}
 
@@ -96,7 +110,12 @@ public class WageTableHandler
 	{
 		for (Map.Entry<TableType, IWageTable> entry : mTableHandler.entrySet ())
 		{
-			entry.getValue ().writeTable (entry.getKey ().getFileName ());
+			if (!(entry.getValue ().writeTable (entry.getKey ().getFileName ())))
+			{
+				// TODO: Can save it to another file named in the same dir for inspection later.
+				mLogger.Error (WTH_PREFIX,"Cannot write to " + entry.getKey ().getFileName ()
+						+ " no modified values will be saved!");
+			}
 		}
 	}
 
@@ -133,5 +152,55 @@ public class WageTableHandler
 	public IWageTable GetWageTable (TableType tableType)
 	{
 		return mTableHandler.get (tableType);
+	}
+
+	/**
+	 * Disables a table based on the type that is passed into the method.
+	 *
+	 * @param type - The table type to disable.
+	 * @param state - The state of the table, either enabled(true) or disabled(false).
+	 */
+	private void setState (TableType type, IWageTable.State state) throws TableStateException
+	{
+		if (IWageTable.State.Disabled == state)
+		{
+			IWageTable disableRef = mTableHandler.remove (type);
+			if (null != disableRef)
+			{
+				disableRef.setState (state);
+				mDisabledTables.put (type, disableRef);
+			}
+			else
+			{
+				// INFO: If this state change came from a command, then the output will be the player.
+				throw new TableStateException ("The table is already disabled!");
+			}
+		}
+		else
+		{
+			IWageTable enableRef = mDisabledTables.remove (type);
+
+			if (null == enableRef)
+			{
+				// INFO: Unwind stack till the command issuer (reference above INFO: tag)
+				throw new TableStateException ("The table is already enabled!");
+			}
+			else
+			{
+				enableRef.setState (state);
+				mTableHandler.put (type, enableRef);
+			}
+		}
+	}
+
+	/**
+	 * Deletes the table from the WTH. This method should only be called if a fatal error
+	 * occurs and for some reason we cannot retrieve the table information. For example
+	 * when we read in tables from file, if the read fails we need to remove the wage
+	 * table from being used.
+	 */
+	private void deleteTable (TableType type)
+	{
+		mTableHandler.remove (type);
 	}
 }

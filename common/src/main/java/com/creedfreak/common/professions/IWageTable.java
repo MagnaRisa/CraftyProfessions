@@ -1,7 +1,5 @@
 package com.creedfreak.common.professions;
 
-import java.math.BigDecimal;
-
 /**
  * This Interface outlines the common uses of a Wage Table for the
  * various professions within the Plugin.
@@ -12,6 +10,16 @@ import java.math.BigDecimal;
  */
 public interface IWageTable
 {
+    /**
+     * Enumeration
+     *
+     * The possible states of a wage table.
+     */
+    public enum State {
+        Enabled,
+        Disabled
+    }
+
     /**
      * <p> This Method is used in order to Hash a certain
      *     Item, Block, Crafting recipe etc.. In order to
@@ -24,7 +32,8 @@ public interface IWageTable
      * @return The Value stored at that Table Location or null
      *          if the Table does not have the desired Item.
      */
-    float mapItem (String element, String profStatus);
+    float mapItem (String element, String profStatus)
+    throws NullPointerException;
 
     /**
      * <p> This method will allow us to read the wage table
@@ -35,7 +44,7 @@ public interface IWageTable
      *
      * @param resource The file to read from
      */
-    void readTable (String resource);
+    boolean readTable (String resource);
 
     /**
      * <p> writeTable will essentially take any modified data
@@ -46,7 +55,7 @@ public interface IWageTable
      *
      * @param resource The file in which to write to.
      */
-    void writeTable (String resource);
+    boolean writeTable (String resource);
 
     /**
      * This method will return an internal boolean which will
@@ -70,4 +79,19 @@ public interface IWageTable
      *         False - If the operation was a failure
      */
     boolean modifyValue (String key, Double value);
+
+    /**
+     * Sets the state of the wage table. The table can be either
+     * enabled or disabled. If a table is disabled it should be
+     * removed from the users Professions list. If the table then
+     * gets re-enabled, it needs to be retrieved from the WTH.
+     *
+     * @param state - The current state of the table.
+     */
+    void setState (State state);
+
+    /**
+     * @return the current state of the Wage Table.
+     */
+    State getState ();
 }

@@ -41,8 +41,7 @@ public class SQLite_Conn extends Database
      *************************************************************************/
     public Connection dbConnect ()
     {
-        ICraftyProfessions plugin = mPlugin;
-        File dataFolder = new File (plugin.cpGetResourceFile (), SQLITE_DB_NAME);
+        File dataFolder = new File (mPlugin.cpGetResourceFile (), SQLITE_DB_NAME);
 
         if (!dataFolder.exists ())
         {
@@ -50,14 +49,13 @@ public class SQLite_Conn extends Database
             {
                 if (dataFolder.createNewFile ())
                 {
-                    plugin.LogMessage (Level.INFO, Database.DATABASE_PREFIX,
+                    mLogger.Info (Database.DATABASE_PREFIX,
                         "Database file not created, Creating it now...");
                 }
             }
             catch (IOException e)
             {
-                plugin.LogMessage (Level.SEVERE, "File write Error: "
-                    + SQLITE_DB_NAME);
+                mLogger.Error (Database.DATABASE_PREFIX, "File write Error: " + SQLITE_DB_NAME);
             }
         }
 
@@ -73,8 +71,7 @@ public class SQLite_Conn extends Database
         }
         catch (SQLException e)
         {
-            plugin.LogMessage (Level.SEVERE, Database.DATABASE_PREFIX,
-                "SQLite Exception on Initialization" + e);
+            mLogger.Error (Database.DATABASE_PREFIX,"SQLite Exception on Initialization" + e);
         }
 
         return mConnection;

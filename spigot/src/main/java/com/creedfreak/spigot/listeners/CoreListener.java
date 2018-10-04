@@ -1,6 +1,7 @@
 package com.creedfreak.spigot.listeners;
 
 import com.creedfreak.common.ICraftyProfessions;
+import com.creedfreak.common.container.IPlayer;
 import com.creedfreak.spigot.CraftyProfessions;
 import com.creedfreak.common.professions.IWageTable;
 import com.creedfreak.common.container.PlayerManager;
@@ -82,6 +83,7 @@ public class CoreListener implements Listener
     @EventHandler
     public void onBlockBreak (BlockBreakEvent event)
     {
+        IPlayer eventFocus;
         Player player = event.getPlayer ();
 
         /*
@@ -93,6 +95,12 @@ public class CoreListener implements Listener
            player.sendMessage (Double.toString (mEconomy.getBalance (player)));
         }
         */
+
+        // TODO: This needs testing before moving on
+        eventFocus = PlayerManager.Instance ().retrievePlayer (player.getUniqueId ());
+        eventFocus.doWork (event.getBlock ().getType ().name ());
+
+        player.sendMessage ("Block Broken was " + event.getBlock ().getType ().name ());
 
         // INFO: The below implementation of retrieving a wage table is deprecated and needs to be removed.
 /*        IWageTable wageTable = mProfessions.getWageTable ("Miner_Wage");
