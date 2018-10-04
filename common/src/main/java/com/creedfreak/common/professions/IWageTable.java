@@ -1,7 +1,5 @@
 package com.creedfreak.common.professions;
 
-import java.io.IOException;
-
 /**
  * This Interface outlines the common uses of a Wage Table for the
  * various professions within the Plugin.

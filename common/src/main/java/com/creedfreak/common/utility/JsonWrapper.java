@@ -9,14 +9,13 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
-// TODO: Write better exception handling messages. This should log the error to the console and disable the plugin.
+/**
+ * The json wrapper class, wraps a Gson object to retrieve and parse
+ * json files for configuration.
+ */
 public class JsonWrapper
 {
-
 	private Gson mGson;
-	private JsonReader mJsonReader = null;
-	private JsonWriter mJsonWriter = null;
-
 	private ClassLoader mClassLoader;
 
 	public JsonWrapper ()
@@ -39,12 +38,13 @@ public class JsonWrapper
 	 */
 	public HashMap readJson (Type token, String resource) throws IOException
 	{
+		JsonReader reader;
 		BufferedReader bufferedReader = new BufferedReader (new InputStreamReader (mClassLoader.getResourceAsStream (resource)));
 		HashMap parsedTable = null;
 
-		mJsonReader = mGson.newJsonReader (bufferedReader);
-		parsedTable = mGson.fromJson (mJsonReader, token);
-		mJsonReader.close();
+		reader = mGson.newJsonReader (bufferedReader);
+		parsedTable = mGson.fromJson (reader, token);
+		reader.close();
 
 		return parsedTable;
 	}
@@ -61,12 +61,13 @@ public class JsonWrapper
 	 */
 	public void writeJson (HashMap map, Type token, String resource) throws IOException
 	{
+		JsonWriter writer;
 		BufferedWriter bufferedWriter;
 
 		bufferedWriter = new BufferedWriter (new OutputStreamWriter (new FileOutputStream (resource)));
-		mJsonWriter = mGson.newJsonWriter (bufferedWriter);
-		mGson.toJson (map, token, mJsonWriter);
+		writer = mGson.newJsonWriter (bufferedWriter);
+		mGson.toJson (map, token, writer);
 
-		mJsonWriter.close ();
+		writer.close ();
 	}
 }

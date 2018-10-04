@@ -14,10 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The Wage Table Handler will
+ * The Wage Table Handler is used to manage all of the wage tables
+ * and their references. This includes retrieving, instantiating,
+ * writing to file, and removing of the wage tables.
  *
- *
- * The Wage Table Handler also implements the method
+ * The Wage Table Handler implements the method GetWageTable which
+ * serves as the flyweight factory for obtaining references to the
+ * flyweight object when needed.
  */
 public class WageTableHandler
 {
