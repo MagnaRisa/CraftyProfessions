@@ -2,8 +2,7 @@ package com.creedfreak.spigot.listeners;
 
 import com.creedfreak.common.ICraftyProfessions;
 import com.creedfreak.common.container.IPlayer;
-import com.creedfreak.spigot.CraftyProfessions;
-import com.creedfreak.common.professions.IWageTable;
+import com.creedfreak.spigot.CraftyProfessionsSpigot;
 import com.creedfreak.common.container.PlayerManager;
 import com.creedfreak.common.database.databaseConn.Database;
 import net.milkbowl.vault.economy.Economy;
@@ -17,8 +16,6 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.math.BigDecimal;
-
 /**
  * Author:  CreedTheFreak
  * Date:    4/21/2017
@@ -27,13 +24,13 @@ import java.math.BigDecimal;
  */
 public class CoreListener implements Listener
 {
-    private CraftyProfessions mProfessions;
+    private CraftyProfessionsSpigot mProfessions;
     private Database mdb;
     private Economy mEconomy;
 
     public CoreListener (ICraftyProfessions professions)
     {
-        mProfessions = (CraftyProfessions) professions;
+        mProfessions = (CraftyProfessionsSpigot) professions;
     }
 
 

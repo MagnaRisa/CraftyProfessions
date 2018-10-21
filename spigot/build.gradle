@@ -117,6 +117,7 @@ task spigotClean (type: Delete) {
 
     delete 'build'
     delete "../output/${archive}"
+    delete 'out'
     followSymlinks = true
 
     group = 'CP Spigot'

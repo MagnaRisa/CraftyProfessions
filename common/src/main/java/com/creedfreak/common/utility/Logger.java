@@ -64,6 +64,11 @@ public class Logger
 		Log (level, "[" + subSystemPrefix + "] " + message);
 	}
 
+	private void DebugLog (Level level, String subSystemPrefix, String message)
+	{
+		Log (level, "[DEBUG]" + "[" + subSystemPrefix + "]" + message);
+	}
+
 	public void Info (String message)
 	{
 		this.Log (Level.INFO, message);
@@ -96,12 +101,12 @@ public class Logger
 
 	public void Debug (String message)
 	{
-		this.Log (Level.INFO, "[DEBUG] " + message);
+		Log (Level.INFO, "[DEBUG]" + message);
 	}
 
 	public void Debug (String subSystemPrefix, String message)
 	{
-		this.Log (Level.INFO, "[DEBUG]" + subSystemPrefix, message);
+		this.DebugLog (Level.INFO, subSystemPrefix, message);
 	}
 
 	/**
@@ -116,7 +121,7 @@ public class Logger
 	{
 		if (mDebug)
 		{
-			this.Log (Level.INFO, "[DEBUG] " + message);
+			this.Log (Level.INFO, "[DEBUG]" + message);
 		}
 	}
 

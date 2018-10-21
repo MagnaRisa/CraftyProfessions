@@ -4,7 +4,7 @@
 name: CraftyProfessions
 version: @VERSION@
 description: This is a Professions plugin which will be completely customizable.
-main: com.creedfreak.spigot.CraftyProfessions
+main: com.creedfreak.spigot.CraftyProfessionsSpigot
 author: CreedTheFreak
 
 depend: [Vault]

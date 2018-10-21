@@ -19,10 +19,13 @@ plugins {
  * files between both the plugins and is appended to the end of the jar file name.
  */
 ext {
-    spigot_version = '0.1'
-    sponge_version = '0.0'
-    common_version = '0.1'
-    cp_build = 'alpha'
+    // Version 0.8 from the WageTable Update for the dev build
+    spigot_version = '0.12'
+    // Version 0.1 for including the sponge api and creating the initial first class.
+    sponge_version = '0.1'
+    // Version 0.4 from the WageTable Update for the dev build
+    common_version = '0.4'
+    cp_build = 'dev'
     jar_root_prefix = 'craftyprof'
 }
 
@@ -48,6 +51,11 @@ task makeall (dependsOn: [':spigot:makeSpigot', ':sponge:makeSponge', ':pluginNa
 
     group = 'Crafty Profession'
     description = 'Builds all of the jar files associated with crafty professions.'
+}
+
+task cleanAll (dependsOn: [':spigot:spigotClean', ':sponge:spongeClean', ':common:commonClean']) {
+    group = 'CraftyProfession'
+    description = 'Cleans all of the build directories associated with crafty professions'
 }
 
 task pluginName {

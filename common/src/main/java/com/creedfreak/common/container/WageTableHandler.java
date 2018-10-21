@@ -27,6 +27,7 @@ public class WageTableHandler
 	public static final Type DEFAULT_WT_TYPE =
 			new TypeToken<HashMap<String, HashMap<String, Float>>> () {}.getType ();
 	private static final String WTH_PREFIX = "WageTableHandler";
+	private static final String RESOURCE_DIR = "wage_data/";
 
 	private static WageTableHandler Instance = new WageTableHandler ();
 
@@ -69,7 +70,7 @@ public class WageTableHandler
 	{
 		// Initialize all block tables here. If they can't get read in. Delete them.
 		mTableHandler.put (TableType.Miner, new BlockTable (TableType.Miner));
-		mTableHandler.put (TableType.Architect, new BlockTable (TableType.Architect));
+		// mTableHandler.put (TableType.Architect, new BlockTable (TableType.Architect));
 
 		// Initialize all item related tables here.
 		// mTableHandler.put (TableType.Alchemy, new AlchemyWage ());
@@ -82,7 +83,7 @@ public class WageTableHandler
 		// Read in all of the wage tables within the wage table handler.
 		for (Map.Entry<TableType, IWageTable> entry : mTableHandler.entrySet ())
 		{
-			if (!(entry.getValue ().readTable (entry.getKey ().getFileName())))
+			if (!(entry.getValue ().readTable (RESOURCE_DIR + entry.getKey ().getFileName())))
 			{
 				mLogger.Error (WTH_PREFIX,"File " + entry.getKey ().getFileName ()
 						+ " could not be read in! Disabling!");

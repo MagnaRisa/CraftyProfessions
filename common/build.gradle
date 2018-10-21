@@ -10,7 +10,9 @@
  * to include a common jar file when using the different versions of the
  * plugin.
  */
-
+plugins {
+    id "de.fuerstenau.buildconfig" version "1.1.8"
+}
 /**
  * REPOSITORIES: Dependency Repositories
  */
@@ -51,3 +53,43 @@ sourceSets {
         }
     }
 }
+
+buildConfig {
+    appName = project.name
+    version = project.version
+
+    clsName = 'BuildConfig'
+
+    // TODO: Change this to be the correct package name in gradle.settings.
+    packageName = 'com.creedfreak.common.utility'
+
+    charset = 'UTF-8'
+
+    buildConfigField('String', 'SPIGOT_VERSION', "${spigot_version}")
+    buildConfigField('String', 'SPONGE_VERSION', "${sponge_version}")
+    buildConfigField('String', 'COMMON_VERSION', "${common_version}")
+}
+
+idea.module.sourceDirs += file('build/gen/buildconfig/src/main')
+
+task commonClean (type: Delete) {
+    doFirst {
+        println "Cleaning common directories"
+    }
+
+    delete 'build'
+    delete 'out'
+    followSymlinks = true
+
+    group = "CP Common"
+    description = "Cleans all of the build compilations for the common api"
+}
+
+//def genPath = 'build/gen/src/main/com/creedfreak/common/utility/BuildConfig.java'
+//task placeBuildConfig {
+//    doFirst {
+//        delete 'src/main/java/com/creedfreak/common/utility/BuildConfig.java'
+//    }
+//
+//    copy ''
+//}
