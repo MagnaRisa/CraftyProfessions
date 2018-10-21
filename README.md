@@ -6,15 +6,17 @@ That being said this plugin is still in Development and the features listed abov
 # Building the Project
 In order to build CraftyProfessions simply clone the repository and run the following commands.
 
-### Make All Projects [Currently only builds spigot]
+Note: Currently all of the projects are in development so they WILL NOT work as intended at all. Building at this stage is simply to test any changed made while developing.
+
+### Make All Projects
 <p>Make both the spigot and sponge jar files.</p>
 <code>./gradlew makeall</code>
 
-### Spigot Project [Currently not implemented]
+### Spigot Project
 <p>Creates the jar file for the spigot version of crafty professions.</p>
 <code>./gradlew makeSpigot</code>
 
-### Sponge Project [Implemented but the plugin is in development]
+### Sponge Project
 <p>Creates the jar file for the sponge version of crafty professions.</p>
 <code>./gradlew makeSponge</code>
 
