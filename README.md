@@ -6,7 +6,7 @@ That being said this plugin is still in Development and the features listed abov
 # Building the Project
 In order to build CraftyProfessions simply clone the repository and run the following commands.
 
-Note: Currently all of the projects are in development so they WILL NOT work as intended at all. Building at this stage is simply to test any changed made while developing.
+**Note: Currently all of the projects are in development so they WILL NOT work as intended at all. Building at this stage is simply to test any changed made while developing.**
 
 ### Make All Projects
 <p>Make both the spigot and sponge jar files.</p>
