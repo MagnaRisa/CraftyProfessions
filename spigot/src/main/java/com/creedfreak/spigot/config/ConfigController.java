@@ -24,11 +24,10 @@ import java.util.logging.Level;
  */
 public class ConfigController extends AbsConfigController
 {
-    private static final String systemPrefix = "CONFIG";
+    private static final String systemPrefix = "Config";
 
     private JavaPlugin mPlugin;
     private File mConfigFile;
-    private YamlConfiguration mConfig;
 
     private Logger mLogger = null;
     private Map<String, File> mWageFiles;
@@ -59,10 +58,15 @@ public class ConfigController extends AbsConfigController
      */
     public void registerConfigFiles ()
     {
-        for (TableType resource : TableType.values ())
-        {
-            loadFile (resource.getFileName ());
-        }
+
+        // TODO: Remove all save config lines once all wage tables are implemented.
+        loadFile (TableType.Miner.getFileName ());
+
+//        TODO: This needs to get uncommented when all of the wage files are added.
+//        for (TableType resource : TableType.values ())
+//        {
+//            loadFile (resource.getFileName ());
+//        }
     }
 
     /**
@@ -182,12 +186,19 @@ public class ConfigController extends AbsConfigController
     {
         File resourceFile = new File (mPlugin.getDataFolder (), resource);
 
-        if (!resourceFile.exists ())
+        try
         {
-            mPlugin.saveResource ("wage_data/" + resourceFile.getName (), false);
-        }
+            if (!resourceFile.exists ())
+            {
+                mPlugin.saveResource ("wage_data/" + resourceFile.getName (), false);
+            }
 
-        mWageFiles.put (resource, resourceFile);
+            mWageFiles.put (resource, resourceFile);
+        }
+        catch (Exception except)
+        {
+            mLogger.Warn (systemPrefix, "Caught an unknown exception while loading a file: " + except.getMessage ());
+        }
     }
 
     /**

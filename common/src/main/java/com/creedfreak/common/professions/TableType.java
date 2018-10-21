@@ -11,16 +11,16 @@ import java.util.HashMap;
  */
 public enum TableType
 {
-    Miner("miner_wage.yml", "Miner_Payout", "Ore_Affinity", "Stone_Affinity"),
-    Alchemy("alchemy_wage.yml", "Alchemy_Payout"),
-    Angler("angler_wage.yml", "Angler_Payout"),
-    Architect("architect_wage.yml", "Architect_Payout"),
-    Crafter("crafter_wage.yml", "Crafter_Payout"),
-    Enchanter("enchanter_wage.yml", "Enchanter_Payout"),
-    Farmer("farmer_wage.yml", "Farmer_Payout"),
-    Knight("knight_wage.yml", "Knight_Payout"),
-    Lumberjack("lumberjack_wage.yml", "Lumberjack_Payout"),
-    Merchant("merchant_wage.yml", "Merchant_Payout");
+    Miner("miner_wage.json", "Miner_Payout", "Ore_Affinity", "Stone_Affinity"),
+    Alchemy("alchemy_wage.json", "Alchemy_Payout"),
+    Angler("angler_wage.json", "Angler_Payout"),
+    Architect("architect_wage.json", "Architect_Payout"),
+    Crafter("crafter_wage.json", "Crafter_Payout"),
+    Enchanter("enchanter_wage.json", "Enchanter_Payout"),
+    Farmer("farmer_wage.json", "Farmer_Payout"),
+    Knight("knight_wage.json", "Knight_Payout"),
+    Lumberjack("lumberjack_wage.json", "Lumberjack_Payout"),
+    Merchant("merchant_wage.json", "Merchant_Payout");
 
     private String mFileName;
     private String mDefaultTier;

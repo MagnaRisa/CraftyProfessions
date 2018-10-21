@@ -27,7 +27,7 @@ repositories {
  */
 dependencies {
     implementation project (':common')
-    implementation (group: 'org.spongepowered', name: 'spongeapi', version: '7.1.0')
+    implementation (group: 'org.spongepowered', name: 'spongeapi', version: '8.0.0-SNAPSHOT')
 }
 
 /**
@@ -79,6 +79,7 @@ task spongeClean(type: Delete) {
 
     delete 'build'
     delete "../output/${archive}"
+    delete 'out'
     followSymlinks = true
 
     group = 'CP Sponge'

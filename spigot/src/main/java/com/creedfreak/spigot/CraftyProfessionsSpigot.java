@@ -27,7 +27,7 @@ import java.util.logging.Level;
  *
  * This is the entry point class for the CraftyProfessions plugin.
  */
-public class CraftyProfessions extends JavaPlugin implements ICraftyProfessions
+public class CraftyProfessionsSpigot extends JavaPlugin implements ICraftyProfessions
 {
     // Currently edited from here, will be a config option at a later date.
     private static boolean mDebug = true;

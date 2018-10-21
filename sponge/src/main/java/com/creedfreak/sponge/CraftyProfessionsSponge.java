@@ -1,6 +1,7 @@
 package com.creedfreak.sponge;
 
 import com.creedfreak.common.ICraftyProfessions;
+import com.creedfreak.common.utility.BuildConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -8,7 +9,8 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-@Plugin (id = "craftyprofessions", name = "Crafty Professions", version = "0.1-dev")
+@Plugin (id = "craftyprofessions", name = "Crafty Professions", version = BuildConfig.SPONGE_VERSION,
+        description = "The Sponge implementation of the CraftyProfessions Plugin")
 public class CraftyProfessionsSponge
 {
     @Inject
