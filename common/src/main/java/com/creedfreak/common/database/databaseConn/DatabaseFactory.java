@@ -4,12 +4,9 @@ import com.creedfreak.common.ICraftyProfessions;
 import com.creedfreak.common.AbsConfigController;
 import com.creedfreak.common.utility.Logger;
 
-import java.util.logging.Level;
-
 public class DatabaseFactory
 {
-    public static Database buildDatabase (ICraftyProfessions plugin,
-        AbsConfigController config)
+    public static Database buildDatabase (ICraftyProfessions plugin, AbsConfigController config)
     {
         String dbType = config.getString ("DatabaseType");
         Database db = null;

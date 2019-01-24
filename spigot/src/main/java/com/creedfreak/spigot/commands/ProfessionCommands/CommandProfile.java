@@ -1,8 +1,8 @@
 package com.creedfreak.spigot.commands.ProfessionCommands;
 
+import com.creedfreak.common.container.IPlayer;
 import com.creedfreak.spigot.commands.ProfessionCommand;
 import com.creedfreak.spigot.container.CommandData;
-import com.creedfreak.spigot.container.CraftyPlayer;
 
 /**
  * This command will handle the Profile command execution.
@@ -13,13 +13,15 @@ public class CommandProfile extends ProfessionCommand
     {
         super (new CommandData (
             "profile",
-            "This command will give you a book that will display your profile in depth",
+            // TODO: Implement the book feature.
+            // "This command will give you a book that will display your profile in depth",
+            "This command will give you a in text look at what your profile looks like.",
             "/prof profile",
-            "spigot_craftyprofessions.use.profile"));
+            "craftyprofessions.use.profile"));
     }
 
     @Override
-    public boolean execute (CraftyPlayer sender, String... args)
+    public boolean execute (IPlayer sender, String... args)
     {
         sender.sendMessage ("You have just executed /prof profile");
 

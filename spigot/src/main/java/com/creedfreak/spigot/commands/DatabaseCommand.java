@@ -1,11 +1,11 @@
 package com.creedfreak.spigot.commands;
 
+import com.creedfreak.common.container.IPlayer;
 import com.creedfreak.spigot.container.CommandData;
-import com.creedfreak.spigot.container.CraftyPlayer;
 import com.creedfreak.common.database.databaseConn.Database;
 
 /**
- * The abstract command that controls the Database operations
+ * The abstract command that controls the database operations
  */
 public abstract class DatabaseCommand implements ICommand
 {
@@ -26,7 +26,7 @@ public abstract class DatabaseCommand implements ICommand
     /**
      * Checks a users permissions
      */
-    public boolean checkPermission (CraftyPlayer player)
+    public boolean checkPermission (IPlayer player)
     {
         return mCommandData.hasPerms (player);
     }

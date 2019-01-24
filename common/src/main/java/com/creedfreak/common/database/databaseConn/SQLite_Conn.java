@@ -6,7 +6,6 @@ import com.creedfreak.common.ICraftyProfessions;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
-import java.util.logging.Level;
 
 public class SQLite_Conn extends Database
 {
@@ -41,7 +40,7 @@ public class SQLite_Conn extends Database
      *************************************************************************/
     public Connection dbConnect ()
     {
-        File dataFolder = new File (mPlugin.cpGetResourceFile (), SQLITE_DB_NAME);
+        File dataFolder = new File (mPlugin.getResourceFile (), SQLITE_DB_NAME);
 
         if (!dataFolder.exists ())
         {
@@ -50,7 +49,7 @@ public class SQLite_Conn extends Database
                 if (dataFolder.createNewFile ())
                 {
                     mLogger.Info (Database.DATABASE_PREFIX,
-                        "Database file not created, Creating it now...");
+                        "database file not created, Creating it now...");
                 }
             }
             catch (IOException e)

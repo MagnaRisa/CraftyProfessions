@@ -1,8 +1,8 @@
 package com.creedfreak.spigot.commands.DatabaseCommands;
 
+import com.creedfreak.common.container.IPlayer;
 import com.creedfreak.spigot.commands.DatabaseCommand;
 import com.creedfreak.spigot.container.CommandData;
-import com.creedfreak.spigot.container.CraftyPlayer;
 import com.creedfreak.common.database.databaseConn.Database;
 
 /**
@@ -17,12 +17,12 @@ public class CommandArchiveAll extends DatabaseCommand
             "archiveall",
             "This command will archive all of the users within the database.",
             "/prof archiveall",
-            "spigot_craftyprofessions.admin.archiveall"
+            "craftyprofessions.admin.archiveall"
         ));
     }
 
     @Override
-    public boolean execute (CraftyPlayer sender, String... args)
+    public boolean execute (IPlayer sender, String... args)
     {
         sender.sendMessage ("You have issued the archiveall command");
 

@@ -1,8 +1,11 @@
 package com.creedfreak.spigot.commands.ProfessionCommands;
 
+import com.creedfreak.common.container.IPlayer;
+import com.creedfreak.common.container.PlayerManager;
+import com.creedfreak.common.professions.ProfessionBuilder;
 import com.creedfreak.spigot.commands.ProfessionCommand;
 import com.creedfreak.spigot.container.CommandData;
-import com.creedfreak.spigot.container.CraftyPlayer;
+import com.creedfreak.spigot.container.SpigotPlayer;
 
 /**
  * This is the Join command for a Profession. If a player issues this command
@@ -20,7 +23,7 @@ public class CommandJoin extends ProfessionCommand
             "join",
             "Joins the user to the specified Profession",
             "/prof join [ProfessionName]",
-            "spigot_craftyprofessions.use.join"));
+            "craftyprofessions.use.join"));
     }
 
     /**
@@ -34,18 +37,20 @@ public class CommandJoin extends ProfessionCommand
      *                   if some exception was thrown.
      *         False - If the command fails all checks
      */
-    public boolean execute (CraftyPlayer sender, String... args)
+    public boolean execute (IPlayer sender, String... args)
     {
         sender.sendMessage ("You have just executed /prof join");
+        if (checkPermission (sender))
+        {
+            if (sender.registerProfession (ProfessionBuilder.buildDefault (args[0])))
+            {
+                sender.sendMessage ("You are already registered for this profession.");
+            }
+        }
 
         return true;
     }
 
-    /**
-     * This method returns the name of the command
-     *
-     * @return The name of the command after the prefix /prof
-     */
     public String cmdName ()
     {
         return mCommandData.getCommandArg ();

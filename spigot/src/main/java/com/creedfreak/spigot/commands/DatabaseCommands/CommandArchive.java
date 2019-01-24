@@ -1,8 +1,8 @@
 package com.creedfreak.spigot.commands.DatabaseCommands;
 
+import com.creedfreak.common.container.IPlayer;
 import com.creedfreak.spigot.commands.DatabaseCommand;
 import com.creedfreak.spigot.container.CommandData;
-import com.creedfreak.spigot.container.CraftyPlayer;
 import com.creedfreak.common.database.databaseConn.Database;
 
 /**
@@ -17,12 +17,12 @@ public class CommandArchive extends DatabaseCommand
             "archive",
             "This command will send the specified player to be backed up within the Archive.",
             "/prof archive [PlayerName]",
-            "spigot_craftyprofessions.admin.archive"
+            "craftyprofessions.admin.archive"
         ));
     }
 
     @Override
-    public boolean execute (CraftyPlayer sender, String... args)
+    public boolean execute (IPlayer sender, String... args)
     {
         sender.sendMessage ("You have activated the /prof archive command");
 

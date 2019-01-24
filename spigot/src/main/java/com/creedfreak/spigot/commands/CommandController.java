@@ -2,12 +2,13 @@ package com.creedfreak.spigot.commands;
 
 import com.creedfreak.common.AbsCmdController;
 import com.creedfreak.common.ICraftyProfessions;
+import com.creedfreak.common.container.IPlayer;
 import com.creedfreak.spigot.commands.DatabaseCommands.*;
 import com.creedfreak.spigot.commands.ProfessionCommands.*;
 import com.creedfreak.common.container.PlayerManager;
 import com.creedfreak.common.database.databaseConn.Database;
 import com.creedfreak.common.exceptions.*;
-import com.creedfreak.spigot.container.CraftyPlayer;
+import com.creedfreak.spigot.container.SpigotPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -49,7 +50,7 @@ public class CommandController extends AbsCmdController implements CommandExecut
      *
      * @param label The label of the command
      *
-     * @param args The arguments of the command, this can range from few arguments to a few.
+     * @param args The arguments of the command, this can range from few arguments to a couple.
      *
      * @return True  - If the command succeeds
      *         False - If the command fails
@@ -57,34 +58,42 @@ public class CommandController extends AbsCmdController implements CommandExecut
     @Override
     public boolean onCommand (CommandSender sender, Command cmd, String label, String... args)
     {
+    	boolean retVal;
         Player player = obtainBukkitPlayer (sender);
-        CraftyPlayer mPlayer;
-        ICommand command = null;
+        IPlayer mPlayer;
+        ICommand command;
 
         if (player == null)
         {
-            return false;
+            retVal = false;
         }
-
-        try
+        else
         {
-            if (checkArgsLength (args))
-            {
-                command = loadCommand (args[0]);
+	        try
+	        {
+		        if (checkArgsLength (args))
+		        {
+			        command = loadCommand (args[0]);
 
-                // TODO: I need to add in the appropriate checking and arg trimming devices before I can use the commands.
-                mPlayer = (CraftyPlayer) PlayerManager.Instance ().retrievePlayer (player.getUniqueId ());
-                command.execute (mPlayer, args);
-                return true;
-            }
-        }
-        catch (TooFewArgumentException | CommandNotFoundException ex)
-        {
-            player.sendMessage (ex.getMessage ());
-            return true;
+			        // TODO: I need to add in the appropriate checking and arg trimming devices before I can use the commands.
+			        mPlayer = PlayerManager.Instance ().getPlayer (player.getUniqueId ());
+			        command.execute (mPlayer, args);
+		        }
+	        }
+	        catch (TooFewArgumentException | CommandNotFoundException ex)
+	        {
+	        	// Load the Help command and display all usable commands for a regular user.
+//	        	mPlayer = PlayerManager.Instance ().getPlayer (player.getUniqueId ());
+//	        	command = loadCommand ();
+		        player.sendMessage (ex.getMessage ());
+	        }
+	        finally
+	        {
+	        	retVal = true;
+	        }
         }
 
-        return false;
+        return retVal;
     }
 
     /**
@@ -93,7 +102,7 @@ public class CommandController extends AbsCmdController implements CommandExecut
      */
     private void initializeCommands ()
     {
-         Database db = mPlugin.cpGetDatabase ();
+         Database db = mPlugin.getDatabase ();
 
         /*Profession Command Registration*/
         registerCommand (new CommandJoin ());
@@ -102,7 +111,7 @@ public class CommandController extends AbsCmdController implements CommandExecut
         registerCommand (new CommandProfile ());
         registerCommand (new CommandStats ());
 
-        /*Database Command Registration*/
+        /*database Command Registration*/
         registerCommand (new CommandArchive (db));
         registerCommand (new CommandArchiveAll (db));
         registerCommand (new CommandLookup (db));

@@ -1,8 +1,8 @@
 package com.creedfreak.spigot.commands.ProfessionCommands;
 
+import com.creedfreak.common.container.IPlayer;
 import com.creedfreak.spigot.commands.ProfessionCommand;
 import com.creedfreak.spigot.container.CommandData;
-import com.creedfreak.spigot.container.CraftyPlayer;
 
 /**
  * This command when executed will display the users stats
@@ -21,11 +21,11 @@ public class CommandStats extends ProfessionCommand
             "stats",
             "This command will display a simple version of the players stats",
             "/prof stats",
-            "spigot_craftyprofessions.use.stats"
+            "craftyprofessions.use.stats"
         ));
     }
 
-    public boolean execute (CraftyPlayer sender, String... args)
+    public boolean execute (IPlayer sender, String... args)
     {
         sender.sendMessage ("You have issued the command /prof stats");
 

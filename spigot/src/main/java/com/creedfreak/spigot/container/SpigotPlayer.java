@@ -1,22 +1,23 @@
 package com.creedfreak.spigot.container;
 
+import com.creedfreak.common.professions.TableType;
+import com.creedfreak.common.utility.Logger;
 import com.google.common.primitives.UnsignedLong;
 import com.creedfreak.common.container.IPlayer;
 import com.creedfreak.common.professions.Profession;
-import net.milkbowl.vault.economy.*;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /** [HUGE WIP]
  * This is the Player Wrapper for the CraftyProfessions Plugin in which stores all
  * of the information for a CraftyProfessions player.
  */
-public class CraftyPlayer implements IPlayer
+public class SpigotPlayer implements IPlayer
 {
-    // This is the players primary key within the Database
+    // This is the players primary key within the database
     private UnsignedLong mPlayerID;
     private Player mPlayer;
 
@@ -25,27 +26,34 @@ public class CraftyPlayer implements IPlayer
     private boolean mPrintEarnedWages;
 
     // The Users list of professions.
-    private List<Profession> mProfessions;
+    private ConcurrentHashMap<TableType, Profession> mProfessions;
+    private Integer mPlayerLevel;
+    private String mDBUsername;
+    private String mCurrentUsername;
 
     /**
      * This is the Default Constructor for the CraftyPlayer object in which
-     * a player will be initialized from the Crafty Professions Database.
+     * a player will be initialized from the Crafty Professions database.
      *
-     * @param player       - This is the player associated with the CraftyPlayer
-     * @param professions  - This is the Professions info stored for the player, this data
-     *                    will be updated from the game via commands and or leveling up the
-     *                    player, then the data will be stored into the database when the player
-     *                    logs out.
+     * @param dbID The players database ID, this is unique to the database.
+     * @param currentDBuname The current players name stored in the database.
+     * @param playerLevel The players overall Level retrieved from the database.
      */
-    public CraftyPlayer (UnsignedLong dbID, Player player, List<Profession> professions)
+    public SpigotPlayer (UnsignedLong dbID, String currentDBuname, Integer playerLevel, Player player)
     {
         mPlayerID = dbID;
-        mPlayer = player;
         mPlayerPool = 0.0f;
 
-        mProfessions = professions;
+		mPlayerLevel = playerLevel;
+		mDBUsername = currentDBuname;
+	    mPlayer = player;
 
-        mPrintEarnedWages = false;
+        if (!mDBUsername.equals (mPlayer.getName ()))
+        {
+        	mCurrentUsername = mPlayer.getName ();
+        }
+
+	    mPrintEarnedWages = false;
     }
     /**
      * This method will return the UUID of the CPPlayer
@@ -57,6 +65,71 @@ public class CraftyPlayer implements IPlayer
         return mPlayer.getUniqueId ();
     }
 
+	/**
+	 * @return The username of the player
+	 */
+	public String getUsername ()
+    {
+    	return mPlayer.getName ();
+    }
+
+	/**
+	 * @return the overall level of the user.
+	 */
+	public Integer getLevel ()
+    {
+    	return mPlayerLevel;
+    }
+
+	/**
+	 * @return The database identifier of the player.
+	 */
+	public UnsignedLong getDBIdentifier ()
+    {
+    	return mPlayerID;
+    }
+
+    /**
+     * Registering a profession will allow the user to start getting income from
+     * the profession that is registered.
+     *
+     * @param prof - The profession to register with the players list of professions.
+     */
+    @Override
+    public boolean registerProfession (Profession prof)
+    {
+        boolean registered = mProfessions.containsKey (prof.type ());
+        if (!registered)
+        {
+            mProfessions.put (prof.type (), prof);
+        }
+        return registered;
+    }
+
+    public void registerProfession (List<Profession> professions)
+    {
+    	boolean registered;
+		for (Profession prof : professions)
+		{
+			registered = registerProfession (prof);
+
+			if (!registered)
+			{
+				Logger.Instance ().Warn ("SpigotPlayer", "Profession: " + prof.getName () + " was not registered for user " + mCurrentUsername);
+			}
+		}
+    }
+
+    public boolean unregisterProfession (TableType type)
+    {
+        boolean registered = mProfessions.containsKey (type);
+        if (registered)
+        {
+            mProfessions.remove (type);
+        }
+        return registered;
+    }
+
     /**
      * This method will "Payout" the players current money ca, This method
      * should be called after x amount of ticks of the player receiving money and
@@ -66,7 +139,7 @@ public class CraftyPlayer implements IPlayer
     {
     	float retVal = 0.0f;
 
-        for (Profession prof : mProfessions)
+        for (Profession prof : mProfessions.values ())
         {
             if (mPrintEarnedWages)
             {
@@ -97,6 +170,7 @@ public class CraftyPlayer implements IPlayer
      *
      * @param perm The permission to check against the player
      */
+
     public boolean checkPerms (final String perm)
     {
         return mPlayer.hasPermission (perm);
@@ -119,7 +193,7 @@ public class CraftyPlayer implements IPlayer
             {
                 // Iterate over the list and send the Profession name to the User.
 	            mPlayer.sendMessage ("Your Current Professions Are:");
-                for (Profession prof : mProfessions)
+                for (Profession prof : mProfessions.values ())
                 {
                 	mPlayer.sendMessage (prof.getName ());
                 }
@@ -128,11 +202,6 @@ public class CraftyPlayer implements IPlayer
     }
 
 	/**
-     * Question: Can we have multiple blocks associated with multiple wage tables?
-     * Infer: This could work if we use a map to store the various types of events,
-     * Infer: place and break. Once the event occurs we grab the correct map and
-     * Infer: hash the event element into that map.
-     *
 	 * Sets the print earned wages field to either true or false. This field indicates if
 	 * the players wages should be printed out to them or not.
 	 *

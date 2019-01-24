@@ -1,8 +1,8 @@
 package com.creedfreak.spigot.commands.DatabaseCommands;
 
+import com.creedfreak.common.container.IPlayer;
 import com.creedfreak.spigot.commands.DatabaseCommand;
 import com.creedfreak.spigot.container.CommandData;
-import com.creedfreak.spigot.container.CraftyPlayer;
 import com.creedfreak.common.database.databaseConn.Database;
 
 /**
@@ -17,12 +17,12 @@ public class CommandResetProfile extends DatabaseCommand
             "resetplayer",
             "This command will wipe a players full professions stats or you can choose which stat you would like to erase",
             "/prof resetplayer [Statistic]",
-            "spigot_craftyprofessions.admin.resetplayer"
+            "craftyprofessions.admin.resetplayer"
         ));
     }
 
     @Override
-    public boolean execute (CraftyPlayer sender, String... args)
+    public boolean execute (IPlayer sender, String... args)
     {
         sender.sendMessage ("You have issued the ResetPlayer command");
 
