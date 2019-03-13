@@ -1,12 +1,10 @@
 package com.creedfreak.common;
 
-import com.creedfreak.common.database.databaseConn.Database;
-import com.creedfreak.common.exceptions.NoLoggerFoundException;
+import com.creedfreak.common.commands.AbsCmdController;
+import com.creedfreak.common.database.connection.Database;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class is the main Abstraction layer for ICraftyProfessions
@@ -15,41 +13,41 @@ import java.util.logging.Logger;
  * a Sponge Version of ICraftyProfessions. This will allow for
  * very minimal changes within the code when dealing with
  * different servers.
- *
+ * <p>
  * Planned Server Implementations: Spigot and Sponge
- *
+ * <p>
  * This interface outlines all of the common functionality
  * between both Spigot and Sponge implementations that
  * ICraftyProfessions will need to use throughout the
  * project.
  */
-public interface ICraftyProfessions
-{
-    /**
-     * This method outlines the economy hook setup
-     */
-    boolean setupEconomy ();
+public interface ICraftyProfessions {
 
-    /**
-     * Get the Configuration of the Plugin
-     */
-    AbsConfigController getConfigController ();
+	/**
+	 * This method outlines the economy hook setup
+	 */
+	boolean setupEconomy ();
 
-    AbsCmdController getCmdController ();
+	/**
+	 * Get the Configuration of the Plugin
+	 */
+	AbsConfigController getConfigController ();
 
-    /**
-     * Register the plugins listeners.
-     */
-    void setupListeners ();
+	AbsCmdController getCmdController ();
 
-    /**
-     * Grab the database
-     */
-    Database getDatabase ();
+	/**
+	 * Register the plugins listeners.
+	 */
+	void setupListeners ();
 
-    void setupDatabase ();
+	/**
+	 * Grab the database
+	 */
+	Database getDatabase ();
 
-    InputStream openResource (String resource);
+	void setupDatabase ();
 
-    File getResourceFile ();
+	InputStream openResource (String resource);
+
+	File getResourceFile ();
 }

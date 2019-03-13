@@ -15,6 +15,7 @@
  DROP TABLE IF EXISTS SubProfessions;
  DROP TABLE IF EXISTS Professions;
  DROP TABLE IF EXISTS Users;
+ DROP TABLE IF EXISTS Settings;
 
 -- Create the User Table
 CREATE TABLE IF NOT EXISTS Users
@@ -36,6 +37,7 @@ CREATE TABLE IF NOT EXISTS Professions
 (
 	ProfessionID INT NOT NULL AUTO_INCREMENT,
 	ProfessionName VARCHAR (25) NOT NULL,
+  InternalName VARCHAR (25) NOT NULL,
 	Description TEXT DEFAULT NULL,
 	WageTableRef VARCHAR (30) NOT NULL,
 	
@@ -48,6 +50,7 @@ CREATE TABLE IF NOT EXISTS SubProfessions
 (
 	SubProfessionID INT NOT NULL AUTO_INCREMENT,
 	SubProfessionName VARCHAR (25) NOT NULL,
+	InternalName VARCHAR (25) NOT NULL,
 	Description TEXT DEFAULT NULL,
 	WageTableRef VARCHAR (30) NOT NULL,
 	TotalAugSlots INT UNSIGNED DEFAULT 0,
@@ -200,4 +203,14 @@ CREATE TABLE IF NOT EXISTS SideJobSpecificAugments
 		REFERENCES SubProfessions (SubProfessionID) ON DELETE CASCADE,
 	CONSTRAINT SideJobSpecificAugments_AugmentID_FK FOREIGN KEY (AugmentID)
 		REFERENCES Augments (AugmentID) ON DELETE CASCADE
+) Engine=InnoDB CHARACTER SET utf8 COLLATE utf8_bin;
+
+-- Create the settings table. This will house useful information about the database.
+CREATE TABLE IF NOT EXISTS Settings
+(
+  SettingID INT NOT NULL AUTO_INCREMENT,
+  SettingName VARCHAR (25) NOT NULL,
+  Active BOOLEAN NOT NULL DEFAULT FALSE,
+
+	CONSTRAINT Settings_SettingID_PK PRIMARY KEY (SettingID)
 ) Engine=InnoDB CHARACTER SET utf8 COLLATE utf8_bin;
