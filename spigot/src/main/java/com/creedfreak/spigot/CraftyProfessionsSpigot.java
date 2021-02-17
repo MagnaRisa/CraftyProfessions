@@ -80,6 +80,9 @@ public class CraftyProfessionsSpigot extends JavaPlugin implements ICraftyProfes
 		mConfigController.createDefaultConfig ();
 		mConfigController.registerConfigFiles ();
 
+		// Setup debug logging if config value is true
+		mLogger.debugActive(mConfigController.getDebug());
+
 		setupDatabase ();
 		this.registerListeners ();
 
@@ -94,7 +97,7 @@ public class CraftyProfessionsSpigot extends JavaPlugin implements ICraftyProfes
 		/* This does more than just initialize the PlayerManager. Please read the docs on PlayerManager
 		 * to see all that is going on under the hood. */
 		PlayerManager.Instance ().preparePlayerManager (mDatabase, new SpigotPlayerFactory (), 1);
-
+		mLogger.Debug("TEST!!!!");
 		mLogger.Debug ("Initialization of CraftyProfessions Completed!");
 	}
 

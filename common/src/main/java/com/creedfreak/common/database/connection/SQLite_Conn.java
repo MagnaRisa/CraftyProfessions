@@ -59,6 +59,38 @@ public class SQLite_Conn extends Database {
 
 		return mConnection;
 	}
+
+	/**
+
+	CHECKING DATABASE CLOSED RESULT SET ===== REMOVE AND OPTIMIZE
+
+	 */
+	public synchronized Connection newConnection () {
+		File dataFolder = new File (mPlugin.getResourceFile (), SQLITE_DB_NAME);
+
+		if (!dataFolder.exists ()) {
+			try {
+				if (dataFolder.createNewFile ()) {
+					mLogger.Info (Database.DATABASE_PREFIX,
+							"Database file not created, creating it now...");
+				}
+			}
+			catch (IOException except) {
+				mLogger.Error (Database.DATABASE_PREFIX, "File write error " + SQLITE_DB_NAME + ": "
+						+ except.getMessage ());
+			}
+		}
+
+		mLogger.Debug("Attempting creation of new connection");
+		try {
+			return mConnection = DriverManager.getConnection ("jdbc:sqlite:" + dataFolder);
+		}
+		catch (SQLException except) {
+			mLogger.Error (Database.DATABASE_PREFIX, "Could not fetch SQLite connection: " + except.getMessage ());
+		}
+		mLogger.Debug("Can't create connection returning null");
+		return null;
+	}
 	
 	public void shutdown () {
 		try {

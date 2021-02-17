@@ -3,11 +3,10 @@ package com.creedfreak.common.container;
 import com.creedfreak.common.professions.Profession;
 import com.creedfreak.common.professions.TableType;
 import com.google.common.primitives.UnsignedLong;
-import jdk.nashorn.internal.ir.annotations.Immutable;
+//import jdk.nashorn.internal.ir.annotations.Immutable;
+import net.jcip.annotations.Immutable;
 
 import java.util.Map;
-
-;
 
 /**
  * This class will copy a players state at a specific instance

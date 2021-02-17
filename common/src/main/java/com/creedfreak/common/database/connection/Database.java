@@ -51,6 +51,9 @@ public abstract class Database {
 	 */
 	public abstract Connection dbConnect ();
 
+	// TEST TEST TEST
+	public abstract Connection newConnection() throws SQLException;
+
 	/**
 	 * Retrieves the implementation specific create tables file name.
 	 *
@@ -242,6 +245,7 @@ public abstract class Database {
 		}
 		catch (SQLException exception) {
 			mLogger.Info (DATABASE_PREFIX, "Could not locate tables! Database has not been created yet, this is normal.");
+			mLogger.Debug(DATABASE_PREFIX, "Exception Message: " + exception.getMessage());
 		}
 		
 		return tablesExist;

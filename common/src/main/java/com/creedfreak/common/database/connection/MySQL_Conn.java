@@ -5,6 +5,7 @@ import com.creedfreak.common.ICraftyProfessions;
 import com.creedfreak.common.database.queries.QueryLib;
 import com.creedfreak.common.utility.Pair;
 import org.mariadb.jdbc.MariaDbPoolDataSource;
+// import org.mysql
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +15,8 @@ public class MySQL_Conn extends Database {
 
 	private final String MYSQL_TABLE_STMTS = "sql_files/mariadb_create_tables.sql";
 	// private final String CONNECTION_STRING;
-	
+
+// 	private MysqlDataSource
 	private MariaDbPoolDataSource mConnectionPool;
 
 	/**
@@ -32,6 +34,7 @@ public class MySQL_Conn extends Database {
 		super (plugin, config);
 		
 		String url = "jdbc:mysql://" + hostName + ":" + port + "/" + db + "?maxPoolSize=8";
+		// mConnectionPool = new
 		mConnectionPool = new MariaDbPoolDataSource (url);
 
 		try {
@@ -62,6 +65,10 @@ public class MySQL_Conn extends Database {
 			mLogger.Error (Database.DATABASE_PREFIX, "Connection Error: " + exception);
 		}
 		return conn;
+	}
+
+	public Connection newConnection () throws SQLException {
+		throw new SQLException("Cannot Return Connection - Lines 67 - MySQL_Conn.java");
 	}
 	
 	/**

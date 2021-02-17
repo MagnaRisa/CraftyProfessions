@@ -33,7 +33,7 @@ public class CoreListener implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin (PlayerJoinEvent event) {
-		PlayerManager.Instance ().loadPlayer (event.getPlayer ().getUniqueId ());
+		PlayerManager.Instance ().loadPlayer (event.getPlayer ().getUniqueId (), event.getPlayer ().getName ());
 	}
 
 	@EventHandler

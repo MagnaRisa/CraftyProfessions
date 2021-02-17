@@ -124,10 +124,10 @@ public final class PlayerManager {
 	 *
 	 * @param playerUUID - The player uuid of the player to load.
 	 */
-	public synchronized void loadPlayer (UUID playerUUID) {
+	public synchronized void loadPlayer (UUID playerUUID, String username) {
 		// This will check to see if the player exists and handles the
 		// saving or loading of a player depending on the outcome.
-		mWorkerQueue.addTask (new TaskCheckUserExist (playerUUID));
+		mWorkerQueue.addTask (new TaskCheckUserExist (playerUUID, username));
 	}
 
 	/**

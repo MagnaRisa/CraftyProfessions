@@ -21,6 +21,8 @@ public class CommandList extends ProfessionCommand {
 	public boolean execute (IPlayer sender, String... args) {
 		sender.sendMessage ("You have just executed /prof list");
 
+
+
 		return true;
 	}
 }

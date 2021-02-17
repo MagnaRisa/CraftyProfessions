@@ -9,7 +9,8 @@ import com.creedfreak.common.professions.Profession;
 import com.creedfreak.common.professions.ProfessionBuilder;
 import com.creedfreak.common.utility.Logger;
 import com.creedfreak.common.utility.UuidUtil;
-import jdk.nashorn.internal.ir.annotations.Immutable;
+// import jdk.nashorn.internal.ir.annotations.Immutable;
+import net.jcip.annotations.Immutable;
 import net.jcip.annotations.ThreadSafe;
 
 import java.sql.Connection;
